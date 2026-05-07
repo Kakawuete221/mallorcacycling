@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,49 +11,23 @@
 </head>
 <body>
     <nav>
-        <h2>Mallorca Cycling</h2>
-        <ul>
-            <li><a href="#intro">Home</a></li>
-            <li><a href="#map">Map</a></li>
-            <li><a href="#segments">Segments</a></li>
-        </ul>
+        <div class="nav-container">
+            <h2 class="logo">Mallorca Cycling</h2>
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link" data-link>Home</a></li>
+                <li><a href="/map" class="nav-link" data-link>Map</a></li>
+                <li><a href="/segments" class="nav-link" data-link>Segments</a></li>
+            </ul>
+        </div>
     </nav>
-    <section id="intro">
-        <div class="intro-container">
-            <img src="media/photo.jpeg" alt="Cycling in Mallorca" class="intro-photo">
-            <div class="intro-text">
-                <h1>Mallorca Cycling</h1>
-                <p>Welcome to Mallorca Cycling, your ultimate guide to cycling climbs in the beautiful island of Mallorca.</p>
-            </div>
-        </div>
-    </section>
-    <section id="map">
-        <h2>Map</h2>
-        <p>Interactive map of Mallorca's cycling routes and segments.</p>
-        <div id="map-container">
-            <!-- Map will be embedded here -->
-            <a href="https://www.strava.com/maps/segments?sport=Ride&style=standard&terrain=false&labels=true&poi=true&cPhotos=true&3d=false&sType=verified&sElevation=climb&sSurface=0&sMin=0#9.05/39.6425/2.9972" target="_blank"><img src="media/map_example.png" alt="Map of Mallorca Cycling Routes" class="map-photo"></a>
-        </div>
-    </section>
-    <section id="segments">
-        <h2>Segments</h2>
-        <div class="segment-container">
-            <!-- Aquí se cargarán dinámicamente las tarjetas de los puertos -->
-        </div>
-        <!-- Modal para mostrar información completa del puerto -->
-        <div id="puerto-modal" class="modal" style="display:none;">
-            <div class="modal-content">
-                <span class="close-modal" id="close-modal" style="cursor:pointer;">&times;</span>
-                <div id="modal-body">
-                    <!-- Contenido del puerto se cargará aquí -->
-                </div>
-            </div>
-        </div>
-        <script src="js/segments.js"></script>
-    </section>
+
+    <main id="app-viewport">
+        </main>
+
     <footer>
-        <p>By Pau and Jaume</p>
-        <p>&copy; 2026 Mallorca Cycling. All rights reserved.</p>
+        <p>By Pau and Jaume &copy; 2026 Mallorca Cycling</p>
     </footer>
+
+    <script src="js/router.js" type="module"></script>
 </body>
 </html>
