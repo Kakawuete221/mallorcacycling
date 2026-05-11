@@ -193,3 +193,58 @@ footer {
     background-color: #f1f1f1;
     margin-top: 40px;
 }
+
+/* Millores per al Mapa */
+.map-container {
+    max-width: 1200px; /* Una mica més ample */
+    margin: 40px auto;
+}
+
+.map-header {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#segment-search {
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    width: 320px;
+    outline: none;
+    font-family: var(--font-main);
+}
+
+#segment-search:focus {
+    border-color: var(--primary-color);
+}
+
+#map {
+    width: 100%;
+    height: 700px;
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    border: 1px solid #eee;
+}
+
+.map-footer {
+    margin-top: 10px;
+    color: #666;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    #map { height: 400px; }
+    .map-header { flex-direction: column; align-items: flex-start; }
+    #segment-search { width: 100%; }
+}
+
+@media (max-width: 1024px) {
+    #map {
+        height: 550px;
+    }
+}

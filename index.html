@@ -1,59 +1,174 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ca">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mallorca Cycling</title>
+    <title>Mallorca Cycling | Ports de Muntanya</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lexend:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
     <link rel="stylesheet" href="css/styles.css">
+
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfKHI_ppkXrqq9woohNzLDi1Zchlf5BEM&libraries=places,geometry,elevation"
+        async defer></script>
 </head>
+
 <body>
-    <nav>
-        <h2>Mallorca Cycling</h2>
-        <ul>
-            <li><a href="#intro">Home</a></li>
-            <li><a href="#map">Map</a></li>
-            <li><a href="#segments">Segments</a></li>
-        </ul>
-    </nav>
-    <section id="intro">
-        <div class="intro-container">
-            <img src="media/photo.jpeg" alt="Cycling in Mallorca" class="intro-photo">
-            <div class="intro-text">
-                <h1>Mallorca Cycling</h1>
-                <p>Welcome to Mallorca Cycling, your ultimate guide to cycling climbs in the beautiful island of Mallorca.</p>
-            </div>
-        </div>
-    </section>
-    <section id="map">
-        <h2>Map</h2>
-        <p>Interactive map of Mallorca's cycling routes and segments.</p>
-        <div id="map-container">
-            <!-- Map will be embedded here -->
-            <a href="https://www.strava.com/maps/segments?sport=Ride&style=standard&terrain=false&labels=true&poi=true&cPhotos=true&3d=false&sType=verified&sElevation=climb&sSurface=0&sMin=0#9.05/39.6425/2.9972" target="_blank"><img src="media/map_example.png" alt="Map of Mallorca Cycling Routes" class="map-photo"></a>
-        </div>
-    </section>
-    <section id="segments">
-        <h2>Segments</h2>
-        <div class="segment-container">
-            <!-- Aquí se cargarán dinámicamente las tarjetas de los puertos -->
-        </div>
-        <!-- Modal para mostrar información completa del puerto -->
-        <div id="puerto-modal" class="modal" style="display:none;">
-            <div class="modal-content">
-                <span class="close-modal" id="close-modal" style="cursor:pointer;">&times;</span>
-                <div id="modal-body">
-                    <!-- Contenido del puerto se cargará aquí -->
+
+    <nav class="navbar">
+        <div class="nav-container"
+            style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1200px; margin: 0 auto;">
+            <a href="#home" class="brand"
+                style="text-decoration: none; color: #fc4c02; font-family: 'Lexend', sans-serif;">
+                <h2 style="margin: 0; font-style: italic;">Mallorca Cycling</h2>
+            </a>
+
+            <button class="hamburger" id="hamburger-btn" aria-label="Menú"
+                style="display: none; background: none; border: none; cursor: pointer;">
+                <span class="bar"
+                    style="display: block; width: 25px; height: 3px; background: #2f353b; margin: 5px 0;"></span>
+                <span class="bar"
+                    style="display: block; width: 25px; height: 3px; background: #2f353b; margin: 5px 0;"></span>
+                <span class="bar"
+                    style="display: block; width: 25px; height: 3px; background: #2f353b; margin: 5px 0;"></span>
+            </button>
+
+            <div class="nav-right" style="display: flex; align-items: center; gap: 30px;">
+                <ul id="nav-menu" class="nav-links"
+                    style="display: flex; gap: 20px; list-style: none; margin: 0; padding: 0;">
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#mapa" class="nav-link">Map</a></li>
+                    <li><a href="#segments" class="nav-link">Segments</a></li>
+                    <li><a href="#favorites" class="nav-link">Guardats</a></li>
+                    <li><a href="#about" class="nav-link">Nosaltres</a></li>
+                </ul>
+
+                <div id="strava-area">
+                    <button id="btn-strava-login" class="btn-strava"
+                        style="padding: 8px 16px; background-color: #fc4c02; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">
+                        Connectar a Strava
+                    </button>
+                    <div id="user-profile" style="display: none; align-items: center; gap: 10px;">
+                        <span id="user-name" style="font-weight: bold; color: #2f353b;"></span>
+                        <img id="user-avatar" src="" alt="Avatar"
+                            style="width: 35px; height: 35px; border-radius: 50%; border: 2px solid #fc4c02;">
+                    </div>
                 </div>
             </div>
         </div>
-        <script src="js/segments.js"></script>
-    </section>
+    </nav>
+
+    <main style="padding-top: 80px;">
+
+        <section id="home" class="page-section">
+            <div class="intro-container">
+                <img src="media/photo.jpeg" alt="Cycling in Mallorca" class="intro-photo">
+                <div class="intro-text">
+                    <h1>Mallorca Cycling</h1>
+                    <p>La teva guia definitiva de ports de muntanya a Mallorca.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="mapa" class="page-section" style="display: none;">
+            <div class="map-container">
+                <div class="map-header">
+                    <h2>Explora els Ports de Mallorca</h2>
+                    <div class="search-box">
+                        <input id="segment-search" type="text" placeholder="Cerca una localització o port...">
+                    </div>
+                </div>
+
+                <div id="map"></div>
+
+                <div class="map-footer">
+                    <p><i class="fas fa-info-circle"></i> Fes clic sobre un marcador per veure els detalls del port i
+                        calcular la ruta ciclista.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="segments" class="page-section" style="display: none;">
+            <div class="container">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                    <h2>Segments de Mallorca</h2>
+                    <input type="text" id="segment-search" placeholder="Cerca un port o municipi..."
+                        style="padding: 8px 15px; border-radius: 20px; border: 1px solid #ddd; width: 300px;">
+                </div>
+
+                <div id="segment-list" class="segment-container">
+                    <p>Carregant ports de muntanya...</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="favorites" class="page-section" style="display: none;">
+            <div class="container">
+                <h2>Els meus ports guardats</h2>
+                <div id="favorites-list" class="segment-container">
+                    <p>No tens cap port guardat encara. Explora el catàleg!</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="page-section" style="display: none;">
+            <div class="container" style="text-align: center; max-width: 800px; margin: 0 auto;">
+                <h2>Sobre Nosaltres</h2>
+                <div
+                    style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 30px;">
+                    <h3 style="color: #fc4c02;">Pau Antich i Jaume Ribas</h3>
+                    <p style="margin-top: 15px; font-size: 1.1rem;">Som estudiants d'Enginyeria Informàtica i hem creat
+                        Mallorca Cycling per als amants de la carretera i el desnivell.</p>
+                    <p>Aquesta Web-App utilitza dades reals de l'API de Strava per oferir-te els millors temps i
+                        altimetries.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="port-modal" class="modal"
+        style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center;">
+        <div class="modal-content"
+            style="background-color: #fefefe; padding: 25px; width: 90%; max-width: 500px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);">
+            <span class="close-modal"
+                style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            <h2 id="modal-title" style="color: #fc4c02; margin-bottom: 15px;"></h2>
+            <p><strong>Municipi:</strong> <span id="modal-municipi"></span></p>
+            <p><strong>Distància:</strong> <span id="modal-distancia"></span> km</p>
+            <p><strong>Desnivell:</strong> <span id="modal-desnivell"></span> m</p>
+            <p><strong>Pendent mitjà:</strong> <span id="modal-pendent"></span>%</p>
+
+            <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
+
+            <h3 style="color: #2f353b; margin-bottom: 10px;">Dades de Strava</h3>
+            <p><strong>KOM:</strong> <span id="modal-kom">Carregant...</span> | <strong>Temps:</strong> <span
+                    id="modal-temps-kom">Carregant...</span></p>
+            <p><strong>QOM:</strong> <span id="modal-qom">Carregant...</span> | <strong>Temps:</strong> <span
+                    id="modal-temps-qom">Carregant...</span></p>
+            <p><strong>El teu temps personal:</strong> <span id="modal-temps-usuari">Carregant dades...</span></p>
+
+            <div style="margin-top: 20px;">
+                <button id="btn-calculate-route"
+                    style="width: 100%; padding: 10px; background-color: #2f353b; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                    Com arribar-hi (Ruta en bici)
+                </button>
+            </div>
+        </div>
+    </div>
+
     <footer>
-        <p>By Pau and Jaume</p>
-        <p>&copy; 2026 Mallorca Cycling. All rights reserved.</p>
+        <p>Desenvolupat per Pau i Jaume</p>
+        <p>&copy; 2026 Mallorca Cycling. Tots els drets reservats.</p>
     </footer>
+
+    <script type="module" src="js/app.js"></script>
 </body>
+
 </html>
