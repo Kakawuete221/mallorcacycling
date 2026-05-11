@@ -1,115 +1,179 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    const container = document.querySelector('.segment-container');
-    container.innerHTML = '';
+// segments.js - Module for handling Strava segments and related UI interactions
+
+import { getSegmentDetails } from './stravaApi.js';
+import { addPortMarkers } from './map.js';
+
+// Function to load segments from local JSON and display them
+export async function loadSegments() {
+    const segmentList = document.getElementById('segment-list');
+    if (!segmentList) return;
 
     try {
         const response = await fetch('data/puertos.json');
-        const puertos = await response.json();
+        const ports = await response.json();
 
-        puertos.forEach((puerto) => {
-            const card = document.createElement('div');
-            card.className = 'segment';
+        segmentList.innerHTML = ''; // Clear existing list
 
-            const imgContainer = document.createElement('div');
-            imgContainer.className = 'card-img-wrapper';
+        // Draw each segment card
+        ports.forEach(port => {
+            const stravaId = port.id || "0";
+            const imatgePerDefecte = "media/photo.jpeg";
+            const imatgePort = port.imagen || imatgePerDefecte;
 
-            const img = document.createElement('img');
-            img.src = `media/${puerto.nombre}.jpg`;
-            img.alt = `Puerto de montaña ${puerto.nombre}`;
-            img.className = 'puerto-photo';
-            
-            img.onerror = function() {
-                this.src = 'media/photo.jpg'; 
-                this.onerror = null;
-            };
-
-            imgContainer.appendChild(img);
-            card.appendChild(imgContainer);
-
-            const infoContainer = document.createElement('div');
-            infoContainer.className = 'segment-content';
-
-            const h3 = document.createElement('h3');
-            h3.textContent = puerto.nombre;
-
-            const infoHtml = `
-                <p><strong>Categoría:</strong> ${puerto.categoria}</p>
-                <p><strong>Distancia:</strong> ${puerto.distancia_km} km</p>
-                <p><strong>Pendiente media:</strong> ${puerto.pendiente_media_pct}%</p>
-                <p><strong>Desnivel:</strong> ${puerto.elevacion_m} m</p>
-            `;
-            
-            const btn = document.createElement('button');
-            btn.textContent = 'See more';
-            btn.addEventListener('click', () => showModal(puerto));
-
-            infoContainer.appendChild(h3);
-            infoContainer.insertAdjacentHTML('beforeend', infoHtml);
-            infoContainer.appendChild(btn);
-            
-            card.appendChild(infoContainer);
-            container.appendChild(card);
-        });
-    } catch (error) {
-        console.error("Error al cargar los datos de los puertos:", error);
-    }
-
-    function showModal(puerto) {
-        const modal = document.getElementById('puerto-modal');
-        const modalBody = document.getElementById('modal-body');
-        
-        modalBody.innerHTML = `
-            <div style="position:relative">
-                <img src="media/${puerto.nombre}.jpg" 
-                     alt="${puerto.nombre}" 
-                     style="width:100%; height:300px; object-fit:cover; display:block;"
-                     onerror="this.src='media/photo.jpg'">
-                
-                <div style="padding: 25px;">
-                    <h2 style="margin-bottom:10px; color:var(--primary-color)">${puerto.nombre}</h2>
-                    <p style="margin-bottom:20px; font-weight:600;">${puerto.municipio} | Categoria: ${puerto.categoria}</p>
-                    
-                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:15px; margin-bottom:30px; background:#f4f4f4; padding:15px; border-radius:8px;">
-                        <div><strong>Distancia:</strong> ${puerto.distancia_km} km</div>
-                        <div><strong>Pendiente Media:</strong> ${puerto.pendiente_media_pct}%</div>
-                        <div><strong>Pendiente Máx:</strong> ${puerto.pendiente_maxima_pct}%</div>
-                        <div><strong>Desnivel:</strong> ${puerto.elevacion_m} m</div>
+            const cardHTML = `
+                <div class="segment">
+                    <div class="card-img-wrapper">
+                        <img src="${imatgePort}" alt="${port.nombre}">
                     </div>
-
-                    <h3>Strava Leaderboards</h3>
-                    <table class="leaderboard-table">
-                        <thead>
-                            <tr><th>Tipo</th><th>Nombre</th><th>Velocidad</th><th>Potencia</th><th>Tiempo</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>KOM</strong></td>
-                                <td>${puerto.kom}</td>
-                                <td>${puerto.velocidad_media_kom} km/h</td>
-                                <td>${puerto.potencia_media_kom}W</td>
-                                <td style="color:var(--primary-color); font-weight:bold">${puerto.tiempo_kom || '--:--'}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>QOM</strong></td>
-                                <td>${puerto.qom}</td>
-                                <td>${puerto.velocidad_media_qom} km/h</td>
-                                <td>${puerto.potencia_media_qom}W</td>
-                                <td style="color:var(--primary-color); font-weight:bold">${puerto.tiempo_qom || '--:--'}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="segment-content">
+                        <h3 style="color: #fc4c02; margin-bottom: 10px;">${port.nombre}</h3>
+                        <p><strong>Municipi:</strong> ${port.municipio}</p>
+                        <p><strong>Distància:</strong> ${port.distancia_km} km</p>
+                        <p><strong>Desnivell:</strong> ${port.elevacion_m} m</p>
+                        <p><strong>Pendent mitjà:</strong> ${port.pendiente_media_pct}%</p>
+                        <p><strong>Categoria:</strong> Cat. ${port.categoria}</p>
+                        <p><strong>Temps KOM:</strong> ${port.tiempo_kom || 'No disponible'}</p>
+                        <p><strong>Temps QOM:</strong> ${port.tiempo_qom || 'No disponible'}</p>
+                        
+                        <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <button class="btn-details" data-id="${stravaId}">Veure detalls</button>
+                            <button class="btn-save" data-id="${stravaId}" style="background-color: #2f353b;">Guardar</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            `;
+            segmentList.innerHTML += cardHTML;
+        });
+
+        // Add event listeners for "Veure detalls" buttons after the cards have been rendered
+        const detailButtons = document.querySelectorAll('.btn-details');
+        detailButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const portId = e.target.getAttribute('data-id');
+                showPortDetails(portId, ports);
+            });
+        });
+
+        // Initialize map markers for the segments
+        addPortMarkers(ports);
+
+    } catch (error) {
+        console.error("Error loading ports:", error);
+        segmentList.innerHTML = '<p style="color: red;">Hi ha hagut un error carregant el catàleg de ports.</p>';
+    }
+}
+
+// Function to show port details in a modal
+export async function showPortDetails(portId, ports) {
+    const modal = document.getElementById('port-modal');
+    const port = ports.find(p => p.id === portId);
+
+    if (port) {
+        const modalContent = modal.querySelector('.modal-content');
+
+        // Build all the detailed content of the modal
+        modalContent.innerHTML = `
+            <span class="close-modal" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            <h2 id="modal-title" style="color: #fc4c02; margin-bottom: 15px;">${port.nombre}</h2>
+            <p><strong>Municipi:</strong> <span>${port.municipio}</span></p>
+            <p><strong>Distància:</strong> <span>${port.distancia_km} km</span></p>
+            <p><strong>Desnivell:</strong> <span>${port.elevacion_m} m</span></p>
+            <p><strong>Pendent mitjà:</strong> <span>${port.pendiente_media_pct}%</span></p>
+            <p><strong>Pendent màxim:</strong> <span>${port.pendiente_maxima_pct || 'N/A'}%</span></p>
+            <p><strong>Categoria:</strong> <span>Cat. ${port.categoria}</span></p>
+            
+            <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
+            
+            <h3 style="color: #2f353b; margin-bottom: 10px;">Dades del Segment i Strava</h3>
+            <p><strong>Temps KOM:</strong> <span id="modal-temps-kom">Carregant...</span></p>
+            <p><strong>Titular KOM:</strong> <span id="modal-nom-kom">Carregant...</span></p>
+            <p><strong>Velocitat mitjana KOM:</strong> <span>${port.velocidad_media_kom ? port.velocidad_media_kom + ' km/h' : 'No disponible'}</span></p>
+            <p><strong>Potència mitjana KOM:</strong> <span>${port.potencia_media_kom ? port.potencia_media_kom + ' W' : 'No disponible'}</span></p>
+            
+            <p><strong>Temps QOM:</strong> <span id="modal-temps-qom">Carregant...</span></p>
+            <p><strong>Titular QOM:</strong> <span id="modal-nom-qom">Carregant...</span></p>
+            <p><strong>Velocitat mitjana QOM:</strong> <span>${port.velocidad_media_qom ? port.velocidad_media_qom + ' km/h' : 'No disponible'}</span></p>
+            <p><strong>Potència mitjana QOM:</strong> <span>${port.potencia_qom ? port.potencia_qom + ' W' : 'No disponible'}</span></p>
+            
+            <p><strong>El teu temps personal:</strong> <span id="modal-temps-usuari">Carregant dades...</span></p>
         `;
+
         modal.style.display = 'flex';
+
+        try {
+            const cacheKey = `strava_segment_${portId}`;
+            const cachedData = sessionStorage.getItem(cacheKey);
+            
+            let stravaData;
+
+            if (cachedData) {
+                stravaData = JSON.parse(cachedData);
+            } else {
+                stravaData = await getSegmentDetails(portId);
+                if (stravaData) {
+                    sessionStorage.setItem(cacheKey, JSON.stringify(stravaData));
+                }
+            }
+
+            if (stravaData) {
+                if (stravaData.kom_in_seconds) {
+                    const komSeconds = stravaData.kom_in_seconds;
+                    const komMin = Math.floor(komSeconds / 60);
+                    const komSeg = komSeconds % 60;
+                    document.getElementById('modal-temps-kom').textContent = `${komMin}m ${komSeg}s`;
+                    document.getElementById('modal-nom-kom').textContent = stravaData.kom_holder_name || 'Desconegut';
+                } else {
+                    document.getElementById('modal-temps-kom').textContent = port.tiempo_kom || 'No disponible';
+                    document.getElementById('modal-nom-kom').textContent = port.titular_kom || port.kom || 'Desconegut';
+                }
+
+                if (stravaData.qom_in_seconds) {
+                    const qomSeconds = stravaData.qom_in_seconds;
+                    const qomMin = Math.floor(qomSeconds / 60);
+                    const qomSeg = qomSeconds % 60;
+                    document.getElementById('modal-temps-qom').textContent = `${qomMin}m ${qomSeg}s`;
+                    document.getElementById('modal-nom-qom').textContent = stravaData.qom_holder_name || 'Desconegut';
+                } else {
+                    document.getElementById('modal-temps-qom').textContent = port.tiempo_qom || 'No disponible';
+                    document.getElementById('modal-nom-qom').textContent = port.titular_qom || port.qom || 'Desconegut';
+                }
+
+                if (stravaData.athlete_segment_stats && stravaData.athlete_segment_stats.pr_elapsed_time) {
+                    const prSeconds = stravaData.athlete_segment_stats.pr_elapsed_time;
+                    const prMin = Math.floor(prSeconds / 60);
+                    const prSeg = prSeconds % 60;
+                    document.getElementById('modal-temps-usuari').textContent = `${prMin}m ${prSeg}s`;
+                } else {
+                    document.getElementById('modal-temps-usuari').textContent = 'Sense temps registrat';
+                }
+            } else {
+                document.getElementById('modal-temps-kom').textContent = port.tiempo_kom || 'No disponible';
+                document.getElementById('modal-nom-kom').textContent = port.titular_kom || port.kom || 'Desconegut';
+                document.getElementById('modal-temps-qom').textContent = port.tiempo_qom || 'No disponible';
+                document.getElementById('modal-nom-qom').textContent = port.titular_qom || port.qom || 'Desconegut';
+                document.getElementById('modal-temps-usuari').textContent = 'Sense temps registrat';
+            }
+        } catch (err) {
+            console.error('Error loading Strava data in modal:', err);
+            
+            document.getElementById('modal-temps-kom').textContent = port.tiempo_kom || 'Error al connectar';
+            document.getElementById('modal-nom-kom').textContent = port.titular_kom || port.kom || 'Desconegut';
+            document.getElementById('modal-temps-qom').textContent = port.tiempo_qom || 'Error al connectar';
+            document.getElementById('modal-nom-qom').textContent = port.titular_qom || port.qom || 'Desconegut';
+            document.getElementById('modal-temps-usuari').textContent = 'Inicia sessió per veure el teu temps';
+        }
     }
 
-    document.getElementById('close-modal').onclick = () => { 
-        document.getElementById('puerto-modal').style.display = 'none'; 
-    };
-    
+    const closeModal = modal.querySelector('.close-modal');
+    if (closeModal) {
+        closeModal.onclick = () => {
+            modal.style.display = 'none';
+        };
+    }
+
     window.onclick = (event) => {
-        const modal = document.getElementById('puerto-modal');
-        if (event.target == modal) modal.style.display = 'none';
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
     };
-});
+}
