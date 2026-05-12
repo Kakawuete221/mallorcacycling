@@ -23,12 +23,17 @@
     <nav>
         <div class="nav-container">
             <h2 class="logo">Mallorca Cycling</h2>
+            <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <ul class="nav-menu">
                 <li><a href="/" class="nav-link" data-link>Home</a></li>
                 <li><a href="/map" class="nav-link" data-link>Map</a></li>
                 <li><a href="/segments" class="nav-link" data-link>Segments</a></li>
+                <li class="nav-user-item"><div id="user-nav-area"></div></li>
             </ul>
-            <div id="user-nav-area"></div>
         </div>
     </nav>
 

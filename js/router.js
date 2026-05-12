@@ -13,6 +13,15 @@ window.toggleDropdown = (event) => {
     if (d) d.style.display = d.style.display === 'none' ? 'block' : 'none';
 };
 
+window.toggleMobileMenu = () => {
+    const menu = document.querySelector('.nav-menu');
+    const button = document.querySelector('.nav-toggle');
+    if (!menu || !button) return;
+
+    const isActive = menu.classList.toggle('active');
+    button.setAttribute('aria-expanded', String(isActive));
+};
+
 const getPuertos = async () => {
     try {
         const r = await fetch('data/puertos.json');
@@ -95,6 +104,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             e.preventDefault();
             window.history.pushState(null, null, e.target.href);
             router();
+        }
+
+        const menu = document.querySelector('.nav-menu');
+        const toggle = document.querySelector('.nav-toggle');
+        if (menu && toggle && menu.classList.contains('active') && !e.target.closest('.nav-container')) {
+            menu.classList.remove('active');
+            toggle.setAttribute('aria-expanded', 'false');
         }
     });
     window.addEventListener("popstate", router);
