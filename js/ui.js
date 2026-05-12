@@ -20,7 +20,7 @@ export function actualitzarInterficieUsuari() {
                         <img src="${user.profile_medium}" style="width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--primary-color);">
                     </div>
                     <div id="user-dropdown" style="display: none; position: absolute; background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); z-index: 2000;">
-                        <button onclick="window.ferLogout()" style="padding: 10px; border: none; background: none; cursor: pointer; width: 100%; text-align: left;">🚪 Tancar sessió</button>
+                        <button onclick="window.ferLogout()" style="padding: 10px; border: none; background: none; cursor: pointer; width: 100%; text-align: left;">Log out</button>
                     </div>
                 </div>`;
         }
@@ -30,9 +30,9 @@ export function actualitzarInterficieUsuari() {
             connectCard.innerHTML = `
                 <div style="text-align: center; padding: 20px;">
                     <img src="${user.profile_medium}" style="width: 70px; border-radius: 50%; border: 3px solid var(--primary-color);">
-                    <h2>Hola, ${user.firstname}!</h2>
-                    <p>Ja estàs connectat amb Strava.</p>
-                    <button class="strava-connect-btn" onclick="window.location.href='/map'">ANAR AL MAPA</button>
+                    <h2>Hello, ${user.firstname}!</h2>
+                    <p>You are already connected to Strava.</p>
+                    <button class="strava-connect-btn" onclick="window.location.href='/map'">GO TO MAP</button>
                 </div>`;
         }
     } else {
@@ -42,8 +42,8 @@ export function actualitzarInterficieUsuari() {
         }
         if (connectCard) {
             connectCard.innerHTML = `
-                <h2>Conecta con Strava</h2>
-                <p>Connecta per veure els teus temps reals i PRs als segments.</p>
+                <h2>Connect with Strava</h2>
+                <p>Connect to view your real-time times and PRs on segments.</p>
                 <button class="strava-connect-btn" onclick="window.loginAmbStrava()">CONNECT ACCOUNT</button>`;
         }
     }
@@ -61,8 +61,8 @@ export const createCardHTML = (puerto) => {
         </div>
         <div class="segment-content">
             <h3>${nom}</h3>
-            <p>Distància: ${dist} km | Desnivell: ${desn} m</p>
-            <button class="view-details-btn" onclick='window.handleVerSegmento(${JSON.stringify(puerto).replace(/'/g, "&apos;")})'>Veure més</button>
+            <p>Distance: ${dist} km | Elevation: ${desn} m</p>
+            <button class="view-details-btn" onclick='window.handleVerSegmento(${JSON.stringify(puerto).replace(/'/g, "&apos;")})'>View Details</button>
         </div>
     </div>`;
 };

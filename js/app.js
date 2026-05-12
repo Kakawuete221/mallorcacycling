@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.getElementById('port-modal').style.display = 'none';
 
                 // Navigate to the map
-                window.location.hash = '#mapa';
+                window.location.hash = '#map';
 
                 // Calculate the route once the map is initialized
                 setTimeout(() => {
