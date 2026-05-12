@@ -1,17 +1,23 @@
+/* =========================================
+   ESTILS GENERALS I RESE7
+   ========================================= */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
 html {
     scroll-behavior: smooth;
 }
+
 :root {
     --primary-color: #fc4c02;
     --secondary-color: #2f353b;
     --font-main: 'Inter', sans-serif;
     --font-title: 'Lexend', sans-serif;
 }
+
 body {
     font-family: var(--font-main);
     line-height: 1.6;
@@ -19,6 +25,9 @@ body {
     background-color: #fcfcfc;
 }
 
+/* =========================================
+   NAVEGACIÓ
+   ========================================= */
 nav {
     height: 80px;
     display: flex;
@@ -31,6 +40,7 @@ nav {
     z-index: 1000;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
+
 .nav-container {
     display: flex;
     justify-content: space-between;
@@ -40,16 +50,27 @@ nav {
     margin: 0 auto;
     padding: 0 20px;
 }
+
 .logo {
     color: var(--primary-color);
     font-style: italic;
     font-family: var(--font-title);
 }
+
 .nav-menu {
     list-style: none;
     display: flex;
     gap: 25px;
+    margin: 0;
+    padding: 0;
 }
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 30px;  
+}
+
 .nav-link {
     text-decoration: none;
     color: var(--secondary-color);
@@ -57,31 +78,40 @@ nav {
     text-transform: uppercase;
     transition: color 0.1s;
 }
+
 .nav-link:hover {
     color: var(--primary-color);
     text-decoration: underline;
 }
+
+/* =========================================
+   ESTRUCTURA PRINCIPAL
+   ========================================= */
 #app-viewport {
     padding-top: 80px;
     min-height: 80vh;
 }
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 60px 20px;
 }
 
+/* Hero / Intro */
 .intro-container {
     position: relative;
     width: 100%;
     height: 70vh;
     overflow: hidden;
 }
+
 .intro-photo {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
+
 .intro-text {
     position: absolute;
     top: 0;
@@ -97,6 +127,10 @@ nav {
     text-align: center;
     padding: 20px;
 }
+
+/* =========================================
+   TARGETES I SEGMENTS
+   ========================================= */
 .strava-connect-card {
     background: #fdfdfd;
     border: 2px solid var(--primary-color);
@@ -104,6 +138,7 @@ nav {
     border-radius: 12px;
     text-align: center;
 }
+
 .strava-connect-btn {
     margin-top: 20px;
     padding: 12px 24px;
@@ -115,15 +150,18 @@ nav {
     cursor: pointer;
     transition: transform 0.2s;
 }
+
 .strava-connect-btn:hover {
     transform: scale(1.05);
 }
+
 .segment-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 30px;
     padding: 20px 0;
 }
+
 .segment {
     background-color: white;
     border-radius: 12px;
@@ -133,21 +171,26 @@ nav {
     display: flex;
     flex-direction: column;
 }
+
 .segment:hover {
     transform: translateY(-5px);
 }
+
 .card-img-wrapper {
     width: 100%;
     height: 200px;
 }
+
 .card-img-wrapper img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
+
 .segment-content {
     padding: 20px;
 }
+
 .view-details-btn {
     width: 100%;
     padding: 12px;
@@ -159,6 +202,10 @@ nav {
     cursor: pointer;
     font-weight: bold;
 }
+
+/* =========================================
+   MODALS (ESTILS ACTUALITZATS)
+   ========================================= */
 .modal {
     position: fixed;
     z-index: 2000;
@@ -172,16 +219,18 @@ nav {
     align-items: center;
     justify-content: center;
 }
+
 .modal-content {
     background-color: white;
     border-radius: 16px;
     width: 90%;
-    max-width: 800px;
+    max-width: 900px; /* Ajustat segons nova petició */
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
     box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 }
+
 .close-modal {
     position: absolute;
     top: 15px;
@@ -192,8 +241,84 @@ nav {
     cursor: pointer;
     text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
-.modal-image { width: 100%; height: 300px; object-fit: cover; }
-.modal-body-content { padding: 30px; }
+
+/* Nous contenidors de modal */
+.modal-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    padding: 0; /* Treiem padding per deixar que el header ocupi tot el width */
+}
+
+.modal-header {
+    position: relative;
+    height: 200px;
+    border-radius: 12px 12px 0 0; /* Ajustat per encaixar amb el modal */
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+    color: white;
+}
+
+.header-img {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    filter: brightness(0.7);
+}
+
+.header-text {
+    position: relative;
+    z-index: 2;
+}
+
+.modal-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 25px;
+    padding: 0 30px 30px 30px; /* Padding interior per al contingut sota el header */
+}
+
+@media (max-width: 768px) {
+    .modal-grid { grid-template-columns: 1fr; padding: 0 20px 20px 20px; }
+}
+
+/* Mapa i gràfics dins del modal */
+#modal-mini-map {
+    height: 250px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Comparativa Tu vs KOM */
+.comparison-card {
+    background: #fdf2f2;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #f9d7d7;
+    margin-bottom: 20px;
+}
+
+.bar-bg {
+    background: #e0e0e0;
+    height: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.bar-fill {
+    background: var(--primary-color);
+    height: 100%;
+    border-radius: 5px;
+    width: 0%;
+    transition: width 1.5s ease-out;
+}
+
+/* Taules i Stats en Modal */
 .stats-box {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -203,29 +328,99 @@ nav {
     border-radius: 10px;
     margin: 20px 0;
 }
+
 .leaderboard-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
 }
+
 .leaderboard-table th, .leaderboard-table td {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #eee;
 }
+
 .highlight-time { 
     color: var(--primary-color); font-weight: bold; 
 }
-.fade-in {
-    animation: fadeIn 0.4s ease-out;
+
+/* Accions */
+.action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 20px;
 }
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+
+.btn-action {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.2s;
 }
+
+.btn-action:hover { background: #555; }
+
+/* =========================================
+   ESTILS DE LA VISTA MAPA (FULL SCREEN)
+   ========================================= */
+.map-section {
+    height: calc(100vh - 80px); 
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.map-header {
+    padding: 15px 30px;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); 
+    z-index: 10;
+}
+
+.map-header h2 {
+    margin: 0;
+    color: var(--secondary-color);
+    font-family: var(--font-title);
+    font-size: 1.5rem;
+}
+
+.full-map {
+    flex-grow: 1; 
+    width: 100%;
+    background-color: #e5e3df;
+}
+
+/* Google Maps InfoWindow Tweaks */
+.gm-style-iw-d { overflow: hidden !important; }
+.gm-style-iw-c { padding: 0 !important; max-height: none !important; }
+.gm-ui-hover-effect { display: none !important; }
+
+/* =========================================
+   FOOTER I ANIMACIONS
+   ========================================= */
 footer {
     text-align: center;
     padding: 40px 20px;
     background-color: #f1f1f1;
     color: var(--secondary-color);
+}
+
+body:has(.map-section) footer {
+    display: none;
+}
+
+.fade-in {
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }

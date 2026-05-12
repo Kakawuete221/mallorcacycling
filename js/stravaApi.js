@@ -80,26 +80,49 @@ export function getAccessToken() {
 
 // Function to fetch segment details
 export async function getSegmentDetails(segmentId) {
-    const accessToken = localStorage.getItem('strava_access_token');
-    
+    if (!segmentId) return null;
+
+    const cacheKey = `segment_${segmentId}`;
+    const cachedData = localStorage.getItem(cacheKey);
+
+    // 1. Comprovem Caché (24 hores)
+    if (cachedData) {
+        const parsed = JSON.parse(cachedData);
+        if (Date.now() - parsed.timestamp < 24 * 60 * 60 * 1000) {
+            console.log(`📦 Usant dades de caché per al segment ${segmentId}`);
+            return parsed.data;
+        }
+    }
+
+    // 2. Si no hi ha caché, anem a l'API
+    const token = localStorage.getItem('strava_access_token');
+    if (!token) {
+        console.warn("No s'ha trobat cap token de Strava.");
+        return null;
+    }
+
     try {
         const response = await fetch(`https://www.strava.com/api/v3/segments/${segmentId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
+            headers: { 'Authorization': `Bearer ${token}` }
         });
 
-        if (!response.ok) {
-            console.error(`Error HTTP ${response.status}: ${response.statusText}`);
-            throw new Error(`Error al connectar (Codi: ${response.status})`);
-        }
+        if (!response.ok) throw new Error('Error en la resposta de Strava');
 
-        return await response.json();
+        const data = await response.json();
+
+        // Guardem al caché
+        localStorage.setItem(cacheKey, JSON.stringify({
+            timestamp: Date.now(),
+            data: data
+        }));
+
+        return data;
     } catch (error) {
-        console.error('Error consultant el segment a Strava:', error);
-        throw error;
+        console.error("Error petició Strava:", error);
+        return null;
     }
 }
+
+window.getSegmentDetails = getSegmentDetails;
 
 
