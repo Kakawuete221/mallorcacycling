@@ -12,6 +12,12 @@ let hoverMarker = null;
 let orangePolyline = null; 
 let whiteBorderPolyline = null;
 let fullSegmentPath = [];
+let userMarker = null;
+let userPos = null;
+let accuracyCircle = null;
+let pulseCircle = null;
+let intervalAura = null;
+let mapaActual = null;
 
 // Function to initialize the Google Map
 export function initGoogleMap() {
@@ -60,6 +66,8 @@ export function initGoogleMap() {
             activeInfoWindow = null;
         }
     });
+
+    localitzarUsuari(map);
 }
 
 // Function to calculate cycling routes from user location to a specific climb
@@ -494,3 +502,104 @@ window.dibuixarPerfilElevacio = (polyline) => {
         }
     });
 };
+
+export const localitzarUsuari = (map) => {
+    mapaActual = map; // Guardem la referència del mapa nou cada vegada que es crida la funció
+
+    if (!navigator.geolocation) return;
+
+    // Cerca ràpida
+    navigator.geolocation.getCurrentPosition(
+        (position) => actualitzarOcrearSistemaUbicacio(position, mapaActual),
+        null,
+        { enableHighAccuracy: false, timeout: 3000, maximumAge: 60000 }
+    );
+
+    // Seguiment continu
+    navigator.geolocation.watchPosition(
+        (position) => actualitzarOcrearSistemaUbicacio(position, mapaActual),
+        null,
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+};
+
+// Funció centralitzada per gestionar tot el sistema visual
+function actualitzarOcrearSistemaUbicacio(position, map) {
+    userPos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+    };
+    window.userPos = userPos;
+
+    // SI EL MAPA HA CANVIAT (o el marcador s'ha perdut), l'hem de recrear
+    // Comprovem si el marcador té el mapa actual assignat
+    if (!userMarker || userMarker.getMap() !== map) {
+        
+        // Si hi havia marcadors vells, els netegem del tot
+        if (userMarker) userMarker.setMap(null);
+        if (accuracyCircle) accuracyCircle.setMap(null);
+        if (pulseCircle) pulseCircle.setMap(null);
+
+        // 1. Punt blau
+        userMarker = new google.maps.Marker({
+            position: userPos,
+            map: map,
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 8,
+                fillColor: "#4285F4",
+                fillOpacity: 1,
+                strokeColor: "white",
+                strokeWeight: 2,
+            },
+            zIndex: 1000
+        });
+
+        // 2. Aura estàtica
+        accuracyCircle = new google.maps.Circle({
+            map: map,
+            center: userPos,
+            radius: position.coords.accuracy,
+            fillColor: "#4285F4",
+            fillOpacity: 0.15,
+            strokeWeight: 0
+        });
+
+        // 3. Aura polsant
+        pulseCircle = new google.maps.Circle({
+            map: map,
+            center: userPos,
+            radius: 0,
+            fillColor: "#4285F4",
+            fillOpacity: 0.4,
+            strokeWeight: 0,
+            clickable: false,
+            zIndex: 999
+        });
+
+        iniciarAnimacioAura(position.coords.accuracy);
+
+    } else {
+        // Si el mapa és el mateix, només actualitzem posició
+        userMarker.setPosition(userPos);
+        accuracyCircle.setCenter(userPos);
+        accuracyCircle.setRadius(position.coords.accuracy);
+        pulseCircle.setCenter(userPos);
+    }
+}
+
+function iniciarAnimacioAura(maxRadius) {
+    if (intervalAura) clearInterval(intervalAura);
+    
+    let r = 0;
+    intervalAura = setInterval(() => {
+        r += maxRadius / 50;
+        if (r > maxRadius * 1.5) r = 0;
+        
+        if (pulseCircle) {
+            pulseCircle.setRadius(r);
+            const opacity = 0.4 * (1 - r / (maxRadius * 1.5));
+            pulseCircle.setOptions({ fillOpacity: opacity });
+        }
+    }, 50);
+}
