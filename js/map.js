@@ -78,15 +78,15 @@ export function calculateCyclingRoute(destLat, destLng) {
                     directionsRenderer.setDirections(result);
                 } else {
                     console.error('Error obtenint la ruta: ' + status);
-                    alert('No s\'ha pogut calcular la ruta. Si us plau, comprova la teva connexió i permisos de geolocalització.');
+                    alert('Could not calculate route. Please check your connection and geolocation permissions.');
                 }
             });
         }, error => {
             console.error('Error obtenint la ubicació de l\'usuari:', error);
-            alert('No s\'ha pogut obtenir la teva ubicació. Si us plau, activa la geolocalització i torna-ho a intentar.');
+            alert('Could not obtain your location. Please enable geolocation and try again.');
         });
     } else {
-        alert('La geolocalització no és compatible amb aquest navegador.');
+        alert('Geolocation is not supported by this browser.');
     }
 }
 
@@ -392,7 +392,7 @@ window.actualitzarMunicipiReal = (lat, lng) => {
 
 // 2. DIRECTIONS: Calcular ruta dins la teva App
 window.calcularRutaPort = (destLat, destLng) => {
-    if (!navigator.geolocation) return alert("Geolocalització no suportada");
+    if (!navigator.geolocation) return alert("Geolocation is not supported by this browser.");
 
     navigator.geolocation.getCurrentPosition(pos => {
         const directionsService = new google.maps.DirectionsService();
@@ -427,7 +427,7 @@ window.cercarServeisProp = (lat, lng) => {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             console.log("Serveis trobats:", results);
             // Aquí podries pintar marcadors especials al mapa o mostrar una llista al modal
-            alert(`Hem trobat ${results.length} llocs propers per a ciclistes al mapa!`);
+            alert("We found " + results.length + " nearby cyclist-friendly places on the map!");
             window.closeModal();
         }
     });

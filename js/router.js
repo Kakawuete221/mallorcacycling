@@ -22,7 +22,7 @@ const getPuertos = async () => {
 
 const routes = {
     "/": {
-    title: "Inicio | Mallorca Cycling",
+    title: "Home | Mallorca Cycling",
     render: async () => {
         const puertos = await getPuertos();
         // Generem les targetes destacades usant la funció de ui.js
@@ -34,12 +34,12 @@ const routes = {
                     <img src="media/photo.jpeg" class="intro-photo">
                     <div class="intro-text">
                         <h1>Mallorca Cycling</h1>
-                        <p>Descobreix els millors ports de muntanya de l'illa.</p>
+                        <p>Discover the best mountain passes in Mallorca.</p>
                     </div>
                 </div>
             </section>
             <section class="container">
-                <h2 class="section-title">Segmentos Destacados</h2>
+                <h2 class="section-title">Featured Segments</h2>
                 <div class="segment-container">${destacats}</div>
             </section>
             <section class="container">
@@ -49,14 +49,14 @@ const routes = {
     }
 },
     "/map": {
-        title: "Mapa | Mallorca Cycling",
+        title: "Map | Mallorca Cycling",
         render: async () => `
             <section class="map-section fade-in">
                 <div id="map" class="full-map"></div>
             </section>`
     },
     "/segments": {
-        title: "Segmentos | Mallorca Cycling",
+        title: "Segments | Mallorca Cycling",
         render: async () => {
             const puertos = await getPuertos();
             const tots = puertos.map(createCardHTML).join('');

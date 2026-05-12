@@ -14,7 +14,7 @@ export const showModal = (puerto) => {
                 <img src="media/${puerto.nom}.jpg" class="header-img" onerror="this.src='media/photo.jpeg'">
                 <div class="header-text">
                     <h2>${puerto.nom}</h2>
-                    <p id="modal-municipi">Cercant ubicació exacta...</p>
+                    <p id="modal-municipi">Finding location...</p>
                 </div>
             </div>
 
@@ -28,13 +28,13 @@ export const showModal = (puerto) => {
 
                 <div class="data-col">
                     <div class="basic-stats">
-                        <span>📏 ${puerto.distancia} km</span>
-                        <span>📈 ${puerto.pendent_mitja}%</span>
-                        <span>🏔️ ${puerto.desnivell} m</span>
+                        <span>Dist: ${puerto.distancia} km</span>
+                        <span>Avg Grad: ${puerto.pendent_mitja}%</span>
+                        <span>Elevation: ${puerto.desnivell} m</span>
                     </div>
 
                     <div class="comparison-card">
-                        <h4>🚀 Tu vs. KOM</h4>
+                        <h4>🚀 You vs. KOM</h4>
                         <div class="bar-bg"><div id="pr-progress-bar" class="bar-fill"></div></div>
                         <p id="comparison-text"></p>
                     </div>
@@ -42,12 +42,12 @@ export const showModal = (puerto) => {
                     <div class="leaderboard">
                         <div class="entry"><span>👑 KOM:</span> <strong id="modal-kom-real">--:--</strong></div>
                         <div class="entry"><span>👑 QOM:</span> <strong id="modal-qom-real">--:--</strong></div>
-                        <div class="entry pr"><span>⭐ El teu PR:</span> <strong id="modal-pr-real">--:--</strong></div>
+                        <div class="entry pr"><span>⭐ Your PR:</span> <strong id="modal-pr-real">--:--</strong></div>
                     </div>
 
                     <div class="action-grid">
-                        <button onclick="window.calcularRuta(${puerto.lat}, ${puerto.lng})">📍 Com arribar</button>
-                        <button onclick="window.cercarServeis(${puerto.lat}, ${puerto.lng})">☕ Serveis propers</button>
+                        <button onclick="window.calcularRuta(${puerto.lat}, ${puerto.lng})">📍 How to get there</button>
+                        <button onclick="window.cercarServeis(${puerto.lat}, ${puerto.lng})">☕ Nearby Services</button>
                     </div>
                 </div>
             </div>
@@ -82,16 +82,16 @@ window.handleVerSegmento = (port) => {
             setTimeout(() => { bar.style.width = `${percent}%`; }, 200);
 
             const text = document.getElementById('comparison-text');
-            text.innerText = prSec > komSec ? `Estàs a ${formatTime(prSec - komSec)} del KOM` : "👑 Tens el KOM!";
+            text.innerText = prSec > komSec ? `You are ${formatTime(prSec - komSec)} away from the KOM` : "👑 You have the KOM!";
         }
     }
 };
 
 window.createMiniCardHTML = (port) => {
-    if (!port || !port.id) return `<div style="padding:10px;">Error dades</div>`;
+    if (!port || !port.id) return `<div style="padding:10px;">Error data</div>`;
 
     const cached = JSON.parse(localStorage.getItem(`segment_${port.id}`));
-    let infoStrava = `<div style="border-top: 1px solid #eee; padding-top: 8px; margin-top: 8px; font-size: 11px; color: #888; font-style: italic;">⏳ Carregant Strava...</div>`;
+    let infoStrava = `<div style="border-top: 1px solid #eee; padding-top: 8px; margin-top: 8px; font-size: 11px; color: #888; font-style: italic;">⏳ Loading Strava data...</div>`;
 
     if (cached && cached.data) {
         const d = cached.data;
@@ -111,7 +111,7 @@ window.createMiniCardHTML = (port) => {
             <h3 style="margin: 0; font-size: 15px;">${port.nom}</h3>
             <div style="font-size: 12px; color: #666; margin-bottom: 8px;">🚲 ${port.distancia}km • ${port.pendent_mitja}%</div>
             ${infoStrava}
-            <button onclick='window.handleVerSegmento(${portData})' style="width: 100%; background: #fc4c02; color: white; border: none; padding: 8px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 10px;">Ver detalles</button>
+            <button onclick='window.handleVerSegmento(${portData})' style="width: 100%; background: #fc4c02; color: white; border: none; padding: 8px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 10px;">View Details</button>
         </div>`;
 };
 

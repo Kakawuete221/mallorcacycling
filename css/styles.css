@@ -46,7 +46,6 @@ nav {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -93,7 +92,7 @@ nav {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 80%;
     margin: 0 auto;
     padding: 60px 20px;
 }
@@ -139,8 +138,11 @@ nav {
     text-align: center;
 }
 
+.strava-connect-card p {
+    margin-bottom: 20px;
+}
+
 .strava-connect-btn {
-    margin-top: 20px;
     padding: 12px 24px;
     background: var(--primary-color);
     color: white;
