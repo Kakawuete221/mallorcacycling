@@ -226,7 +226,7 @@ nav {
     background-color: white;
     border-radius: 16px;
     width: 90%;
-    max-width: 900px; /* Ajustat segons nova petició */
+    max-width: 900px;
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
@@ -244,19 +244,18 @@ nav {
     text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
-/* Nous contenidors de modal */
 .modal-container {
     display: flex;
     flex-direction: column;
     gap: 20px;
     width: 100%;
-    padding: 0; /* Treiem padding per deixar que el header ocupi tot el width */
+    padding: 0;
 }
 
 .modal-header {
     position: relative;
     height: 200px;
-    border-radius: 12px 12px 0 0; /* Ajustat per encaixar amb el modal */
+    border-radius: 12px 12px 0 0;
     overflow: hidden;
     display: flex;
     align-items: flex-end;
@@ -281,7 +280,25 @@ nav {
     display: grid;
     grid-template-columns: 1.2fr 0.8fr;
     gap: 25px;
-    padding: 0 30px 30px 30px; /* Padding interior per al contingut sota el header */
+    padding: 0 30px 30px 30px;
+}
+
+.basic-stats ul {
+    list-style: none;
+    padding-left: 0;
+    column-count: 2;
+    column-gap: 20px;
+}
+
+.modal-btn {
+    background: #ffdccf;
+    color: var(--primary-color);
+    border: none;
+    padding: 12px 8px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 @media (max-width: 768px) {
@@ -303,6 +320,7 @@ nav {
     border-radius: 12px;
     border: 1px solid #f9d7d7;
     margin-bottom: 20px;
+    margin-top: 20px;
 }
 
 .bar-bg {

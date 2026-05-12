@@ -4,7 +4,8 @@ const CLIENT_ID = '236654';
 const CLIENT_SECRET = '312e7c7c712a8af0e55af705e2d2e6a163d5b563';
 
 // For development, we use localhost. For production, we would switch to the live URL. Make sure to update this in both the loginWithStrava function and the Strava app settings.
-const REDIRECT_URI = 'http://127.0.0.1:5500/index.html'
+// const REDIRECT_URI = 'http://127.0.0.1:5500/index.html'
+const REDIRECT_URI = 'http://127.0.0.1:3000/index.html';
 // const REDIRECT_URI = 'https://www.mallorcacycling.online/index.html';
 
 // Function to initiate Strava OAuth flow

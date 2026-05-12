@@ -28,9 +28,14 @@ export const showModal = (puerto) => {
 
                 <div class="data-col">
                     <div class="basic-stats">
-                        <span>Dist: ${puerto.distancia} km</span>
-                        <span>Avg Grad: ${puerto.pendent_mitja}%</span>
-                        <span>Elevation: ${puerto.desnivell} m</span>
+                        <ul>
+                            <li>Dist: ${puerto.distancia} km</li>
+                            <li>Avg Grad: ${puerto.pendent_mitja}%</li>
+                            <li>Elevation: ${puerto.desnivell} m</li>
+                            <li>Category: ${puerto.categoria}</li>
+                            <li>Max Grad: ${puerto.pendent_max}%</li>
+                            <li>Max Elev: ${puerto.altitud_max} m</li>
+                        </ul>
                     </div>
 
                     <div class="comparison-card">
@@ -42,12 +47,12 @@ export const showModal = (puerto) => {
                     <div class="leaderboard">
                         <div class="entry"><span>👑 KOM:</span> <strong id="modal-kom-real">--:--</strong></div>
                         <div class="entry"><span>👑 QOM:</span> <strong id="modal-qom-real">--:--</strong></div>
-                        <div class="entry pr"><span>⭐ Your PR:</span> <strong id="modal-pr-real">--:--</strong></div>
+                        <div class="entry pr"><span>🏅 Your PR:</span> <strong id="modal-pr-real">--:--</strong></div>
                     </div>
 
                     <div class="action-grid">
-                        <button onclick="window.calcularRuta(${puerto.lat}, ${puerto.lng})">📍 How to get there</button>
-                        <button onclick="window.cercarServeis(${puerto.lat}, ${puerto.lng})">☕ Nearby Services</button>
+                        <button onclick="window.calcularRuta(${puerto.lat}, ${puerto.lng})" class="modal-btn">📍 How to get there</button>
+                        <button onclick="window.cercarServeis(${puerto.lat}, ${puerto.lng})" class="modal-btn">☕ Nearby Services</button>
                     </div>
                 </div>
             </div>
@@ -91,7 +96,7 @@ window.createMiniCardHTML = (port) => {
     if (!port || !port.id) return `<div style="padding:10px;">Error data</div>`;
 
     const cached = JSON.parse(localStorage.getItem(`segment_${port.id}`));
-    let infoStrava = `<div style="border-top: 1px solid #eee; padding-top: 8px; margin-top: 8px; font-size: 11px; color: #888; font-style: italic;">⏳ Loading Strava data...</div>`;
+    let infoStrava = `<div style="border-top: 1px solid #eee; padding-top: 8px; margin-top: 8px; font-size: 11px; color: #888; font-style: italic;">Loading Strava data...</div>`;
 
     if (cached && cached.data) {
         const d = cached.data;
@@ -101,7 +106,7 @@ window.createMiniCardHTML = (port) => {
                     <span>👑 <strong>KOM:</strong> ${d.xoms?.kom || '--:--'}</span>
                     <span>👑 <strong>QOM:</strong> ${d.xoms?.qom || '--:--'}</span>
                 </div>
-                <div style="color: #fc4c02; font-weight: bold;">⭐ PR: ${formatTime(d.athlete_segment_stats?.pr_elapsed_time)}</div>
+                <div style="color: #fc4c02; font-weight: bold;">🏅 PR: ${formatTime(d.athlete_segment_stats?.pr_elapsed_time)}</div>
             </div>`;
     }
 
@@ -109,7 +114,7 @@ window.createMiniCardHTML = (port) => {
     return `
         <div style="font-family: 'Inter', sans-serif; padding: 5px; min-width: 240px;">
             <h3 style="margin: 0; font-size: 15px;">${port.nom}</h3>
-            <div style="font-size: 12px; color: #666; margin-bottom: 8px;">🚲 ${port.distancia}km • ${port.pendent_mitja}%</div>
+            <div style="font-size: 12px; color: #666; margin-bottom: 8px;">🚲 ${port.distancia}km · ${port.pendent_mitja}% · ${port.desnivell}m</div>
             ${infoStrava}
             <button onclick='window.handleVerSegmento(${portData})' style="width: 100%; background: #fc4c02; color: white; border: none; padding: 8px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 10px;">View Details</button>
         </div>`;
