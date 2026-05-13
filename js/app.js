@@ -1,178 +1,183 @@
-// app.js - Main JavaScript for the SPA
+// app.js - Orquestrador d'Esdeveniments i Lògica Central
+import { loginWithStrava, logoutStrava, getSegmentDetails, checkStravaCallback, isStravaSessionValid } from './stravaApi.js';
+import { aplicarFiltres, resetFiltres, setCerca, toggleFiltreGeneric, setToggleCompletats, setValorSlider } from './filters.js';
+// NOU IMPORT ACTUALITZAT: S'han afegit resetearVistaMapa i centrarEnUsuari al final
+import { 
+    initGoogleMap, pintarPorts, centrarMapaEnPort, eliminarMarcadorCerca, 
+    actualitzarMunicipiReal, calcularRutaPort, cercarServeisProp, 
+    resetearVistaMapa, centrarEnUsuari 
+} from './map.js';
+import { showModal, closeModal } from './modal.js';
+import { 
+    uiToggleDropdownFiltres, uiCercaToggle, uiNetejarCercaUnica, 
+    uiToggleCompletatsBtn, uiToggleGeneric, uiActualitzarSlider, uiNetejarFiltres, createMiniCardHTML 
+} from './ui.js';
+import { router } from './router.js';
 
-// Import Strava API functions and Map functions
-import { loginWithStrava, checkStravaCallback, isStravaSessionValid, logoutStrava } from './stravaApi.js';
-import { loadSegments } from './segments.js';
-// Updated imports to include the new Google Maps functionalities
-import { initGoogleMap, initAutocomplete, addPortMarkers, calculateCyclingRoute, pintarPorts } from './map.js';
+// Estat global de l'aplicació
+export const appState = {
+    totsElsPorts: []
+};
 
-document.addEventListener('DOMContentLoaded', async () => {
-    console.log('DOM fully loaded and ready for interaction');
-
-    // Element selectors
-    const navLinks = document.querySelectorAll('.nav-links a');
-    const sections = document.querySelectorAll('.page-section');
-    const loginBtn = document.getElementById('btn-strava-login');
-    const userProfileArea = document.getElementById('user-profile');
-    const routeBtn = document.getElementById('btn-calculate-route');
-
-    // Variable to store segments globally once loaded
-    let globalSegments = [];
-
-    // Initialize segments and markers if user is already logged in
-    async function initializeAppData() {
-        console.log("🔄 Iniciant càrrega de dades...");
-
-        const ports = await loadSegments();
-        globalSegments = ports || [];
-
-        console.log(`✅ Dades carregades: ${globalSegments.length} ports.`);
-
-        // Instead of pintarPorts, we call the functions that integrate with the map
-        if (globalSegments.length > 0) {
-            console.log("Cridant a les funcions del mapa...");
-            addPortMarkers(globalSegments);
-            pintarPorts(globalSegments);
-        } else {
-            console.log("No hi ha ports per pintar!");
-        }
+// Funció central per executar filtres i repintar
+export const executarFiltre = () => {
+    if (appState.totsElsPorts.length > 0) {
+        pintarPorts(aplicarFiltres(appState.totsElsPorts), handlePortClick);
     }
+};
 
-    // SPA Routing engine
-    function navigateTo(hash) {
-        const targetId = hash.replace('#', '') || 'home';
-
-        // Hide all sections
-        sections.forEach(section => {
-            section.style.display = 'none';
-        });
-
-        // Show the target section
-        const targetSection = document.getElementById(targetId);
-        if (targetSection) {
-            targetSection.style.display = 'block';
-        }
-
-        // Logical initialization based on section
-        if (targetId === 'mapa') {
-            setTimeout(() => {
-                initGoogleMap();
-                initAutocomplete();
-                if (globalSegments.length > 0) {
-                    addPortMarkers(globalSegments);
-                }
-            }, 100);
-        }
-
-        if (targetId === 'segments') {
-            setTimeout(() => {
-                initAutocomplete();
-            }, 100);
-        }
-
-        // Update active link in navbar
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === '#' + targetId) {
-                link.classList.add('active');
-            }
-        });
-    }
-
-    // Handle hash change for navigation
-    window.addEventListener('hashchange', () => {
-        navigateTo(window.location.hash);
-    });
-
-    // Initial navigation check
-    navigateTo(window.location.hash);
-
-    // Initial data load
-    await initializeAppData();
-
-    // Event listener for the "Calculate Route" button in the modal
-    if (routeBtn) {
-        routeBtn.addEventListener('click', () => {
-            // 'window.currentPort' should be set inside your showPortDetails function
-            if (window.currentPort) {
-                // Close the modal
-                document.getElementById('port-modal').style.display = 'none';
-
-                // Navigate to the map
-                window.location.hash = '#map';
-
-                // Calculate the route once the map is initialized
-                setTimeout(() => {
-                    calculateCyclingRoute(window.currentPort.lat, window.currentPort.lng);
-                }, 500);
-            }
-        });
-    }
-
-    // Strava Login logic
-    if (loginBtn) {
-        loginBtn.addEventListener('click', () => {
-            loginWithStrava();
-        });
-    }
-
-    // Check for Strava callback (after redirect)
+// Connexió entre Mapa, API i UI quan es clica un port
+const handlePortClick = async (port, infowindow, latLng) => {
     try {
-        const data = await checkStravaCallback();
-        if (data && data.athlete) {
-            showUserLoggedIn(data.athlete);
+        const dadesReals = await getSegmentDetails(port.id);
+        if (dadesReals) {
+            infowindow.setContent(createMiniCardHTML(port, dadesReals));
         }
-    } catch (err) {
-        console.error("Error during Strava callback:", err);
+    } catch (error) {
+        console.error("Error obtenint detalls de Strava:", error);
+    }
+};
+
+// GESTIÓ GLOBAL D'ESDEVENIMENTS (Event Delegation)
+document.addEventListener('click', async (e) => {
+    // 1. Navegació del Router
+    if (e.target.matches("[data-link]")) {
+        e.preventDefault();
+        window.history.pushState(null, null, e.target.href);
+        router();
+        return;
     }
 
-    // Check for existing session
-    const storedAthlete = localStorage.getItem('strava_athlete');
-    if (storedAthlete) {
-        showUserLoggedIn(JSON.parse(storedAthlete));
+    // 2. Tancar menú mòbil si es clica fora
+    const menu = document.querySelector('.nav-menu');
+    const toggleBtn = document.querySelector('.nav-toggle');
+    if (menu && toggleBtn && menu.classList.contains('active') && !e.target.closest('.nav-container')) {
+        menu.classList.remove('active');
+        toggleBtn.setAttribute('aria-expanded', 'false');
     }
 
-    // Update UI for logged in user
-    function showUserLoggedIn(user) {
-        if (!user) return;
-        if (loginBtn) loginBtn.style.display = 'none';
-        if (userProfileArea) userProfileArea.style.display = 'flex';
-        if (document.getElementById('user-name')) {
-            document.getElementById('user-name').textContent = user.firstname;
-        }
-        if (document.getElementById('user-avatar')) {
-            document.getElementById('user-avatar').src = user.profile_medium;
-        }
+    // 3. Tancar panells de filtres si es clica fora
+    const panelFiltres = document.getElementById('panel-filtres');
+    const btnFiltres = document.getElementById('btn-filtres-dropdown');
+    const llistaSugg = document.getElementById('llista-suggeriments');
+    const inputCerca = document.getElementById('input-cerca');
+
+    if (panelFiltres && !panelFiltres.classList.contains('hidden') && !panelFiltres.contains(e.target) && !btnFiltres.contains(e.target)) {
+        panelFiltres.classList.add('hidden');
+        btnFiltres.classList.remove('bg-gray-100', 'border-gray-400');
     }
 
-    // Close modal event
-    const closeModal = document.querySelector('.close-modal');
-    if (closeModal) {
-        closeModal.onclick = () => {
-            document.getElementById('port-modal').style.display = "none";
-        };
+    if (llistaSugg && !llistaSugg.classList.contains('hidden') && !llistaSugg.contains(e.target) && e.target !== inputCerca) {
+        llistaSugg.classList.add('hidden');
     }
 
-    if (isStravaSessionValid()) {
-        const user = JSON.parse(localStorage.getItem('strava_athlete'));
-        showUserLoggedIn(user);
-    } else {
-        logoutStrava();
-        console.log("Sessió no vàlida o caducada.");
+    // 4. Accions específiques
+    const target = e.target.closest('[data-action]');
+    if (!target) return;
+
+    const action = target.dataset.action;
+
+    switch (action) {
+        case 'login-strava':
+            loginWithStrava();
+            break;
+        case 'logout-strava':
+            logoutStrava();
+            window.location.href = "/";
+            break;
+        case 'toggle-user-dropdown':
+            const d = document.getElementById('user-dropdown');
+            if (d) d.style.display = d.style.display === 'none' ? 'block' : 'none';
+            break;
+        case 'toggle-mobile-menu':
+            if (menu && toggleBtn) {
+                const isActive = menu.classList.toggle('active');
+                toggleBtn.setAttribute('aria-expanded', String(isActive));
+            }
+            break;
+        case 'view-details':
+            const portData = JSON.parse(target.dataset.port);
+            showModal(portData);
+            break;
+        case 'close-modal':
+            closeModal();
+            break;
+        case 'toggle-filtres':
+            uiToggleDropdownFiltres();
+            break;
+        case 'netejar-filtres':
+            uiNetejarFiltres();
+            resetFiltres();
+            executarFiltre();
+            break;
+        case 'netejar-cerca':
+            uiNetejarCercaUnica();
+            setCerca("");
+            eliminarMarcadorCerca();
+            executarFiltre();
+            break;
+        case 'toggle-completats':
+            const nouEstatComp = uiToggleCompletatsBtn(target); 
+            setToggleCompletats(nouEstatComp); 
+            executarFiltre();
+            break;
+        case 'toggle-generic':
+            uiToggleGeneric(target);
+            toggleFiltreGeneric(target.dataset.camp, target.dataset.valor);
+            executarFiltre();
+            break;
+        case 'seleccionar-suggeriment':
+            const portSugg = JSON.parse(target.dataset.port);
+            document.getElementById('input-cerca').value = portSugg.nom;
+            document.getElementById('llista-suggeriments').classList.add('hidden');
+            document.getElementById('btn-clear-search').classList.remove('hidden');
+            centrarMapaEnPort(portSugg.lat, portSugg.lng, portSugg.nom);
+            break;
+        case 'calcular-ruta':
+            calcularRutaPort(parseFloat(target.dataset.lat), parseFloat(target.dataset.lng));
+            break;
+        case 'cercar-serveis':
+            cercarServeisProp(parseFloat(target.dataset.lat), parseFloat(target.dataset.lng));
+            break;
+        
+        // NOUS CASOS PER ALS BOTONS DEL MAPA
+        case 'reset-map-view':
+            resetearVistaMapa();
+            break;
+        case 'center-on-user':
+            centrarEnUsuari();
+            break;
     }
 });
 
-// Global function to show port details in the modal, called from map.js when a marker is clicked
-window.showPortDetails = function (port) {
-    // Save to global variable for the route button
-    window.currentPort = port;
+// Escoltar inputs (cerca i sliders)
+document.addEventListener('input', (e) => {
+    if (e.target.id === 'input-cerca') {
+        const textCerca = e.target.value;
+        const teCaractersValids = uiCercaToggle(textCerca, appState.totsElsPorts);
+        
+        if (!teCaractersValids) {
+            setCerca("");
+            eliminarMarcadorCerca();
+            executarFiltre();
+        }
+    } else if (e.target.classList.contains('custom-slider')) {
+        const target = e.target;
+        uiActualitzarSlider(
+            target.value, 
+            target.dataset.valId, 
+            target.dataset.prefix || '', 
+            target.dataset.sufix || ''
+        );
+        setValorSlider(target.dataset.camp, target.value);
+        executarFiltre();
+    }
+});
 
-    document.getElementById('modal-title').textContent = port.nom;
-    document.getElementById('modal-municipi').textContent = port.municipi || 'Mallorca';
-    document.getElementById('modal-distancia').textContent = port.distancia;
-    document.getElementById('modal-desnivell').textContent = port.desnivell;
-    document.getElementById('modal-pendent').textContent = port.pendent;
-
-    // Show the modal
-    document.getElementById('port-modal').style.display = "block";
-};
+// Inicialització principal
+document.addEventListener("DOMContentLoaded", async () => {
+    await checkStravaCallback();
+    if (!isStravaSessionValid()) logoutStrava();
+    window.addEventListener("popstate", router);
+    router();
+});

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,13 +18,28 @@
         async defer></script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#fc4c02'
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 
 <body>
     <nav>
         <div class="nav-container">
             <h2 class="logo">Mallorca Cycling</h2>
-            <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" onclick="toggleMobileMenu()">
+            <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false"
+                onclick="toggleMobileMenu()">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -32,13 +48,15 @@
                 <li><a href="/" class="nav-link" data-link>Home</a></li>
                 <li><a href="/map" class="nav-link" data-link>Map</a></li>
                 <li><a href="/segments" class="nav-link" data-link>Segments</a></li>
-                <li class="nav-user-item"><div id="user-nav-area"></div></li>
+                <li class="nav-user-item">
+                    <div id="user-nav-area"></div>
+                </li>
             </ul>
         </div>
     </nav>
 
     <main id="app-viewport">
-        </main>
+    </main>
 
     <footer>
         <p>By Pau and Jaume &copy; 2026 Mallorca Cycling</p>

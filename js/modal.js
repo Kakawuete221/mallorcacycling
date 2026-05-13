@@ -1,7 +1,6 @@
-// modal.js - Gestió de Modal i MiniCard
-import { getSegmentDetails } from './stravaApi.js';
-import { formatTime, calcularVelocitat } from './utils.js';
-import { dibuixarMiniMapa } from './map.js';
+// modal.js - Gestió de Modal
+import { formatTime } from './utils.js';
+import { dibuixarMiniMapa, actualitzarMunicipiReal, dibuixarPerfilElevacio } from './map.js';
 
 export const showModal = (puerto) => {
     const modal = document.getElementById('puerto-modal');
@@ -51,8 +50,8 @@ export const showModal = (puerto) => {
                     </div>
 
                     <div class="action-grid">
-                        <button onclick="window.calcularRuta(${puerto.lat}, ${puerto.lng})" class="modal-btn">📍 How to get there</button>
-                        <button onclick="window.cercarServeis(${puerto.lat}, ${puerto.lng})" class="modal-btn">☕ Nearby Services</button>
+                        <button data-action="calcular-ruta" data-lat="${puerto.lat}" data-lng="${puerto.lng}" class="modal-btn">📍 How to get there</button>
+                        <button data-action="cercar-serveis" data-lat="${puerto.lat}" data-lng="${puerto.lng}" class="modal-btn">☕ Nearby Services</button>
                     </div>
                 </div>
             </div>
@@ -60,15 +59,14 @@ export const showModal = (puerto) => {
 
     modal.style.display = 'flex';
 
-    // Execució de les funcions d'API
-    dibuixarMiniMapa(puerto); // Pinta el mapa
-    window.actualitzarMunicipiReal(puerto.lat, puerto.lng); // Pinta el poble (Geocoding)
-    window.dibuixarPerfilElevacio(puerto.polyline); // Pinta l'altimetria (Elevation API)
+    dibuixarMiniMapa(puerto); 
+    actualitzarMunicipiReal(puerto.lat, puerto.lng); 
+    dibuixarPerfilElevacio(puerto.polyline); 
+    
+    _omplirDadesStravaModal(puerto);
 };
 
-window.handleVerSegmento = (port) => {
-    showModal(port); // Genera l'HTML i crida les APIs de Google
-
+const _omplirDadesStravaModal = (port) => {
     const cached = JSON.parse(localStorage.getItem(`segment_${port.id}`));
     if (cached && cached.data) {
         const d = cached.data;
@@ -79,8 +77,7 @@ window.handleVerSegmento = (port) => {
         document.getElementById('modal-qom-real').innerText = d.xoms?.qom || "--:--";
         document.getElementById('modal-pr-real').innerText = formatTime(prSec);
 
-        // Actualitzem la barra de comparativa
-        const komSec = timeToSeconds(komStr);
+        const komSec = _timeToSeconds(komStr);
         if (komSec > 0 && prSec > 0) {
             const bar = document.getElementById('pr-progress-bar');
             const percent = Math.min(100, (komSec / prSec) * 100);
@@ -92,35 +89,15 @@ window.handleVerSegmento = (port) => {
     }
 };
 
-window.createMiniCardHTML = (port) => {
-    if (!port || !port.id) return `<div style="padding:10px;">Error data</div>`;
-
-    const cached = JSON.parse(localStorage.getItem(`segment_${port.id}`));
-    let infoStrava = `<div style="border-top: 1px solid #eee; padding-top: 8px; margin-top: 8px; font-size: 11px; color: #888; font-style: italic;">Loading Strava data...</div>`;
-
-    if (cached && cached.data) {
-        const d = cached.data;
-        infoStrava = `
-            <div style="border-top: 1px solid #eee; padding-top: 8px; margin-top: 8px; font-size: 12px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                    <span>👑 <strong>KOM:</strong> ${d.xoms?.kom || '--:--'}</span>
-                    <span>👑 <strong>QOM:</strong> ${d.xoms?.qom || '--:--'}</span>
-                </div>
-                <div style="color: #fc4c02; font-weight: bold;">🏅 PR: ${formatTime(d.athlete_segment_stats?.pr_elapsed_time)}</div>
-            </div>`;
-    }
-
-    const portData = JSON.stringify(port).replace(/'/g, "&apos;");
-    return `
-        <div style="font-family: 'Inter', sans-serif; padding: 5px; min-width: 240px;">
-            <h3 style="margin: 0; font-size: 15px;">${port.nom}</h3>
-            <div style="font-size: 12px; color: #666; margin-bottom: 8px;">🚲 ${port.distancia}km · ${port.pendent_mitja}% · ${port.desnivell}m</div>
-            ${infoStrava}
-            <button onclick='window.handleVerSegmento(${portData})' style="width: 100%; background: #fc4c02; color: white; border: none; padding: 8px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 10px;">View Details</button>
-        </div>`;
+const _timeToSeconds = (timeStr) => {
+    if (!timeStr || timeStr === "--:--") return 0;
+    const parts = timeStr.split(':').map(Number);
+    if (parts.length === 3) return (parts[0] * 3600) + (parts[1] * 60) + parts[2];
+    if (parts.length === 2) return (parts[0] * 60) + parts[1];
+    return 0;
 };
 
-window.closeModal = () => {
+export const closeModal = () => {
     const modal = document.getElementById('puerto-modal');
     if (modal) modal.style.display = 'none';
 };
