@@ -62,19 +62,19 @@ const routes = {
         title: "Segments | Mallorca Cycling",
         render: async () => {
             return `
-            <div class="max-w-[80%] mx-auto py-12 px-5">
+            <div class="w-full lg:max-w-[80%] mx-auto py-12 px-5">
                 <h1 class="text-4xl font-bold font-title text-secondary mb-8">Segments</h1>
                 <div class="mb-8 relative z-40 flex flex-col lg:flex-row lg:items-start justify-between gap-4">
                     <div class="flex-1">
                         ${createFiltresHTML()}
                     </div>
                     <div>
-                        <select id="select-ordenacio" class="bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 py-0 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors focus:ring-0 focus:border-gray-200 cursor-pointer outline-none">
+                        <select id="select-ordenacio" class="min-w-[150px] bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 py-0 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors focus:ring-0 focus:border-gray-200 cursor-pointer outline-none">
                             <option value="">Default order</option>
-                            <option value="dist_asc">Distance: Low to High</option>
-                            <option value="dist_desc">Distance: High to Low</option>
-                            <option value="grad_asc">Gradient: Low to High</option>
-                            <option value="grad_desc">Gradient: High to Low</option>
+                            <option value="dist_asc">Distance ⬆️</option>
+                            <option value="dist_desc">Distance ⬇️</option>
+                            <option value="grad_asc">Gradient ⬆️</option>
+                            <option value="grad_desc">Gradient ⬇️</option>
                         </select>
                     </div>
                 </div>

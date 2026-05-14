@@ -50,9 +50,20 @@ const handlePortClick = async (port, infowindow, latLng) => {
 // GESTIÓ GLOBAL D'ESDEVENIMENTS (Event Delegation)
 document.addEventListener('click', async (e) => {
     // 1. Navegació del Router
-    if (e.target.matches("[data-link]")) {
+    const link = e.target.closest("[data-link]");
+    if (link) {
         e.preventDefault();
-        window.history.pushState(null, null, e.target.href);
+        
+        // Tancar menú mòbil si està obert
+        const menu = document.querySelector('.nav-menu');
+        const toggleBtn = document.querySelector('.nav-toggle');
+        if (menu && menu.classList.contains('active')) {
+            menu.classList.remove('active');
+            if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
+        }
+
+        const href = link.getAttribute('href') || link.href;
+        window.history.pushState(null, null, href);
         router();
         return;
     }
@@ -78,6 +89,13 @@ document.addEventListener('click', async (e) => {
 
     if (llistaSugg && !llistaSugg.classList.contains('hidden') && !llistaSugg.contains(e.target) && e.target !== inputCerca) {
         llistaSugg.classList.add('hidden');
+    }
+
+    // 4. Tancar user-dropdown si es clica fora
+    const userDropdown = document.getElementById('user-dropdown');
+    const userToggle = e.target.closest('[data-action="toggle-user-dropdown"]');
+    if (userDropdown && userDropdown.style.display === 'block' && !userDropdown.contains(e.target) && !userToggle) {
+        userDropdown.style.display = 'none';
     }
 
     // 4. Accions específiques

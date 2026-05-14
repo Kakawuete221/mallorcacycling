@@ -13,12 +13,13 @@ export function actualitzarInterficieUsuari() {
         const user = JSON.parse(userStr);
         if (navArea) {
             navArea.innerHTML = `
-                <div class="relative group user-dropdown-container">
-                    <div data-action="toggle-user-dropdown" class="flex items-center gap-2.5 cursor-pointer">
+                <div class="relative user-dropdown-container">
+                    <div data-action="toggle-user-dropdown" class="flex items-center gap-2.5 cursor-pointer hover:bg-gray-100 px-3 py-1.5 rounded-lg transition-colors select-none">
                         <span class="font-bold text-secondary">${user.firstname}</span>
                         <img src="${user.profile_medium}" class="w-[38px] h-[38px] rounded-full border-2 border-primary object-cover">
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </div>
-                    <div id="user-dropdown" class="hidden absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-md z-[2000] border border-gray-100 overflow-hidden group-focus-within:block">
+                    <div id="user-dropdown" class="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-md z-[2000] border border-gray-100 overflow-hidden" style="display: none;">
                         <button data-action="logout-strava" class="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors">Log out</button>
                     </div>
                 </div>`;
