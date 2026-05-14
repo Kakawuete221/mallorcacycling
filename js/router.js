@@ -19,21 +19,21 @@ const routes = {
             const destacats = puertos.slice(0, 4).map(createCardHTML).join('');
 
             return `
-            <section id="intro" class="section fade-in">
-                <div class="intro-container">
-                    <img src="media/photo.jpeg" class="intro-photo">
-                    <div class="intro-text">
-                        <h1>Mallorca Cycling</h1>
-                        <p>Discover the best mountain passes in Mallorca.</p>
+            <section id="intro" class="fade-in">
+                <div class="relative w-full h-[70vh] overflow-hidden">
+                    <img src="media/photo.jpeg" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 flex flex-col justify-center items-center text-white bg-black/40 text-center p-5">
+                        <h1 class="font-title text-4xl md:text-5xl font-bold mb-4">Mallorca Cycling</h1>
+                        <p class="text-lg md:text-xl">Discover the best mountain passes in Mallorca.</p>
                     </div>
                 </div>
             </section>
-            <section class="container">
-                <h2 class="section-title">Featured Segments</h2>
-                <div class="segment-container">${destacats}</div>
+            <section class="max-w-[80%] mx-auto py-16 px-5">
+                <h2 class="text-3xl font-bold font-title text-secondary mb-8 text-center">Featured Segments</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 py-5">${destacats}</div>
             </section>
-            <section class="container">
-                <div class="strava-connect-card" id="strava-card-container"></div>
+            <section class="max-w-[80%] mx-auto py-16 px-5">
+                <div class="bg-[#fdfdfd] border-2 border-primary p-10 rounded-xl text-center" id="strava-card-container"></div>
             </section>`;
         }
     },
@@ -142,7 +142,7 @@ const routes = {
         render: async () => {
             const puertos = await getPuertos();
             const tots = puertos.map(createCardHTML).join('');
-            return `<div class="container"><div class="segment-container">${tots}</div></div>`;
+            return `<div class="max-w-[80%] mx-auto py-16 px-5"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 py-5">${tots}</div></div>`;
         }
     }
 };
@@ -151,9 +151,9 @@ export const router = async () => {
     const path = window.location.pathname;
     const route = routes[path] || routes["/"];
     document.getElementById("app-viewport").innerHTML = await route.render() + `
-        <div id="puerto-modal" class="modal" style="display:none;">
-            <div class="modal-content">
-                <span class="close-modal" data-action="close-modal">&times;</span>
+        <div id="puerto-modal" class="fixed inset-0 z-[2000] bg-black/60 backdrop-blur-sm flex items-center justify-center" style="display:none;">
+            <div class="bg-white rounded-2xl w-[90%] max-w-[900px] max-h-[90vh] overflow-y-auto relative shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
+                <span class="absolute top-4 right-5 text-4xl text-white z-[2100] cursor-pointer drop-shadow-md" data-action="close-modal">&times;</span>
                 <div id="modal-body"></div>
             </div>
         </div>`;

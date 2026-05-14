@@ -13,35 +13,35 @@ export function actualitzarInterficieUsuari() {
         const user = JSON.parse(userStr);
         if (navArea) {
             navArea.innerHTML = `
-                <div class="user-dropdown-container">
-                    <div data-action="toggle-user-dropdown" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                        <span style="font-weight: 700; color: var(--secondary-color);">${user.firstname}</span>
-                        <img src="${user.profile_medium}" style="width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--primary-color);">
+                <div class="relative group user-dropdown-container">
+                    <div data-action="toggle-user-dropdown" class="flex items-center gap-2.5 cursor-pointer">
+                        <span class="font-bold text-secondary">${user.firstname}</span>
+                        <img src="${user.profile_medium}" class="w-[38px] h-[38px] rounded-full border-2 border-primary object-cover">
                     </div>
-                    <div id="user-dropdown" style="display: none; position: absolute; background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); z-index: 2000;">
-                        <button data-action="logout-strava" style="padding: 10px; border: none; background: none; cursor: pointer; width: 100%; text-align: left;">Log out</button>
+                    <div id="user-dropdown" class="hidden absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-md z-[2000] border border-gray-100 overflow-hidden group-focus-within:block">
+                        <button data-action="logout-strava" class="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors">Log out</button>
                     </div>
                 </div>`;
         }
         
         if (connectCard) {
             connectCard.innerHTML = `
-                <div style="text-align: center; padding: 20px;">
-                    <img src="${user.profile_medium}" style="width: 70px; border-radius: 50%; border: 3px solid var(--primary-color);">
-                    <h2>Hello, ${user.firstname}!</h2>
-                    <p>You are already connected to Strava.</p>
-                    <button class="strava-connect-btn" data-link href="/map">GO TO MAP</button>
+                <div class="flex flex-col items-center justify-center p-5">
+                    <img src="${user.profile_medium}" class="w-[70px] h-[70px] rounded-full border-[3px] border-primary mb-4 object-cover shadow-sm">
+                    <h2 class="text-2xl font-bold font-title text-secondary mb-2">Hello, ${user.firstname}!</h2>
+                    <p class="text-gray-600 mb-6">You are already connected to Strava.</p>
+                    <button class="bg-primary hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition-transform hover:scale-105 duration-200" data-link href="/map">GO TO MAP</button>
                 </div>`;
         }
     } else {
         if (navArea) {
-            navArea.innerHTML = `<button data-action="login-strava" class="strava-connect-btn">LOGIN</button>`;
+            navArea.innerHTML = `<button data-action="login-strava" class="bg-primary hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg transition-transform hover:scale-105 duration-200 text-sm">LOGIN</button>`;
         }
         if (connectCard) {
             connectCard.innerHTML = `
-                <h2>Connect with Strava</h2>
-                <p>Connect to view your real-time times and PRs on segments.</p>
-                <button class="strava-connect-btn" data-action="login-strava">CONNECT ACCOUNT</button>`;
+                <h2 class="text-2xl font-bold font-title text-secondary mb-4">Connect with Strava</h2>
+                <p class="text-gray-600 mb-6">Connect to view your real-time times and PRs on segments.</p>
+                <button class="bg-primary hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition-transform hover:scale-105 duration-200" data-action="login-strava">CONNECT ACCOUNT</button>`;
         }
     }
 }
@@ -53,53 +53,53 @@ export const createCardHTML = (puerto) => {
     const portDataStr = JSON.stringify(puerto).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
 
     return `
-    <div class="segment">
-        <div class="card-img-wrapper">
-            <img src="media/${nom}.jpg" onerror="this.onerror=null; this.src='media/photo.jpeg';">
+    <div class="bg-white rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.08)] hover:-translate-y-[5px] transition-transform duration-300 overflow-hidden flex flex-col h-full">
+        <div class="w-full h-[200px]">
+            <img src="media/${nom}.jpg" onerror="this.onerror=null; this.src='media/photo.jpeg';" class="w-full h-full object-cover">
         </div>
-        <div class="segment-content">
-            <h3>${nom}</h3>
-            <p>Distance: ${dist} km | Elevation: ${desn} m</p>
-            <button class="view-details-btn" data-action="view-details" data-port="${portDataStr}">View Details</button>
+        <div class="p-5 flex-1 flex flex-col">
+            <h3 class="font-title font-bold text-xl text-secondary mb-2">${nom}</h3>
+            <p class="text-gray-600 text-sm mb-4">Distance: ${dist} km | Elevation: ${desn} m</p>
+            <button class="mt-auto w-full py-3 bg-primary hover:bg-orange-600 text-white font-bold rounded-lg transition-colors" data-action="view-details" data-port="${portDataStr}">View Details</button>
         </div>
     </div>`;
 };
 
 export const createMiniCardHTML = (port, dadesStrava = null) => {
-    if (!port || !port.id) return `<div style="padding:10px;">Error data</div>`;
+    if (!port || !port.id) return `<div class="p-2.5">Error data</div>`;
 
-    let infoStrava = `<div style="border-top: 1px solid #eee; padding-top: 8px; margin-top: 8px; font-size: 11px; color: #888; font-style: italic;">Loading Strava data...</div>`;
+    let infoStrava = `<div class="border-t border-gray-100 pt-2 mt-2 text-[11px] text-gray-400 italic">Loading Strava data...</div>`;
 
     if (dadesStrava) {
         infoStrava = `
-            <div style="border-top: 1px solid #eee; padding-top: 8px; margin-top: 8px; font-size: 12px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <div class="border-t border-gray-100 pt-2 mt-2 text-xs">
+                <div class="flex justify-between mb-1 text-gray-600">
                     <span>👑 <strong>KOM:</strong> ${dadesStrava.xoms?.kom || '--:--'}</span>
                     <span>👑 <strong>QOM:</strong> ${dadesStrava.xoms?.qom || '--:--'}</span>
                 </div>
-                <div style="color: #fc4c02; font-weight: bold;">🏅 PR: ${formatTime(dadesStrava.athlete_segment_stats?.pr_elapsed_time)}</div>
+                <div class="text-primary font-bold">🏅 PR: ${formatTime(dadesStrava.athlete_segment_stats?.pr_elapsed_time)}</div>
             </div>`;
     } else {
         const cached = JSON.parse(localStorage.getItem(`segment_${port.id}`));
         if (cached && cached.data) {
             infoStrava = `
-                <div style="border-top: 1px solid #eee; padding-top: 8px; margin-top: 8px; font-size: 12px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <div class="border-t border-gray-100 pt-2 mt-2 text-xs">
+                    <div class="flex justify-between mb-1 text-gray-600">
                         <span>👑 <strong>KOM:</strong> ${cached.data.xoms?.kom || '--:--'}</span>
                         <span>👑 <strong>QOM:</strong> ${cached.data.xoms?.qom || '--:--'}</span>
                     </div>
-                    <div style="color: #fc4c02; font-weight: bold;">🏅 PR: ${formatTime(cached.data.athlete_segment_stats?.pr_elapsed_time)}</div>
+                    <div class="text-primary font-bold">🏅 PR: ${formatTime(cached.data.athlete_segment_stats?.pr_elapsed_time)}</div>
                 </div>`;
         }
     }
 
     const portDataStr = JSON.stringify(port).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
     return `
-        <div style="font-family: 'Inter', sans-serif; padding: 5px; min-width: 240px;">
-            <h3 style="margin: 0; font-size: 15px;">${port.nom}</h3>
-            <div style="font-size: 12px; color: #666; margin-bottom: 8px;">🚲 ${port.distancia}km · ${port.pendent_mitja}% · ${port.desnivell}m</div>
+        <div class="font-body p-1.5 min-w-[240px]">
+            <h3 class="m-0 text-[15px] font-bold text-secondary">${port.nom}</h3>
+            <div class="text-xs text-gray-500 mb-2">🚲 ${port.distancia}km · ${port.pendent_mitja}% · ${port.desnivell}m</div>
             ${infoStrava}
-            <button data-action="view-details" data-port="${portDataStr}" style="width: 100%; background: #fc4c02; color: white; border: none; padding: 8px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 10px;">View Details</button>
+            <button data-action="view-details" data-port="${portDataStr}" class="w-full bg-primary hover:bg-orange-600 text-white border-none p-2 rounded text-sm font-bold cursor-pointer mt-2.5 transition-colors">View Details</button>
         </div>`;
 };
 

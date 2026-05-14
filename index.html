@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
@@ -27,7 +27,12 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#fc4c02'
+                        primary: '#fc4c02',
+                        secondary: '#2f353b',
+                    },
+                    fontFamily: {
+                        title: ['Lexend', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
                     }
                 }
             }
@@ -35,31 +40,42 @@
     </script>
 </head>
 
-<body>
-    <nav>
-        <div class="nav-container">
-            <h2 class="logo">Mallorca Cycling</h2>
-            <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false"
-                onclick="toggleMobileMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
+<body class="font-body text-gray-800 bg-[#fcfcfc] overflow-y-auto">
+    <nav class="fixed top-0 w-full h-[80px] bg-white/95 backdrop-blur z-[1000] shadow-sm flex items-center">
+        <div class="flex justify-between items-center w-full mx-auto px-5 relative">
+            <h2 class="text-primary italic font-title text-2xl font-bold">Mallorca Cycling</h2>
+            <button
+                class="nav-toggle md:hidden flex flex-col justify-center gap-[6px] p-2 bg-transparent border-none cursor-pointer group"
+                aria-label="Toggle navigation" aria-expanded="false" data-action="toggle-mobile-menu">
+                <span
+                    class="block w-6 h-[3px] rounded-full bg-secondary transition-transform duration-200 group-aria-[expanded=true]:rotate-45 group-aria-[expanded=true]:translate-y-[9px]"></span>
+                <span
+                    class="block w-6 h-[3px] rounded-full bg-secondary transition-opacity duration-200 group-aria-[expanded=true]:opacity-0"></span>
+                <span
+                    class="block w-6 h-[3px] rounded-full bg-secondary transition-transform duration-200 group-aria-[expanded=true]:-rotate-45 group-aria-[expanded=true]:-translate-y-[9px]"></span>
             </button>
-            <ul class="nav-menu">
-                <li><a href="/" class="nav-link" data-link>Home</a></li>
-                <li><a href="/map" class="nav-link" data-link>Map</a></li>
-                <li><a href="/segments" class="nav-link" data-link>Segments</a></li>
-                <li class="nav-user-item">
+            <ul
+                class="nav-menu hidden md:flex absolute md:relative top-full md:top-auto left-0 w-full md:w-auto bg-white/98 md:bg-transparent flex-col md:flex-row items-stretch md:items-center p-5 md:p-0 gap-4 md:gap-6 border-t md:border-none border-gray-200 shadow-lg md:shadow-none [&.active]:flex">
+                <li class="flex justify-center"><a href="/"
+                        class="text-secondary font-bold uppercase py-2 md:py-0 hover:text-primary hover:underline transition-colors"
+                        data-link>Home</a></li>
+                <li class="flex justify-center"><a href="/map"
+                        class="text-secondary font-bold uppercase py-2 md:py-0 hover:text-primary hover:underline transition-colors"
+                        data-link>Map</a></li>
+                <li class="flex justify-center"><a href="/segments"
+                        class="text-secondary font-bold uppercase py-2 md:py-0 hover:text-primary hover:underline transition-colors"
+                        data-link>Segments</a></li>
+                <li class="flex justify-center md:ml-auto">
                     <div id="user-nav-area"></div>
                 </li>
             </ul>
         </div>
     </nav>
 
-    <main id="app-viewport">
+    <main id="app-viewport" class="pt-[80px] min-h-[80vh]">
     </main>
 
-    <footer>
+    <footer class="text-center py-10 px-5 bg-[#f1f1f1] text-secondary">
         <p>By Pau and Jaume &copy; 2026 Mallorca Cycling</p>
     </footer>
 

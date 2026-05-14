@@ -8,50 +8,52 @@ export const showModal = (puerto) => {
     if (!modal || !modalBody) return;
 
     modalBody.innerHTML = `
-        <div class="modal-container">
-            <div class="modal-header">
-                <img src="media/${puerto.nom}.jpg" class="header-img" onerror="this.src='media/photo.jpeg'">
-                <div class="header-text">
-                    <h2>${puerto.nom}</h2>
-                    <p id="modal-municipi">Finding location...</p>
+        <div class="flex flex-col gap-5 w-full p-0">
+            <div class="relative h-[200px] rounded-t-xl overflow-hidden flex items-end p-5 text-white">
+                <img src="media/${puerto.nom}.jpg" class="absolute top-0 left-0 w-full h-full object-cover z-0 brightness-75" onerror="this.src='media/photo.jpeg'">
+                <div class="relative z-10">
+                    <h2 class="text-3xl font-title font-bold drop-shadow-md m-0">${puerto.nom}</h2>
+                    <p id="modal-municipi" class="text-sm opacity-90 m-0 mt-1">Finding location...</p>
                 </div>
             </div>
 
-            <div class="modal-grid">
-                <div class="visual-col">
-                    <div id="modal-mini-map" class="mini-map-box"></div>
-                    <div class="chart-box">
+            <div class="grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-6 px-7 pb-7">
+                <div>
+                    <div id="modal-mini-map" class="h-[250px] rounded-xl border border-gray-200 shadow-sm w-full"></div>
+                    <div class="mt-4">
                         <canvas id="elevation-chart"></canvas>
                     </div>
                 </div>
 
-                <div class="data-col">
-                    <div class="basic-stats">
-                        <ul>
-                            <li>Dist: ${puerto.distancia} km</li>
-                            <li>Avg Grad: ${puerto.pendent_mitja}%</li>
-                            <li>Elevation: ${puerto.desnivell} m</li>
-                            <li>Category: ${puerto.categoria}</li>
-                            <li>Max Grad: ${puerto.pendent_max}%</li>
-                            <li>Max Elev: ${puerto.altitud_max} m</li>
+                <div>
+                    <div class="mb-5">
+                        <ul class="list-none p-0 columns-2 gap-5 text-sm text-gray-700">
+                            <li class="mb-2">Dist: <span class="font-bold">${puerto.distancia} km</span></li>
+                            <li class="mb-2">Avg Grad: <span class="font-bold">${puerto.pendent_mitja}%</span></li>
+                            <li class="mb-2">Elev: <span class="font-bold">${puerto.desnivell} m</span></li>
+                            <li class="mb-2">Cat: <span class="font-bold">${puerto.categoria}</span></li>
+                            <li class="mb-2">Max Grad: <span class="font-bold">${puerto.pendent_max}%</span></li>
+                            <li class="mb-2">Max Elev: <span class="font-bold">${puerto.altitud_max} m</span></li>
                         </ul>
                     </div>
 
-                    <div class="comparison-card">
-                        <h4>🚀 You vs. KOM</h4>
-                        <div class="bar-bg"><div id="pr-progress-bar" class="bar-fill"></div></div>
-                        <p id="comparison-text"></p>
+                    <div class="bg-orange-50 p-4 rounded-xl border border-orange-100 my-5">
+                        <h4 class="font-bold text-gray-700 m-0 mb-2">🚀 You vs. KOM</h4>
+                        <div class="bg-gray-200 h-2.5 rounded-full my-2.5 overflow-hidden">
+                            <div id="pr-progress-bar" class="bg-primary h-full rounded-full w-0 transition-all duration-[1500ms] ease-out"></div>
+                        </div>
+                        <p id="comparison-text" class="text-sm text-gray-600 m-0"></p>
                     </div>
 
-                    <div class="leaderboard">
-                        <div class="entry"><span>👑 KOM:</span> <strong id="modal-kom-real">--:--</strong></div>
-                        <div class="entry"><span>👑 QOM:</span> <strong id="modal-qom-real">--:--</strong></div>
-                        <div class="entry pr"><span>🏅 Your PR:</span> <strong id="modal-pr-real">--:--</strong></div>
+                    <div class="bg-gray-50 p-4 rounded-xl mt-4 space-y-2 text-sm text-gray-700">
+                        <div class="flex justify-between border-b border-gray-200 pb-2"><span>👑 KOM:</span> <strong id="modal-kom-real">--:--</strong></div>
+                        <div class="flex justify-between border-b border-gray-200 pb-2"><span>👑 QOM:</span> <strong id="modal-qom-real">--:--</strong></div>
+                        <div class="flex justify-between text-primary"><span>🏅 Your PR:</span> <strong id="modal-pr-real">--:--</strong></div>
                     </div>
 
-                    <div class="action-grid">
-                        <button data-action="calcular-ruta" data-lat="${puerto.lat}" data-lng="${puerto.lng}" class="modal-btn">📍 How to get there</button>
-                        <button data-action="cercar-serveis" data-lat="${puerto.lat}" data-lng="${puerto.lng}" class="modal-btn">☕ Nearby Services</button>
+                    <div class="grid grid-cols-2 gap-3 mt-5">
+                        <button data-action="calcular-ruta" data-lat="${puerto.lat}" data-lng="${puerto.lng}" class="bg-orange-100 text-primary hover:bg-orange-200 border-none py-3 px-2 rounded-lg text-sm font-bold cursor-pointer transition-colors">📍 Route</button>
+                        <button data-action="cercar-serveis" data-lat="${puerto.lat}" data-lng="${puerto.lng}" class="bg-orange-100 text-primary hover:bg-orange-200 border-none py-3 px-2 rounded-lg text-sm font-bold cursor-pointer transition-colors">☕ Services</button>
                     </div>
                 </div>
             </div>
