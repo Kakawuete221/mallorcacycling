@@ -54,7 +54,10 @@ export const createCardHTML = (puerto) => {
     const portDataStr = JSON.stringify(puerto).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
 
     return `
-    <div class="bg-white rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.08)] hover:-translate-y-[5px] transition-transform duration-300 overflow-hidden flex flex-col h-full">
+    <div class="bg-white rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.08)] hover:-translate-y-[5px] transition-transform duration-300 overflow-hidden flex flex-col h-full relative">
+        <div class="absolute top-3 right-3 bg-black/60 text-white text-xs font-bold px-2.5 py-1 rounded-md backdrop-blur shadow-sm z-10 border border-white/10">
+            Cat. ${puerto.categoria}
+        </div>
         <div class="w-full h-[200px]">
             <img src="media/${nom}.jpg" onerror="this.onerror=null; this.src='media/photo.jpeg';" class="w-full h-full object-cover">
         </div>

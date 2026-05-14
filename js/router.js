@@ -91,10 +91,12 @@ export const router = async () => {
     if (!path) path = "/";
     const route = routes[path] || routes["/"];
     document.getElementById("app-viewport").innerHTML = await route.render() + `
-        <div id="puerto-modal" class="fixed inset-0 z-[2000] bg-black/60 backdrop-blur-sm flex items-center justify-center" style="display:none;">
-            <div class="bg-white rounded-2xl w-[90%] max-w-[900px] max-h-[90vh] overflow-y-auto relative shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
-                <span class="absolute top-4 right-5 text-4xl text-white z-[2100] cursor-pointer drop-shadow-md" data-action="close-modal">&times;</span>
-                <div id="modal-body"></div>
+        <div id="puerto-modal" class="fixed inset-0 z-[2000] bg-black/60 backdrop-blur-sm flex items-center justify-center transition-all duration-300" style="display:none;">
+            <div class="bg-white w-full h-full md:w-[95%] md:h-auto md:rounded-3xl max-w-[1200px] max-h-[100dvh] md:max-h-[90vh] overflow-y-auto relative shadow-2xl fade-in flex flex-col">
+                <button class="absolute top-4 right-4 w-10 h-10 md:w-8 md:h-8 flex items-center justify-center rounded-full bg-black/30 text-white hover:bg-black/50 backdrop-blur z-[2100] transition-colors" data-action="close-modal">
+                    <svg class="w-6 h-6 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <div id="modal-body" class="flex-1 w-full flex flex-col"></div>
             </div>
         </div>`;
 
