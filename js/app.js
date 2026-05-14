@@ -22,7 +22,8 @@ export const appState = {
 export const executarFiltre = () => {
     if (appState.totsElsPorts.length > 0) {
         const portsFiltrats = aplicarFiltres(appState.totsElsPorts);
-        const path = window.location.pathname;
+        let path = window.location.hash.slice(1);
+        if (!path) path = "/";
         
         if (path === "/map") {
             pintarPorts(portsFiltrats, handlePortClick);
@@ -63,8 +64,7 @@ document.addEventListener('click', async (e) => {
         }
 
         const href = link.getAttribute('href') || link.href;
-        window.history.pushState(null, null, href);
-        router();
+        window.location.hash = href;
         return;
     }
 
@@ -213,6 +213,6 @@ document.addEventListener('change', (e) => {
 document.addEventListener("DOMContentLoaded", async () => {
     await checkStravaCallback();
     if (!isStravaSessionValid()) logoutStrava();
-    window.addEventListener("popstate", router);
+    window.addEventListener("hashchange", router);
     router();
 });

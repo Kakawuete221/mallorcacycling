@@ -87,7 +87,8 @@ const routes = {
 };
 
 export const router = async () => {
-    const path = window.location.pathname;
+    let path = window.location.hash.slice(1);
+    if (!path) path = "/";
     const route = routes[path] || routes["/"];
     document.getElementById("app-viewport").innerHTML = await route.render() + `
         <div id="puerto-modal" class="fixed inset-0 z-[2000] bg-black/60 backdrop-blur-sm flex items-center justify-center" style="display:none;">

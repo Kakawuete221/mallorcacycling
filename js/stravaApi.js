@@ -37,7 +37,7 @@ export async function checkStravaCallback() {
                 
                 console.log("Sessió iniciada. Expira el:", new Date(data.expires_at * 1000).toLocaleString());
                 
-                window.history.replaceState({}, document.title, window.location.pathname);   
+                window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);   
                 return data;
             }
         } catch (error) {
