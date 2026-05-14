@@ -16,23 +16,90 @@ const routes = {
         title: "Home | Mallorca Cycling",
         render: async () => {
             const puertos = await getPuertos();
-            const destacats = puertos.slice(0, 4).map((p, i) => createCardHTML(p, i)).join('');
+            const p1 = puertos[0];
+            const p2 = puertos[1];
+            const rest = puertos.slice(2, 5);
+
+            const bentoHTML = `
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-8">
+                <!-- Columna Esquerra (2 segments) -->
+                <div class="lg:col-span-8 flex flex-col gap-6 h-full">
+                    <!-- Segment of the Month (Gran) -->
+                    <a href="/map" data-link class="group relative rounded-3xl overflow-hidden shadow-2xl flex-1 min-h-[400px] md:min-h-[450px] cursor-pointer block">
+                        <img src="media/${p1.nom || p1.nombre}.jpg" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-6 md:p-10 text-white w-full">
+                            <span class="bg-[#ea580c] text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest mb-4 inline-block shadow-lg">Segment of the Month</span>
+                            <h3 class="text-4xl md:text-6xl font-title font-bold mb-4 tracking-tight">${p1.nom || p1.nombre}</h3>
+                            <div class="flex items-center gap-6 md:gap-8 text-sm md:text-base font-medium">
+                                <span class="flex items-center gap-2"><svg class="w-5 h-5 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg> ${p1.distancia || p1.distancia_km} km</span>
+                                <span class="flex items-center gap-2"><svg class="w-5 h-5 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11l7-7 7 7M5 19l7-7 7 7"></path></svg> ${p1.desnivell || p1.elevacion_m} m</span>
+                                <span class="flex items-center gap-2"><svg class="w-5 h-5 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Cat. ${p1.categoria}</span>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <!-- Segment Secundari Inferior -->
+                    <a href="/map" data-link class="group relative rounded-3xl overflow-hidden shadow-lg h-[180px] md:h-[220px] flex-shrink-0 cursor-pointer block">
+                        <img src="media/${p2.nom || p2.nombre}.jpg" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/30 to-transparent opacity-90"></div>
+                        <div class="absolute bottom-0 left-0 p-6 text-white w-full">
+                            <h3 class="text-2xl md:text-3xl font-title font-bold mb-3">${p2.nom || p2.nombre}</h3>
+                            <div class="flex flex-wrap items-center gap-4 md:gap-6 text-xs md:text-sm font-medium text-gray-300 tracking-wide">
+                                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg> ${p2.distancia || p2.distancia_km} km</span>
+                                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11l7-7 7 7M5 19l7-7 7 7"></path></svg> ${p2.desnivell || p2.elevacion_m} m</span>
+                                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Cat. ${p2.categoria}</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Columna Dreta (3 segments) -->
+                <div class="lg:col-span-4 flex flex-col gap-6 h-full">
+                    ${rest.map(p => `
+                    <a href="/map" data-link class="group relative rounded-3xl overflow-hidden shadow-lg flex-1 min-h-[160px] cursor-pointer block">
+                        <img src="media/${p.nom || p.nombre}.jpg" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent opacity-95"></div>
+                        <div class="absolute bottom-0 left-0 p-5 text-white w-full">
+                            <h3 class="text-xl md:text-2xl font-title font-bold mb-3 leading-tight">${p.nom || p.nombre}</h3>
+                            <div class="flex flex-wrap items-center gap-3 md:gap-5 text-xs font-medium text-gray-300 tracking-wide">
+                                <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg> ${p.distancia || p.distancia_km} km</span>
+                                <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11l7-7 7 7M5 19l7-7 7 7"></path></svg> ${p.desnivell || p.elevacion_m} m</span>
+                                <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Cat. ${p.categoria}</span>
+                            </div>
+                        </div>
+                    </a>
+                    `).join('')}
+                </div>
+            </div>
+            `;
 
             return `
             <section id="intro" class="fade-in">
-                <div class="relative w-full h-[70vh] overflow-hidden">
+                <div class="relative w-full h-[calc(100vh-40px)] overflow-hidden">
                     <img src="media/photo.jpeg" class="w-full h-full object-cover">
                     <div class="absolute inset-0 flex flex-col justify-center items-center text-white bg-black/40 text-center p-5">
-                        <h1 class="font-title text-4xl md:text-5xl font-bold mb-4">Mallorca Cycling</h1>
-                        <p class="text-lg md:text-xl">Discover the best mountain passes in Mallorca.</p>
+                        <h1 class="font-title text-4xl md:text-5xl lg:text-7xl font-bold mb-4">Mallorca Cycling</h1>
+                        <p class="text-lg md:text-2xl opacity-90 tracking-wide">Discover the best mountain passes in Mallorca.</p>
                     </div>
                 </div>
             </section>
-            <section class="max-w-[80%] mx-auto py-16 px-5">
-                <h2 class="text-3xl font-bold font-title text-secondary mb-8 text-center">Featured Segments</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 py-5">${destacats}</div>
+            <section class="max-w-[1400px] w-[95%] mx-auto pb-12 pt-24 px-5">
+                <div class="flex justify-between items-end mb-6">
+                    <div>
+                        <h2 class="text-4xl md:text-5xl font-bold font-title text-secondary tracking-tight">Featured Segments</h2>
+                        <p class="text-gray-500 mt-2 text-lg">Hand-picked classic climbs you must ride.</p>
+                    </div>
+                    <a href="/segments" data-link class="hidden md:block text-[#ea580c] font-bold tracking-wider hover:text-orange-700 transition-colors uppercase text-sm">View All Segments &rarr;</a>
+                </div>
+                ${bentoHTML}
             </section>
-            <section class="max-w-[1200px] w-[90%] mx-auto py-16 px-5">
+            
+            <section class="max-w-[1200px] w-[90%] mx-auto pb-24 pt-12 px-5">
+                <div class="text-center mb-10 fade-in">
+                    <h2 class="text-3xl md:text-4xl font-bold font-title text-secondary tracking-tight">Your Cycling Hub</h2>
+                    <p class="text-gray-500 mt-3 text-lg max-w-2xl mx-auto">Connect your Strava account to analyze your segment efforts, track your yearly progress, and discover your personal records.</p>
+                </div>
                 <div id="strava-card-container"></div>
             </section>`;
         }
@@ -96,6 +163,8 @@ export const router = async () => {
                 <div id="modal-body" class="flex-1 w-full flex flex-col"></div>
             </div>
         </div>`;
+
+    window.scrollTo(0, 0);
 
     actualitzarInterficieUsuari();
     document.title = route.title;

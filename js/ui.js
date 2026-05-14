@@ -1,5 +1,5 @@
 // ui.js - Interfície d'Usuari i Targetes
-import { isStravaSessionValid } from './stravaApi.js';
+import { isStravaSessionValid, getAthleteStats } from './stravaApi.js';
 import { formatTime } from './utils.js';
 import { setValorSlider } from './filters.js';
 
@@ -27,19 +27,83 @@ export function actualitzarInterficieUsuari() {
         
         if (connectCard) {
             connectCard.innerHTML = `
-                <div class="bg-[#11131f] text-white rounded-2xl p-10 flex flex-col md:flex-row items-center justify-between shadow-2xl relative overflow-hidden">
-                    <div class="absolute inset-0 opacity-20 pointer-events-none" style="background: radial-gradient(circle at 100% 50%, #ea580c 0%, transparent 50%);"></div>
-                    <div class="relative z-10 flex flex-col items-start max-w-lg">
+                <div class="bg-[#11131f] text-white rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between shadow-2xl relative overflow-hidden gap-10">
+                    <div class="absolute inset-0 opacity-20 pointer-events-none" style="background: radial-gradient(circle at 100% 50%, #ea580c 0%, transparent 60%);"></div>
+                    <div class="relative z-10 flex flex-col items-start max-w-lg text-left">
                         <div class="flex items-center gap-4 mb-6">
                             <img src="${user.profile_medium}" class="w-16 h-16 rounded-full border-2 border-[#ea580c] object-cover">
                             <div>
-                                <h2 class="text-2xl font-bold italic font-title text-white uppercase tracking-wider">HELLO, ${user.firstname}!</h2>
+                                <h2 class="text-2xl md:text-3xl font-bold italic font-title text-white uppercase tracking-wider">HELLO, ${user.firstname}!</h2>
                                 <p class="text-gray-400 text-sm">You are connected to Strava.</p>
                             </div>
                         </div>
-                        <button class="bg-[#c2410c] hover:bg-[#ea580c] text-white font-bold py-3 px-6 rounded text-sm tracking-wider transition-colors uppercase" data-link href="/map">GO TO MAP &rarr;</button>
+                        <p class="text-gray-400 mb-8 text-sm md:text-base leading-relaxed">Your account is fully linked. Head over to the map to see your segment efforts and real-time PRs.</p>
+                        <button class="bg-[#c2410c] hover:bg-[#ea580c] text-white font-bold py-3 px-8 rounded text-sm tracking-wider transition-colors flex items-center gap-2 uppercase" data-link href="/map">GO TO MAP &rarr;</button>
+                    </div>
+                    
+                    <div id="strava-stats-container" class="relative z-10 w-full md:w-auto flex-shrink-0">
+                        <div class="bg-[#1a1c29] border border-gray-800 rounded-xl p-6 w-full md:w-80 shadow-lg text-left animate-pulse">
+                            <div class="h-6 w-32 bg-gray-800 rounded mb-6"></div>
+                            <div class="grid grid-cols-2 gap-y-6 gap-x-4">
+                                <div class="h-10 w-20 bg-gray-800 rounded"></div>
+                                <div class="h-10 w-20 bg-gray-800 rounded"></div>
+                                <div class="h-10 w-20 bg-gray-800 rounded"></div>
+                                <div class="h-10 w-20 bg-gray-800 rounded"></div>
+                                <div class="h-10 w-20 bg-gray-800 rounded"></div>
+                                <div class="h-10 w-20 bg-gray-800 rounded"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>`;
+            
+            getAthleteStats(user.id).then(stats => {
+                const statsContainer = document.getElementById('strava-stats-container');
+                if (statsContainer && stats) {
+                    const recent = stats.recent_ride_totals;
+                    const ytd = stats.ytd_ride_totals;
+                    
+                    statsContainer.innerHTML = `
+                        <div class="bg-[#1a1c29] border border-gray-800 rounded-xl p-6 w-full md:w-80 shadow-lg text-left">
+                            <h3 class="text-white font-bold mb-4 flex items-center gap-2 text-sm tracking-wider">
+                                <svg class="w-5 h-5 text-[#ea580c]" fill="currentColor" viewBox="0 0 24 24"><path d="M4 10h3v10H4zM10 4h3v16h-3zM16 14h3v6h-3z"></path></svg>
+                                CYCLING STATS
+                            </h3>
+                            <div class="grid grid-cols-2 gap-y-5 gap-x-4">
+                                <div>
+                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">Recent Rides</p>
+                                    <p class="text-white font-bold text-lg">${recent ? recent.count : 0}</p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">YTD Rides</p>
+                                    <p class="text-white font-bold text-lg">${ytd ? ytd.count : 0}</p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">Recent Dist</p>
+                                    <p class="text-white font-bold text-lg">${recent ? (recent.distance / 1000).toFixed(0) : 0} <span class="text-xs text-gray-500">km</span></p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">YTD Dist</p>
+                                    <p class="text-[#ea580c] font-bold text-lg">${ytd ? (ytd.distance / 1000).toFixed(0) : 0} <span class="text-xs">km</span></p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">Recent Elev</p>
+                                    <p class="text-white font-bold text-lg">${recent ? recent.elevation_gain.toFixed(0) : 0} <span class="text-xs text-gray-500">m</span></p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">YTD Elev</p>
+                                    <p class="text-white font-bold text-lg">${ytd ? ytd.elevation_gain.toFixed(0) : 0} <span class="text-xs text-gray-500">m</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (statsContainer) {
+                    statsContainer.innerHTML = `
+                        <div class="bg-[#1a1c29] border border-gray-800 rounded-xl p-6 w-full md:w-80 shadow-lg text-left flex items-center justify-center">
+                            <p class="text-xs text-gray-500">Stats unavailable</p>
+                        </div>
+                    `;
+                }
+            });
         }
     } else {
         if (navArea) {
@@ -309,7 +373,7 @@ export const createFiltresHTML = () => `
                             <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="1">1</button>
                             <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="2">2</button>
                             <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="3">3</button>
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="4(HC)">4</button>
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="4">4</button>
                         </div>
                     </div>
 
@@ -393,7 +457,7 @@ export const createSidebarFiltresHTML = () => `
                     <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="1">1</button>
                     <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="2">2</button>
                     <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="3">3</button>
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="4(HC)">4</button>
+                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="4">4</button>
                 </div>
             </details>
 

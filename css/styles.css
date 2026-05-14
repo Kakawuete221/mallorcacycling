@@ -12,6 +12,11 @@ body:has(.map-section) footer {
     display: none;
 }
 
+/* Treure el requadre blau del mapa al fer clic */
+#map *, .gm-style * {
+    outline: none !important;
+}
+
 /* Animacions personalitzades */
 .fade-in {
     animation: fadeIn 0.4s ease-out;

@@ -108,3 +108,40 @@ export async function getSegmentDetails(segmentId) {
         return null;
     }
 }
+
+export async function getAthleteStats(athleteId) {
+    if (!athleteId) return null;
+
+    const cacheKey = `stats_${athleteId}`;
+    const cachedData = localStorage.getItem(cacheKey);
+
+    if (cachedData) {
+        const parsed = JSON.parse(cachedData);
+        if (Date.now() - parsed.timestamp < 60 * 60 * 1000) { // 1 hora de caché
+            return parsed.data;
+        }
+    }
+
+    const token = localStorage.getItem('strava_access_token');
+    if (!token) return null;
+
+    try {
+        const response = await fetch(`https://www.strava.com/api/v3/athletes/${athleteId}/stats`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error('Error fetching stats');
+
+        const data = await response.json();
+
+        localStorage.setItem(cacheKey, JSON.stringify({
+            timestamp: Date.now(),
+            data: data
+        }));
+
+        return data;
+    } catch (error) {
+        console.error("Error getting athlete stats:", error);
+        return null;
+    }
+}
