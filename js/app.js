@@ -30,7 +30,7 @@ export const executarFiltre = () => {
         } else if (path === "/segments") {
             const grid = document.getElementById('segments-grid');
             if (grid) {
-                grid.innerHTML = portsFiltrats.map(createCardHTML).join('');
+                grid.innerHTML = portsFiltrats.map((p, i) => createCardHTML(p, i)).join('');
             }
         }
     }
@@ -173,6 +173,33 @@ document.addEventListener('click', async (e) => {
             break;
         case 'center-on-user':
             centrarEnUsuari();
+            break;
+            
+        case 'view-size-2':
+        case 'view-size-3':
+        case 'view-size-4':
+            const grid = document.getElementById('segments-grid');
+            if (!grid) break;
+            
+            document.querySelectorAll('.view-toggle-btn').forEach(b => {
+                b.classList.remove('active-view', 'shadow-sm', 'bg-white', 'text-gray-800');
+                b.classList.add('text-gray-400');
+            });
+            
+            const btnToggle = target.closest('.view-toggle-btn');
+            if (btnToggle) {
+                btnToggle.classList.add('active-view', 'shadow-sm', 'bg-white', 'text-gray-800');
+                btnToggle.classList.remove('text-gray-400');
+            }
+            
+            grid.className = 'grid gap-6 pb-20 transition-all duration-500';
+            if (action === 'view-size-2') {
+                grid.classList.add('grid-cols-1', 'md:grid-cols-2');
+            } else if (action === 'view-size-3') {
+                grid.classList.add('grid-cols-1', 'md:grid-cols-2', 'lg:grid-cols-3');
+            } else if (action === 'view-size-4') {
+                grid.classList.add('grid-cols-1', 'md:grid-cols-2', 'lg:grid-cols-3', 'xl:grid-cols-4');
+            }
             break;
     }
 });

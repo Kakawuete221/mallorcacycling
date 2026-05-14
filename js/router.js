@@ -1,6 +1,6 @@
 // router.js - Navegació i Control Principal
 import { initGoogleMap, assignarComarcaAdministrativa } from './map.js';
-import { actualitzarInterficieUsuari, createCardHTML, createFiltresHTML } from './ui.js';
+import { actualitzarInterficieUsuari, createCardHTML, createFiltresHTML, createSidebarFiltresHTML, createTopBarSegmentsHTML } from './ui.js';
 import { resetFiltres } from './filters.js';
 import { appState, executarFiltre } from './app.js';
 
@@ -16,7 +16,7 @@ const routes = {
         title: "Home | Mallorca Cycling",
         render: async () => {
             const puertos = await getPuertos();
-            const destacats = puertos.slice(0, 4).map(createCardHTML).join('');
+            const destacats = puertos.slice(0, 4).map((p, i) => createCardHTML(p, i)).join('');
 
             return `
             <section id="intro" class="fade-in">
@@ -32,8 +32,8 @@ const routes = {
                 <h2 class="text-3xl font-bold font-title text-secondary mb-8 text-center">Featured Segments</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 py-5">${destacats}</div>
             </section>
-            <section class="max-w-[80%] mx-auto py-16 px-5">
-                <div class="bg-[#fdfdfd] border-2 border-primary p-10 rounded-xl text-center" id="strava-card-container"></div>
+            <section class="max-w-[1200px] w-[90%] mx-auto py-16 px-5">
+                <div id="strava-card-container"></div>
             </section>`;
         }
     },
@@ -62,24 +62,21 @@ const routes = {
         title: "Segments | Mallorca Cycling",
         render: async () => {
             return `
-            <div class="w-full lg:max-w-[80%] mx-auto py-12 px-5">
-                <h1 class="text-4xl font-bold font-title text-secondary mb-8">Segments</h1>
-                <div class="mb-8 relative z-40 flex flex-col lg:flex-row lg:items-start justify-between gap-4">
-                    <div class="flex-1">
-                        ${createFiltresHTML()}
+            <div class="w-full xl:max-w-[1400px] mx-auto py-12 px-5 fade-in">
+                <div class="flex flex-col lg:flex-row gap-8 items-start relative">
+                    <!-- Sidebar Filtres -->
+                    ${createSidebarFiltresHTML()}
+
+                    <!-- Main Content -->
+                    <div class="flex-1 w-full flex flex-col">
+                        <!-- Top Bar -->
+                        ${createTopBarSegmentsHTML()}
+
+                        <!-- Grid de Segments -->
+                        <div id="segments-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20 transition-all duration-500">
+                            <!-- Es carregarà mitjançant app.js executarFiltre() -->
+                        </div>
                     </div>
-                    <div>
-                        <select id="select-ordenacio" class="min-w-[150px] bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 py-0 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors focus:ring-0 focus:border-gray-200 cursor-pointer outline-none">
-                            <option value="">Default order</option>
-                            <option value="dist_asc">Distance ⬆️</option>
-                            <option value="dist_desc">Distance ⬇️</option>
-                            <option value="grad_asc">Gradient ⬆️</option>
-                            <option value="grad_desc">Gradient ⬇️</option>
-                        </select>
-                    </div>
-                </div>
-                <div id="segments-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 py-5">
-                    <!-- Es carregarà mitjançant app.js executarFiltre() -->
                 </div>
             </div>`;
         }
