@@ -219,3 +219,85 @@ export const uiNetejarFiltres = () => {
         });
     }
 };
+
+export const createFiltresHTML = () => `
+    <div class="flex flex-wrap items-start gap-3">
+        <div class="relative">
+            <button data-action="toggle-filtres" id="btn-filtres-dropdown" class="bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                Filters
+            </button>
+
+            <div id="panel-filtres" class="hidden absolute top-full mt-2 left-0 w-[340px] bg-white border border-gray-100 shadow-2xl rounded-xl flex flex-col overflow-hidden max-h-[75vh] overflow-y-auto z-50">
+                <div class="flex justify-between items-center px-5 py-3.5 border-b border-gray-100 bg-gray-50/50">
+                    <span class="font-bold text-gray-800 text-sm">Refine search</span>
+                    <button data-action="netejar-filtres" class="text-xs font-semibold text-primary hover:text-orange-700">Clear</button>
+                </div>
+
+                <div class="p-5 space-y-7">
+                    <div>
+                        <h4 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">Region</h4>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all" data-action="toggle-generic" data-camp="comarca" data-valor="Tramuntana">Tramuntana</button>
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all" data-action="toggle-generic" data-camp="comarca" data-valor="Raiguer">Raiguer</button>
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all" data-action="toggle-generic" data-camp="comarca" data-valor="Pla">Pla</button>
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all" data-action="toggle-generic" data-camp="comarca" data-valor="Migjorn">Migjorn</button>
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all" data-action="toggle-generic" data-camp="comarca" data-valor="Llevant">Llevant</button>
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all" data-action="toggle-generic" data-camp="comarca" data-valor="Palma">Palma</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">Category</h4>
+                        <div class="grid grid-cols-4 gap-2">
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="1">1</button>
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="2">2</button>
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="3">3</button>
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="4(HC)">4</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-end mb-2">
+                            <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Max Distance</h4>
+                            <span class="text-[13px] font-bold text-primary" id="val-dist">10 km</span>
+                        </div>
+                        <input type="range" id="sl-distancia" data-camp="distanciaMax" data-val-id="val-dist" data-sufix=" km" min="1" max="10" value="10" step="0.5" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-end mb-2">
+                            <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Max Elevation Gain</h4>
+                            <span class="text-[13px] font-bold text-primary" id="val-desn">1000 m</span>
+                        </div>
+                        <input type="range" id="sl-desnivell" data-camp="desnivellMax" data-val-id="val-desn" data-sufix=" m" min="0" max="1000" value="1000" step="50" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-end mb-2">
+                            <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Max Gradient</h4>
+                            <span class="text-[13px] font-bold text-primary" id="val-pend">< 10 %</span>
+                        </div>
+                        <input type="range" id="sl-pendent" data-camp="pendentMax" data-val-id="val-pend" data-prefix="< " data-sufix=" %" min="2" max="10" value="10" step="0.5" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                    </div>
+                </div>
+            </div>
+        </div>  
+
+        <div class="relative bg-white rounded-lg shadow-sm border border-gray-200 flex items-center h-10 px-3 w-64 md:w-72">
+            <svg class="w-4 h-4 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <input type="text" id="input-cerca" autocomplete="off" class="w-full h-full outline-none border-none ring-0 focus:ring-0 text-sm text-gray-700 placeholder-gray-400 bg-transparent" placeholder="Search for a segment...">
+            
+            <button id="btn-clear-search" data-action="netejar-cerca" class="hidden ml-2 text-gray-400 hover:text-gray-600">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
+            <ul id="llista-suggeriments" class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-100 shadow-xl rounded-lg overflow-hidden hidden z-50 max-h-60 overflow-y-auto"></ul>
+        </div>
+
+        <button id="btn-completats" data-action="toggle-completats" class="bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">
+            <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            Completed
+        </button>
+    </div>
+`;

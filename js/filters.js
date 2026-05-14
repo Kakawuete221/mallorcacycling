@@ -7,11 +7,12 @@ const estatFiltres = {
     distanciaMax: 10,
     desnivellMax: 1000,
     pendentMax: 10,
-    nomesCompletats: false
+    nomesCompletats: false,
+    ordenacio: ""
 };
 
 export const aplicarFiltres = (ports) => {
-    return ports.filter(port => {
+    const filtrats = ports.filter(port => {
         if (estatFiltres.cerca) {
             const text = estatFiltres.cerca.toLowerCase();
             if (!(port.nom || "").toLowerCase().includes(text)) return false;
@@ -37,11 +38,31 @@ export const aplicarFiltres = (ports) => {
 
         return true; 
     });
+
+    if (estatFiltres.ordenacio) {
+        filtrats.sort((a, b) => {
+            const distA = parseFloat(a.distancia) || 0;
+            const distB = parseFloat(b.distancia) || 0;
+            const gradA = parseFloat(a.pendent_mitja) || 0;
+            const gradB = parseFloat(b.pendent_mitja) || 0;
+
+            switch (estatFiltres.ordenacio) {
+                case "dist_asc": return distA - distB;
+                case "dist_desc": return distB - distA;
+                case "grad_asc": return gradA - gradB;
+                case "grad_desc": return gradB - gradA;
+                default: return 0;
+            }
+        });
+    }
+
+    return filtrats;
 };
 
 export const setCerca = (text) => { estatFiltres.cerca = text; };
 export const setToggleCompletats = (actiu) => { estatFiltres.nomesCompletats = actiu; };
 export const setValorSlider = (camp, valor) => { estatFiltres[camp] = parseFloat(valor); };
+export const setOrdenacio = (val) => { estatFiltres.ordenacio = val; };
 
 export const toggleFiltreGeneric = (camp, valor) => {
     const index = estatFiltres[camp].indexOf(valor);
@@ -57,4 +78,5 @@ export const resetFiltres = () => {
     estatFiltres.desnivellMax = 1000;
     estatFiltres.pendentMax = 10;
     estatFiltres.nomesCompletats = false;
+    estatFiltres.ordenacio = "";
 };

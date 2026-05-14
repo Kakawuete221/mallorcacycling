@@ -1,6 +1,6 @@
 // router.js - Navegació i Control Principal
 import { initGoogleMap, assignarComarcaAdministrativa } from './map.js';
-import { actualitzarInterficieUsuari, createCardHTML } from './ui.js';
+import { actualitzarInterficieUsuari, createCardHTML, createFiltresHTML } from './ui.js';
 import { resetFiltres } from './filters.js';
 import { appState, executarFiltre } from './app.js';
 
@@ -44,86 +44,7 @@ const routes = {
                 <div id="map" class="absolute top-0 left-0 w-full h-full z-0"></div>
 
                 <div class="absolute top-4 left-4 z-40 flex flex-col gap-3">
-                    
-                    <div class="flex flex-wrap items-start gap-3">
-                        <div class="relative">
-                            <button data-action="toggle-filtres" id="btn-filtres-dropdown" class="bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-                                Filtres
-                            </button>
-
-                            <div id="panel-filtres" class="hidden absolute top-full mt-2 left-0 w-[340px] bg-white border border-gray-100 shadow-2xl rounded-xl flex flex-col overflow-hidden max-h-[75vh] overflow-y-auto">
-                                <div class="flex justify-between items-center px-5 py-3.5 border-b border-gray-100 bg-gray-50/50">
-                                    <span class="font-bold text-gray-800 text-sm">Ajusta la cerca</span>
-                                    <button data-action="netejar-filtres" class="text-xs font-semibold text-primary hover:text-orange-700">Netejar</button>
-                                </div>
-
-                                <div class="p-5 space-y-7">
-                                    <div>
-                                        <h4 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">Zona Geogràfica</h4>
-                                        <div class="grid grid-cols-2 gap-2">
-                                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all" data-action="toggle-generic" data-camp="comarca" data-valor="Tramuntana">Tramuntana</button>
-                                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all" data-action="toggle-generic" data-camp="comarca" data-valor="Raiguer">Raiguer</button>
-                                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all" data-action="toggle-generic" data-camp="comarca" data-valor="Pla">Pla</button>
-                                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all" data-action="toggle-generic" data-camp="comarca" data-valor="Migjorn">Migjorn</button>
-                                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all" data-action="toggle-generic" data-camp="comarca" data-valor="Llevant">Llevant</button>
-                                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all" data-action="toggle-generic" data-camp="comarca" data-valor="Palma">Palma</button>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <h4 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">Categoria</h4>
-                                        <div class="grid grid-cols-4 gap-2">
-                                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="1">1</button>
-                                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="2">2</button>
-                                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="3">3</button>
-                                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="4(HC)">4</button>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <div class="flex justify-between items-end mb-2">
-                                            <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Distància Màxima</h4>
-                                            <span class="text-[13px] font-bold text-primary" id="val-dist">10 km</span>
-                                        </div>
-                                        <input type="range" id="sl-distancia" data-camp="distanciaMax" data-val-id="val-dist" data-sufix=" km" min="1" max="10" value="10" step="0.5" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
-                                    </div>
-
-                                    <div>
-                                        <div class="flex justify-between items-end mb-2">
-                                            <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Desnivell Màxim</h4>
-                                            <span class="text-[13px] font-bold text-primary" id="val-desn">1000 m</span>
-                                        </div>
-                                        <input type="range" id="sl-desnivell" data-camp="desnivellMax" data-val-id="val-desn" data-sufix=" m" min="0" max="1000" value="1000" step="50" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
-                                    </div>
-
-                                    <div>
-                                        <div class="flex justify-between items-end mb-2">
-                                            <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Pendent Màxima</h4>
-                                            <span class="text-[13px] font-bold text-primary" id="val-pend">< 10 %</span>
-                                        </div>
-                                        <input type="range" id="sl-pendent" data-camp="pendentMax" data-val-id="val-pend" data-prefix="< " data-sufix=" %" min="2" max="10" value="10" step="0.5" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>  
-
-                        <div class="relative bg-white rounded-lg shadow-sm border border-gray-200 flex items-center h-10 px-3 w-64 md:w-72">
-                            <svg class="w-4 h-4 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                            <input type="text" id="input-cerca" autocomplete="off" class="w-full h-full outline-none border-none ring-0 focus:ring-0 text-sm text-gray-700 placeholder-gray-400 bg-transparent" placeholder="Cerca un port...">
-                            
-                            <button id="btn-clear-search" data-action="netejar-cerca" class="hidden ml-2 text-gray-400 hover:text-gray-600">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                            </button>
-
-                            <ul id="llista-suggeriments" class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-100 shadow-xl rounded-lg overflow-hidden hidden z-50 max-h-60 overflow-y-auto"></ul>
-                        </div>
-
-                        <button id="btn-completats" data-action="toggle-completats" class="bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">
-                            <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            Ja completats
-                        </button>
-                    </div>
+                    ${createFiltresHTML()}
 
                     <div class="flex flex-col bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden w-10 mt-1">
                         <button data-action="center-on-user" title="La meva ubicació" class="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-primary hover:bg-gray-50 transition-colors border-b border-gray-100 focus:outline-none">
@@ -140,9 +61,27 @@ const routes = {
     "/segments": {
         title: "Segments | Mallorca Cycling",
         render: async () => {
-            const puertos = await getPuertos();
-            const tots = puertos.map(createCardHTML).join('');
-            return `<div class="max-w-[80%] mx-auto py-16 px-5"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 py-5">${tots}</div></div>`;
+            return `
+            <div class="max-w-[80%] mx-auto py-12 px-5">
+                <h1 class="text-4xl font-bold font-title text-secondary mb-8">Segments</h1>
+                <div class="mb-8 relative z-40 flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+                    <div class="flex-1">
+                        ${createFiltresHTML()}
+                    </div>
+                    <div>
+                        <select id="select-ordenacio" class="bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 py-0 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors focus:ring-0 focus:border-gray-200 cursor-pointer outline-none">
+                            <option value="">Default order</option>
+                            <option value="dist_asc">Distance: Low to High</option>
+                            <option value="dist_desc">Distance: High to Low</option>
+                            <option value="grad_asc">Gradient: Low to High</option>
+                            <option value="grad_desc">Gradient: High to Low</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="segments-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 py-5">
+                    <!-- Es carregarà mitjançant app.js executarFiltre() -->
+                </div>
+            </div>`;
         }
     }
 };
@@ -161,13 +100,19 @@ export const router = async () => {
     actualitzarInterficieUsuari();
     document.title = route.title;
 
+    // Assegurem que appState.totsElsPorts estigui inicialitzat
+    if (appState.totsElsPorts.length === 0) {
+        const portsJSON = await getPuertos();
+        appState.totsElsPorts = portsJSON.map(p => assignarComarcaAdministrativa(p));
+    }
+
     if (path === "/map") {
         resetFiltres();
         initGoogleMap();
-        
-        const portsJSON = await getPuertos();
-        appState.totsElsPorts = portsJSON.map(p => assignarComarcaAdministrativa(p));
-        
-        executarFiltre();
+    } else if (path === "/segments") {
+        resetFiltres();
     }
+
+    // Sempre s'executa per a que actualitzi els elements (ja sigui mapa o grid)
+    executarFiltre();
 };

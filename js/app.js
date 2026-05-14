@@ -1,6 +1,6 @@
 // app.js - Orquestrador d'Esdeveniments i Lògica Central
 import { loginWithStrava, logoutStrava, getSegmentDetails, checkStravaCallback, isStravaSessionValid } from './stravaApi.js';
-import { aplicarFiltres, resetFiltres, setCerca, toggleFiltreGeneric, setToggleCompletats, setValorSlider } from './filters.js';
+import { aplicarFiltres, resetFiltres, setCerca, toggleFiltreGeneric, setToggleCompletats, setValorSlider, setOrdenacio } from './filters.js';
 // NOU IMPORT ACTUALITZAT: S'han afegit resetearVistaMapa i centrarEnUsuari al final
 import { 
     initGoogleMap, pintarPorts, centrarMapaEnPort, eliminarMarcadorCerca, 
@@ -10,7 +10,7 @@ import {
 import { showModal, closeModal } from './modal.js';
 import { 
     uiToggleDropdownFiltres, uiCercaToggle, uiNetejarCercaUnica, 
-    uiToggleCompletatsBtn, uiToggleGeneric, uiActualitzarSlider, uiNetejarFiltres, createMiniCardHTML 
+    uiToggleCompletatsBtn, uiToggleGeneric, uiActualitzarSlider, uiNetejarFiltres, createMiniCardHTML, createCardHTML 
 } from './ui.js';
 import { router } from './router.js';
 
@@ -19,10 +19,19 @@ export const appState = {
     totsElsPorts: []
 };
 
-// Funció central per executar filtres i repintar
 export const executarFiltre = () => {
     if (appState.totsElsPorts.length > 0) {
-        pintarPorts(aplicarFiltres(appState.totsElsPorts), handlePortClick);
+        const portsFiltrats = aplicarFiltres(appState.totsElsPorts);
+        const path = window.location.pathname;
+        
+        if (path === "/map") {
+            pintarPorts(portsFiltrats, handlePortClick);
+        } else if (path === "/segments") {
+            const grid = document.getElementById('segments-grid');
+            if (grid) {
+                grid.innerHTML = portsFiltrats.map(createCardHTML).join('');
+            }
+        }
     }
 };
 
@@ -170,6 +179,14 @@ document.addEventListener('input', (e) => {
             target.dataset.sufix || ''
         );
         setValorSlider(target.dataset.camp, target.value);
+        executarFiltre();
+    }
+});
+
+// Escoltar canvis (selects)
+document.addEventListener('change', (e) => {
+    if (e.target.id === 'select-ordenacio') {
+        setOrdenacio(e.target.value);
         executarFiltre();
     }
 });
