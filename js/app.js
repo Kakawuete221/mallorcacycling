@@ -204,6 +204,15 @@ document.addEventListener('click', async (e) => {
     }
 });
 
+// Lògica de debounce per evitar parpellejos al filtrar
+let filtreTimeout;
+const debouncedExecutarFiltre = (delay = 250) => {
+    clearTimeout(filtreTimeout);
+    filtreTimeout = setTimeout(() => {
+        executarFiltre();
+    }, delay);
+};
+
 // Escoltar inputs (cerca i sliders)
 document.addEventListener('input', (e) => {
     if (e.target.id === 'input-cerca') {
@@ -213,7 +222,7 @@ document.addEventListener('input', (e) => {
         if (!teCaractersValids) {
             setCerca("");
             eliminarMarcadorCerca();
-            executarFiltre();
+            debouncedExecutarFiltre(250);
         }
     } else if (e.target.classList.contains('custom-slider')) {
         const target = e.target;
@@ -224,7 +233,7 @@ document.addEventListener('input', (e) => {
             target.dataset.sufix || ''
         );
         setValorSlider(target.dataset.camp, target.value);
-        executarFiltre();
+        debouncedExecutarFiltre(250);
     }
 });
 

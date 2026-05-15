@@ -157,17 +157,16 @@ export const createCardHTML = (puerto, index = 0) => {
     const portDataStr = JSON.stringify(puerto).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
 
     return `
-    <div class="bg-white rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col h-full relative group hover:shadow-xl transition-all duration-300">
-        <div class="absolute top-3 right-3 bg-black/60 text-white text-xs font-bold px-2.5 py-1 rounded-md backdrop-blur shadow-sm z-10 border border-white/10">
-            Cat. ${puerto.categoria}
-        </div>
-        <div class="w-full aspect-[4/3] overflow-hidden">
-            <img src="media/${nom}.jpg" onerror="this.onerror=null; this.src='media/photo.jpeg';" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-        </div>
-        <div class="p-5 flex-1 flex flex-col bg-white">
-            <h3 class="font-title font-bold text-xl text-secondary mb-2">${nom}</h3>
-            <p class="text-gray-600 text-sm mb-4">Distance: ${dist} km | Elevation: ${desn} m</p>
-            <button class="mt-auto w-full py-3 bg-primary hover:bg-orange-600 text-white font-bold rounded-lg transition-colors" data-action="view-details" data-port="${portDataStr}">View Details</button>
+    <div class="group relative rounded-3xl overflow-hidden shadow-lg aspect-[4/3] w-full cursor-pointer hover:shadow-2xl transition-all duration-300" data-action="view-details" data-port="${portDataStr}">
+        <img src="media/${nom}.jpg" onerror="this.onerror=null; this.src='media/photo.jpeg';" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent opacity-95"></div>
+        <div class="absolute bottom-0 left-0 p-5 text-white w-full">
+            <h3 class="text-xl md:text-2xl font-title font-bold mb-3 leading-tight pr-4">${nom}</h3>
+            <div class="flex flex-wrap items-center gap-4 text-xs md:text-sm font-medium text-gray-300 tracking-wide">
+                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg> ${dist} km</span>
+                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11l7-7 7 7M5 19l7-7 7 7"></path></svg> ${desn} m</span>
+                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Cat. ${puerto.categoria}</span>
+            </div>
         </div>
     </div>`;
 };
