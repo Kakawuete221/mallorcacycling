@@ -61,7 +61,7 @@ export const showModal = (puerto) => {
                     <!-- KOM Section -->
                     <div class="bg-gradient-to-br from-orange-50 to-orange-100/50 p-5 rounded-2xl border border-orange-100/80 shadow-inner">
                         <div class="flex items-center gap-2 mb-3">
-                            <span class="text-xl">🚀</span>
+                            <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                             <h4 class="font-bold text-orange-900 m-0">You vs. KOM</h4>
                         </div>
                         <div class="bg-white/60 h-3 rounded-full overflow-hidden shadow-inner border border-orange-900/5">
@@ -73,15 +73,15 @@ export const showModal = (puerto) => {
                     <!-- Times Section -->
                     <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-3 text-sm text-gray-700">
                         <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-                            <span class="flex items-center gap-2 text-gray-500 font-medium">👑 KOM</span> 
+                            <span class="flex items-center gap-2 text-gray-500 font-medium"><svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"></path></svg> KOM</span> 
                             <strong id="modal-kom-real" class="font-title text-gray-900 text-base">--:--</strong>
                         </div>
                         <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-                            <span class="flex items-center gap-2 text-gray-500 font-medium">👑 QOM</span> 
+                            <span class="flex items-center gap-2 text-gray-500 font-medium"><svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"></path></svg> QOM</span> 
                             <strong id="modal-qom-real" class="font-title text-gray-900 text-base">--:--</strong>
                         </div>
                         <div class="flex justify-between items-center pt-1 text-primary">
-                            <span class="flex items-center gap-2 font-bold">🏅 Your PR</span> 
+                            <span class="flex items-center gap-2 font-bold"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 4h-3V2h-8v2H5c-1.1 0-2 .9-2 2v2c0 2.2 1.8 4 4 4h.3c1.1 2.4 3.2 4.1 5.7 4.7V20H9v2h6v-2h-2v-3.3c2.5-.6 4.6-2.3 5.7-4.7H19c2.2 0 4-1.8 4-4V6c0-1.1-.9-2-2-2zM7 10c-1.1 0-2-.9-2-2V6h3v4H7zm12-2c0 1.1-.9 2-2 2h-1V6h3v2z"></path></svg> Your PR</span> 
                             <strong id="modal-pr-real" class="font-title text-lg">--:--</strong>
                         </div>
                     </div>
@@ -128,7 +128,7 @@ const _omplirDadesStravaModal = (port) => {
             setTimeout(() => { bar.style.width = `${percent}%`; }, 200);
 
             const text = document.getElementById('comparison-text');
-            text.innerText = prSec > komSec ? `You are ${formatTime(prSec - komSec)} away from the KOM` : "👑 You have the KOM!";
+            text.innerHTML = prSec > komSec ? `You are ${formatTime(prSec - komSec)} away from the KOM` : `<span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"></path></svg> You have the KOM!</span>`;
         }
     }
 };

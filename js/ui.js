@@ -181,10 +181,10 @@ export const createMiniCardHTML = (port, dadesStrava = null) => {
         infoStrava = `
             <div class="border-t border-gray-100 pt-2 mt-2 text-xs">
                 <div class="flex justify-between mb-1 text-gray-600">
-                    <span>👑 <strong>KOM:</strong> ${dadesStrava.xoms?.kom || '--:--'}</span>
-                    <span>👑 <strong>QOM:</strong> ${dadesStrava.xoms?.qom || '--:--'}</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"></path></svg> <strong>KOM:</strong> ${dadesStrava.xoms?.kom || '--:--'}</span>
+                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"></path></svg> <strong>QOM:</strong> ${dadesStrava.xoms?.qom || '--:--'}</span>
                 </div>
-                <div class="text-primary font-bold">🏅 PR: ${formatTime(dadesStrava.athlete_segment_stats?.pr_elapsed_time)}</div>
+                <div class="flex items-center gap-1 text-primary font-bold"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 4h-3V2h-8v2H5c-1.1 0-2 .9-2 2v2c0 2.2 1.8 4 4 4h.3c1.1 2.4 3.2 4.1 5.7 4.7V20H9v2h6v-2h-2v-3.3c2.5-.6 4.6-2.3 5.7-4.7H19c2.2 0 4-1.8 4-4V6c0-1.1-.9-2-2-2zM7 10c-1.1 0-2-.9-2-2V6h3v4H7zm12-2c0 1.1-.9 2-2 2h-1V6h3v2z"></path></svg> PR: ${formatTime(dadesStrava.athlete_segment_stats?.pr_elapsed_time)}</div>
             </div>`;
     } else {
         const cached = JSON.parse(localStorage.getItem(`segment_${port.id}`));
@@ -192,10 +192,10 @@ export const createMiniCardHTML = (port, dadesStrava = null) => {
             infoStrava = `
                 <div class="border-t border-gray-100 pt-2 mt-2 text-xs">
                     <div class="flex justify-between mb-1 text-gray-600">
-                        <span>👑 <strong>KOM:</strong> ${cached.data.xoms?.kom || '--:--'}</span>
-                        <span>👑 <strong>QOM:</strong> ${cached.data.xoms?.qom || '--:--'}</span>
+                        <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"></path></svg> <strong>KOM:</strong> ${cached.data.xoms?.kom || '--:--'}</span>
+                        <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"></path></svg> <strong>QOM:</strong> ${cached.data.xoms?.qom || '--:--'}</span>
                     </div>
-                    <div class="text-primary font-bold">🏅 PR: ${formatTime(cached.data.athlete_segment_stats?.pr_elapsed_time)}</div>
+                    <div class="flex items-center gap-1 text-primary font-bold"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 4h-3V2h-8v2H5c-1.1 0-2 .9-2 2v2c0 2.2 1.8 4 4 4h.3c1.1 2.4 3.2 4.1 5.7 4.7V20H9v2h6v-2h-2v-3.3c2.5-.6 4.6-2.3 5.7-4.7H19c2.2 0 4-1.8 4-4V6c0-1.1-.9-2-2-2zM7 10c-1.1 0-2-.9-2-2V6h3v4H7zm12-2c0 1.1-.9 2-2 2h-1V6h3v2z"></path></svg> PR: ${formatTime(cached.data.athlete_segment_stats?.pr_elapsed_time)}</div>
                 </div>`;
         }
     }
@@ -204,7 +204,10 @@ export const createMiniCardHTML = (port, dadesStrava = null) => {
     return `
         <div class="font-body p-1.5 min-w-[240px]">
             <h3 class="m-0 text-[15px] font-bold text-secondary">${port.nom}</h3>
-            <div class="text-xs text-gray-500 mb-2">🚲 ${port.distancia}km · ${port.pendent_mitja}% · ${port.desnivell}m</div>
+            <div class="flex items-center gap-1 text-xs text-gray-500 mb-2 mt-1.5">
+                <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM5 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5zm5.8-10l2.4-2.4.8.8c1.3 1.3 3 2.1 5.1 2.1V9c-1.5 0-2.7-.6-3.6-1.5l-1.9-1.9c-.5-.4-1-.6-1.6-.6s-1.1.2-1.4.6L7.8 8.4c-.4.4-.6.9-.6 1.4 0 .6.2 1.1.6 1.4L11 14v5h1.5v-5.5l-1.7-3zM19 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5z"></path></svg>
+                <span>${port.distancia}km · ${port.pendent_mitja}% · ${port.desnivell}m</span>
+            </div>
             ${infoStrava}
             <button data-action="view-details" data-port="${portDataStr}" class="w-full bg-primary hover:bg-orange-600 text-white border-none p-2 rounded text-sm font-bold cursor-pointer mt-2.5 transition-colors">View Details</button>
         </div>`;
