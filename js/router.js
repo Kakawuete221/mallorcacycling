@@ -101,6 +101,46 @@ const routes = {
                     <p class="text-gray-500 mt-3 text-lg max-w-2xl mx-auto">Connect your Strava account to analyze your segment efforts, track your yearly progress, and discover your personal records.</p>
                 </div>
                 <div id="strava-card-container"></div>
+            </section>
+            
+            <section class="max-w-[1200px] w-[90%] mx-auto py-20 px-5 border-t border-gray-100 fade-in">
+                <div class="flex flex-col md:flex-row items-center gap-12">
+                    <div class="flex-1">
+                        <h2 class="text-3xl md:text-4xl font-bold font-title text-secondary tracking-tight mb-6">About Mallorca Cycling</h2>
+                        <p class="text-gray-600 text-lg mb-4 leading-relaxed">
+                            Born out of a deep passion for the mountains and the unique cycling culture of the island, Mallorca Cycling is dedicated to mapping the most challenging and beautiful climbs.
+                        </p>
+                        <p class="text-gray-600 text-lg leading-relaxed">
+                            Our goal is to provide cyclists with an interactive, modern platform to explore HC and categorized segments, track their efforts, and connect with the global cycling community.
+                        </p>
+                    </div>
+                    <div class="flex-1 w-full aspect-video rounded-3xl overflow-hidden shadow-xl">
+                        <img src="media/photo.jpeg" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                    </div>
+                </div>
+            </section>
+
+            <section class="max-w-[1200px] w-[90%] mx-auto pb-24 px-5 fade-in">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold font-title text-secondary tracking-tight">Meet the Creators</h2>
+                    <p class="text-gray-500 mt-3 text-lg">The team behind Mallorca Cycling.</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-12 md:gap-24">
+                    <div class="flex flex-col items-center group">
+                        <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shadow-xl border-4 border-white ring-4 ring-[#ea580c]/20 group-hover:ring-[#ea580c] transition-all duration-500 mb-5">
+                            <img src="media/photo.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Pau">
+                        </div>
+                        <h4 class="font-bold text-gray-800 text-2xl font-title">Pau Antich</h4>
+                        <p class="text-sm text-[#ea580c] uppercase tracking-widest font-bold mt-1">Co-Creator</p>
+                    </div>
+                    <div class="flex flex-col items-center group">
+                        <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shadow-xl border-4 border-white ring-4 ring-[#ea580c]/20 group-hover:ring-[#ea580c] transition-all duration-500 mb-5">
+                            <img src="media/photo.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Creator 2">
+                        </div>
+                        <h4 class="font-bold text-gray-800 text-2xl font-title">Jaume Ribas</h4>
+                        <p class="text-sm text-[#ea580c] uppercase tracking-widest font-bold mt-1">Co-Creator</p>
+                    </div>
+                </div>
             </section>`;
         }
     },
@@ -143,6 +183,40 @@ const routes = {
                         <div id="segments-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20 transition-all duration-500">
                             <!-- Es carregarà mitjançant app.js executarFiltre() -->
                         </div>
+                    </div>
+                </div>
+            </div>`;
+        }
+    },
+    "/profile": {
+        title: "My Profile | Mallorca Cycling",
+        render: async () => {
+            const userStr = localStorage.getItem('strava_athlete');
+            if (!userStr) {
+                window.location.hash = "/";
+                return ``;
+            }
+            const user = JSON.parse(userStr);
+            return `
+            <div class="w-full max-w-[1000px] mx-auto py-16 px-5 fade-in min-h-[70vh]">
+                <div class="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 md:p-12">
+                    <div class="flex flex-col md:flex-row items-center md:items-start gap-8 border-b border-gray-100 pb-10">
+                        <img src="${user.profile_medium}" class="w-32 h-32 rounded-full border-4 border-[#ea580c] object-cover shadow-md">
+                        <div class="text-center md:text-left">
+                            <h1 class="text-4xl font-bold font-title text-secondary mb-2">${user.firstname} ${user.lastname}</h1>
+                            <p class="text-gray-500 flex items-center justify-center md:justify-start gap-2 mb-6">
+                                <svg class="w-5 h-5 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                ${user.city || 'Mallorca'}, ${user.country || 'Spain'}
+                            </p>
+                            <a href="https://www.strava.com/athletes/${user.id}" target="_blank" class="bg-[#fc4c02] text-white px-6 py-2.5 rounded-full font-bold text-sm tracking-wide hover:bg-[#e34402] transition-colors inline-flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"></path></svg>
+                                View on Strava
+                            </a>
+                        </div>
+                    </div>
+                    <div class="py-16 text-center">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Under Construction 🚧</h3>
+                        <p class="text-gray-500 max-w-lg mx-auto text-lg">This profile section is being prepared. Soon you'll be able to see your conquered segments, personal goals, and detailed climbing statistics here.</p>
                     </div>
                 </div>
             </div>`;

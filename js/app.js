@@ -63,6 +63,10 @@ document.addEventListener('click', async (e) => {
             if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
         }
 
+        // Tancar dropdown de perfil
+        const userDropdown = document.getElementById('user-dropdown');
+        if (userDropdown) userDropdown.style.display = 'none';
+
         const href = link.getAttribute('href') || link.href;
         window.location.hash = href;
         return;

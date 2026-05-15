@@ -20,6 +20,7 @@ export function actualitzarInterficieUsuari() {
                         <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </div>
                     <div id="user-dropdown" class="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-md z-[2000] border border-gray-100 overflow-hidden" style="display: none;">
+                        <a href="/profile" data-link data-action="close-dropdown" class="block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors border-b border-gray-50">My Profile</a>
                         <button data-action="logout-strava" class="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors">Log out</button>
                     </div>
                 </div>`;
