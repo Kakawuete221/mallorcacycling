@@ -249,11 +249,18 @@ export const router = async () => {
         appState.totsElsPorts = portsJSON.map(p => assignarComarcaAdministrativa(p));
     }
 
+    const footer = document.querySelector('footer');
     if (path === "/map") {
+        if (footer) footer.style.display = 'none';
+        document.body.style.overflow = 'hidden';
         resetFiltres();
         initGoogleMap();
-    } else if (path === "/segments") {
-        resetFiltres();
+    } else {
+        if (footer) footer.style.display = 'block';
+        document.body.style.overflow = '';
+        if (path === "/segments") {
+            resetFiltres();
+        }
     }
 
     // Sempre s'executa per a que actualitzi els elements (ja sigui mapa o grid)

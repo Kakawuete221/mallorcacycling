@@ -61,7 +61,7 @@ export const assignarComarcaAdministrativa = (port) => {
 };
 
 export function initGoogleMap() {
-    const MALLORCA_BOUNDS = { north: 40.0, south: 39.1, west: 2.2, east: 3.6 };
+    const MALLORCA_BOUNDS = { north: 40.3, south: 39.1, west: 2.2, east: 3.6 };
 
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: ZOOM_INICIAL,
