@@ -7,7 +7,8 @@ import { appState, executarFiltre } from './app.js';
 const getPuertos = async () => {
     try {
         const r = await fetch('data/puertos.json');
-        return await r.json();
+        const data = await r.json();
+        return data["@graph"] || data;
     } catch (e) { return []; }
 };
 
