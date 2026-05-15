@@ -73,8 +73,73 @@
     <main id="app-viewport" class="pt-[80px] min-h-[80vh]">
     </main>
 
-    <footer class="text-center py-10 px-5 bg-[#f1f1f1] text-secondary">
-        <p>By Pau and Jaume &copy; 2026 Mallorca Cycling</p>
+    <footer class="bg-[#11131f] text-white pt-16 pb-8 px-5 border-t border-gray-800">
+        <div class="max-w-[1400px] mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+                <!-- Brand -->
+                <div class="flex flex-col">
+                    <h3 class="font-title font-black text-2xl mb-4 tracking-tight">Mallorca<span
+                            class="text-primary">Cycling</span></h3>
+                    <p class="text-gray-400 text-sm leading-relaxed max-w-sm">
+                        The ultimate platform to explore, conquer, and track the best cycling segments across the
+                        beautiful island of Mallorca.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="flex flex-col">
+                    <h4 class="font-bold text-lg mb-4 text-gray-200">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/" data-link
+                                class="text-gray-400 hover:text-primary transition-colors text-sm">Home</a></li>
+                        <li><a href="/map" data-link
+                                class="text-gray-400 hover:text-primary transition-colors text-sm">Interactive Map</a>
+                        </li>
+                        <li><a href="/segments" data-link
+                                class="text-gray-400 hover:text-primary transition-colors text-sm">Explore Segments</a>
+                        </li>
+                        <li><a href="/profile" data-link
+                                class="text-gray-400 hover:text-primary transition-colors text-sm">My Profile</a></li>
+                    </ul>
+                </div>
+
+                <!-- Connect -->
+                <div class="flex flex-col">
+                    <h4 class="font-bold text-lg mb-4 text-gray-200">Connect</h4>
+                    <p class="text-gray-400 text-sm mb-4">Integrate with Strava to view your personal records and
+                        compare efforts.</p>
+                    <div class="flex gap-4">
+                        <a href="https://www.strava.com" target="_blank" rel="noopener noreferrer"
+                            class="w-10 h-10 rounded-full bg-gray-800 hover:bg-[#fc4c02] flex items-center justify-center transition-colors">
+                            <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169" />
+                            </svg>
+                        </a>
+                        <a href="#"
+                            class="w-10 h-10 rounded-full bg-gray-800 hover:bg-[#ea580c] flex items-center justify-center transition-colors">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                </path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">
+                    &copy; 2026 Mallorca Cycling. Developed by Pau Antich & Jaume Ribas. Academic Project UIB -
+                    Tecnologia Multimedia.
+                </p>
+                <div class="flex items-center gap-6 text-sm">
+                    <a href="#" class="text-gray-500 hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-gray-500 hover:text-white transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
     </footer>
 
     <script src="js/router.js" type="module"></script>

@@ -25,7 +25,7 @@ export function actualitzarInterficieUsuari() {
                     </div>
                 </div>`;
         }
-        
+
         if (connectCard) {
             connectCard.innerHTML = `
                 <div class="bg-[#11131f] text-white rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between shadow-2xl relative overflow-hidden gap-10">
@@ -56,13 +56,13 @@ export function actualitzarInterficieUsuari() {
                         </div>
                     </div>
                 </div>`;
-            
+
             getAthleteStats(user.id).then(stats => {
                 const statsContainer = document.getElementById('strava-stats-container');
                 if (statsContainer && stats) {
                     const recent = stats.recent_ride_totals;
                     const ytd = stats.ytd_ride_totals;
-                    
+
                     statsContainer.innerHTML = `
                         <div class="bg-[#1a1c29] border border-gray-800 rounded-xl p-6 w-full md:w-80 shadow-lg text-left">
                             <h3 class="text-white font-bold mb-4 flex items-center gap-2 text-sm tracking-wider">
@@ -233,7 +233,7 @@ export const uiCercaToggle = (valor, totsElsPorts) => {
 
     if (valor.length < 2) {
         llista.classList.add('hidden');
-        return false; 
+        return false;
     }
 
     const suggeriments = totsElsPorts.filter(port =>
@@ -247,13 +247,13 @@ export const uiCercaToggle = (valor, totsElsPorts) => {
             li.className = "px-4 py-2.5 hover:bg-orange-50 cursor-pointer text-sm text-gray-700 border-b border-gray-50 last:border-0 transition-colors";
             li.innerHTML = `<span class="font-bold">${port.nom}</span> <span class="text-xs text-gray-400 ml-1">${port.municipi || ''}</span>`;
             li.setAttribute('data-action', 'seleccionar-suggeriment');
-            li.setAttribute('data-port', JSON.stringify(port)); 
+            li.setAttribute('data-port', JSON.stringify(port));
             llista.appendChild(li);
         });
     } else {
         llista.classList.add('hidden');
     }
-    
+
     return true;
 };
 
@@ -285,8 +285,8 @@ export const uiToggleCompletatsBtn = (btn) => {
             switchEl.firstElementChild.classList.add('translate-x-4');
         }
     }
-    
-    return !isActive; 
+
+    return !isActive;
 };
 
 export const uiToggleGeneric = (btn) => {
@@ -315,7 +315,7 @@ export const uiNetejarFiltres = () => {
     }
     const btnClear = document.getElementById('btn-clear-search');
     if (btnClear) btnClear.classList.add('hidden');
-        
+
     const btnComp = document.getElementById('btn-completats');
     if (btnComp && btnComp.classList.contains('text-primary')) {
         uiToggleCompletatsBtn(btnComp); // Will toggle it back
@@ -327,9 +327,9 @@ export const uiNetejarFiltres = () => {
     });
 
     const sliders = [
-        {id: 'sl-distancia', valId: 'val-dist', default: "10", unit: " km"},
-        {id: 'sl-desnivell', valId: 'val-desn', default: "1000", unit: " m"},
-        {id: 'sl-pendent', valId: 'val-pend', default: "10", unit: " %", prefix: "< "}
+        { id: 'sl-distancia', valId: 'val-dist', default: "10", unit: " km" },
+        { id: 'sl-desnivell', valId: 'val-desn', default: "1000", unit: " m" },
+        { id: 'sl-pendent', valId: 'val-pend', default: "10", unit: " %", prefix: "< " }
     ];
 
     sliders.forEach(s => {
@@ -427,7 +427,7 @@ export const createSidebarFiltresHTML = () => `
         <div class="flex justify-between items-center border-b border-gray-100 pb-3">
             <h3 class="font-bold text-gray-800 flex items-center gap-2 text-lg">
                 <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
-                Filtres
+                Filters
             </h3>
             <button data-action="netejar-filtres" class="text-sm font-semibold text-primary hover:text-orange-700 transition-colors">Clear</button>
         </div>
