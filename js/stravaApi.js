@@ -7,7 +7,7 @@ const REDIRECT_URI = 'http://127.0.0.1:5500/index.html'
 
 export function loginWithStrava() {
     console.log("Iniciant procés d'autenticació amb Strava...");
-    const url = `https://www.strava.com/oauth/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}&approval_prompt=force&scope=read_all`;
+    const url = `https://www.strava.com/oauth/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}&approval_prompt=force&scope=read_all,activity:read_all,profile:read_all`;
     window.location.href = url;
 }
 
@@ -145,3 +145,42 @@ export async function getAthleteStats(athleteId) {
         return null;
     }
 }
+
+export async function getStarredSegments() {
+    const token = localStorage.getItem('strava_access_token');
+    if (!token) return [];
+
+    try {
+        const response = await fetch(`https://www.strava.com/api/v3/segments/starred?per_page=10`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) return [];
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error getting starred segments:", error);
+        return [];
+    }
+}
+
+export async function getRecentActivities(perPage = 30) {
+    const token = localStorage.getItem('strava_access_token');
+    if (!token) return [];
+
+    try {
+        const response = await fetch(`https://www.strava.com/api/v3/athlete/activities?per_page=${perPage}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) return [];
+
+        const data = await response.json();
+        // Filtrar només activitats de tipus Ride, VirtualRide, etc.
+        return data.filter(a => a.type === 'Ride' || a.type === 'VirtualRide');
+    } catch (error) {
+        console.error("Error getting recent activities:", error);
+        return [];
+    }
+}

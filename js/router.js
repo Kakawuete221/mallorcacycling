@@ -3,6 +3,8 @@ import { initGoogleMap, assignarComarcaAdministrativa } from './map.js';
 import { actualitzarInterficieUsuari, createCardHTML, createFiltresHTML, createSidebarFiltresHTML, createTopBarSegmentsHTML } from './ui.js';
 import { resetFiltres } from './filters.js';
 import { appState, executarFiltre } from './app.js';
+import { getAthleteStats, getStarredSegments, getRecentActivities } from './stravaApi.js';
+import { formatTime } from './utils.js';
 
 const getPuertos = async () => {
     try {
@@ -198,29 +200,363 @@ const routes = {
                 return ``;
             }
             const user = JSON.parse(userStr);
+            const stats = await getAthleteStats(user.id);
+            const starredSegments = await getStarredSegments();
+
+            const formatDistance = (m) => m ? (m / 1000).toLocaleString(undefined, { maximumFractionDigits: 0 }) : '0';
+            const formatElevation = (m) => m ? m.toLocaleString(undefined, { maximumFractionDigits: 0 }) : '0';
+
+            const recent = stats?.recent_ride_totals || {};
+            const ytd = stats?.ytd_ride_totals || {};
+            const all = stats?.all_ride_totals || {};
+
+            let trophies = [];
+            if (appState.totsElsPorts.length > 0) {
+                appState.totsElsPorts.forEach(port => {
+                    const cache = localStorage.getItem('segment_' + port.id);
+                    if (cache) {
+                        try {
+                            const parsed = JSON.parse(cache);
+                            if (parsed.data?.athlete_segment_stats?.pr_elapsed_time) {
+                                trophies.push({
+                                    port: port,
+                                    pr: parsed.data.athlete_segment_stats.pr_elapsed_time,
+                                    efforts: parsed.data.athlete_segment_stats.effort_count || 1
+                                });
+                            }
+                        } catch (e) { }
+                    }
+                });
+            }
+
+            let trophiesHTML = '';
+            if (trophies.length > 0) {
+                const visibleTrophies = trophies.slice(0, 3);
+                const hiddenTrophies = trophies.slice(3);
+
+                trophiesHTML = `
+                <h2 class="text-3xl font-bold font-title text-secondary mt-16 mb-6 px-4 flex items-center gap-3">
+                    <svg class="w-8 h-8 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"></path></svg>
+                    Your Conquered Classics
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="trophies-container">
+                    ${visibleTrophies.map(t => `
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-1.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group block">
+                        <div class="relative rounded-xl overflow-hidden h-36 mb-2">
+                            <img src="media/${t.port.nom || t.port.nombre}.jpg" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#11131f]/90 via-transparent to-transparent"></div>
+                            <div class="absolute bottom-3 left-4 right-4">
+                                <h3 class="font-bold font-title text-white text-lg leading-tight truncate drop-shadow-md">${t.port.nom || t.port.nombre}</h3>
+                            </div>
+                        </div>
+                        <div class="px-2 pb-2">
+                            <div class="flex items-center gap-2 bg-gray-50 rounded-lg p-2.5 border border-gray-100 group-hover:bg-orange-50 group-hover:border-orange-100 transition-colors">
+                                <div class="flex-1 pl-1">
+                                    <span class="text-[9px] text-gray-400 font-bold uppercase tracking-widest block mb-0.5 group-hover:text-primary transition-colors">Personal Record</span>
+                                    <span class="text-lg font-bold font-title text-gray-800 flex items-center gap-1.5 group-hover:text-primary transition-colors">
+                                        <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                                        ${formatTime(t.pr)}
+                                    </span>
+                                </div>
+                                <div class="w-px h-8 bg-gray-200 mx-1 group-hover:bg-orange-200 transition-colors"></div>
+                                <div class="text-center px-3">
+                                    <span class="text-[9px] text-gray-400 font-bold uppercase tracking-widest block mb-0.5 group-hover:text-primary transition-colors">Efforts</span>
+                                    <span class="text-lg font-bold text-gray-700 group-hover:text-primary transition-colors">${t.efforts}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `).join('')}
+                    
+                    ${hiddenTrophies.map(t => `
+                    <div class="hidden-trophy hidden bg-white rounded-2xl shadow-sm border border-gray-100 p-1.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group block">
+                        <div class="relative rounded-xl overflow-hidden h-36 mb-2">
+                            <img src="media/${t.port.nom || t.port.nombre}.jpg" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#11131f]/90 via-transparent to-transparent"></div>
+                            <div class="absolute bottom-3 left-4 right-4">
+                                <h3 class="font-bold font-title text-white text-lg leading-tight truncate drop-shadow-md">${t.port.nom || t.port.nombre}</h3>
+                            </div>
+                        </div>
+                        <div class="px-2 pb-2">
+                            <div class="flex items-center gap-2 bg-gray-50 rounded-lg p-2.5 border border-gray-100 group-hover:bg-orange-50 group-hover:border-orange-100 transition-colors">
+                                <div class="flex-1 pl-1">
+                                    <span class="text-[9px] text-gray-400 font-bold uppercase tracking-widest block mb-0.5 group-hover:text-primary transition-colors">Personal Record</span>
+                                    <span class="text-lg font-bold font-title text-gray-800 flex items-center gap-1.5 group-hover:text-primary transition-colors">
+                                        <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                                        ${formatTime(t.pr)}
+                                    </span>
+                                </div>
+                                <div class="w-px h-8 bg-gray-200 mx-1 group-hover:bg-orange-200 transition-colors"></div>
+                                <div class="text-center px-3">
+                                    <span class="text-[9px] text-gray-400 font-bold uppercase tracking-widest block mb-0.5 group-hover:text-primary transition-colors">Efforts</span>
+                                    <span class="text-lg font-bold text-gray-700 group-hover:text-primary transition-colors">${t.efforts}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `).join('')}
+                </div>
+                ${hiddenTrophies.length > 0 ? `
+                <div class="flex justify-center mt-8">
+                    <button onclick="document.querySelectorAll('.hidden-trophy').forEach(el => { el.classList.remove('hidden'); el.classList.add('block'); }); this.remove();" class="bg-white border border-gray-200 text-gray-600 hover:text-primary hover:border-primary hover:bg-orange-50 font-bold py-2.5 px-6 rounded-full text-sm transition-colors shadow-sm flex items-center gap-2">
+                        Load More (${hiddenTrophies.length})
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                </div>
+                ` : ''}
+                `;
+            }
+
+            let starredHTML = '';
+            if (starredSegments && starredSegments.length > 0) {
+                starredHTML = `
+                <h2 class="text-3xl font-bold font-title text-secondary mt-16 mb-6 px-4 flex items-center gap-3">
+                    <svg class="w-8 h-8 text-[#ea580c]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                    Starred Segments
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    ${starredSegments.slice(0, 9).map(s => `
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow relative overflow-hidden group">
+                        <div class="absolute -right-4 -top-4 text-gray-50 opacity-50 group-hover:scale-110 transition-transform">
+                            <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                        </div>
+                        <div class="relative z-10">
+                            <h3 class="font-bold font-title text-gray-800 text-lg leading-tight mb-4 pr-6">${s.name}</h3>
+                            <div class="flex items-center gap-5 text-sm text-gray-600 font-medium">
+                                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg> ${(s.distance / 1000).toFixed(1)} km</span>
+                                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11l7-7 7 7M5 19l7-7 7 7"></path></svg> ${s.total_elevation_gain.toFixed(0)} m</span>
+                            </div>
+                        </div>
+                    </div>
+                    `).join('')}
+                </div>`;
+            }
+
             return `
-            <div class="w-full max-w-[1000px] mx-auto py-16 px-5 fade-in min-h-[70vh]">
-                <div class="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 md:p-12">
-                    <div class="flex flex-col md:flex-row items-center md:items-start gap-8 border-b border-gray-100 pb-10">
+            <div class="w-full max-w-[1200px] mx-auto py-16 px-5 fade-in min-h-[70vh]">
+                <div class="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 md:p-12 mb-8">
+                    <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
                         <img src="${user.profile_medium}" class="w-32 h-32 rounded-full border-4 border-[#ea580c] object-cover shadow-md">
-                        <div class="text-center md:text-left">
+                        <div class="text-center md:text-left flex-1">
                             <h1 class="text-4xl font-bold font-title text-secondary mb-2">${user.firstname} ${user.lastname}</h1>
                             <p class="text-gray-500 flex items-center justify-center md:justify-start gap-2 mb-6">
                                 <svg class="w-5 h-5 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                                 ${user.city || 'Mallorca'}, ${user.country || 'Spain'}
                             </p>
-                            <a href="https://www.strava.com/athletes/${user.id}" target="_blank" class="bg-[#fc4c02] text-white px-6 py-2.5 rounded-full font-bold text-sm tracking-wide hover:bg-[#e34402] transition-colors inline-flex items-center gap-2">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"></path></svg>
-                                View on Strava
-                            </a>
+                            <div class="flex flex-wrap items-center justify-center md:justify-start gap-4">
+                                <a href="https://www.strava.com/athletes/${user.id}" target="_blank" class="bg-[#fc4c02] text-white px-6 py-2.5 rounded-full font-bold text-sm tracking-wide hover:bg-[#e34402] transition-colors inline-flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"></path></svg>
+                                    View on Strava
+                                </a>
+                                <button data-action="logout-strava" class="bg-gray-100 text-gray-700 px-6 py-2.5 rounded-full font-bold text-sm tracking-wide hover:bg-gray-200 hover:text-red-600 transition-colors inline-flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                                    Log out
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="py-16 text-center">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Under Construction 🚧</h3>
-                        <p class="text-gray-500 max-w-lg mx-auto text-lg">This profile section is being prepared. Soon you'll be able to see your conquered segments, personal goals, and detailed climbing statistics here.</p>
+                </div>
+
+                <h2 class="text-3xl font-bold font-title text-secondary mb-6 px-4">Your Cycling Stats</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Recent Stats -->
+                    <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-md transition-all">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-gray-50 rounded-bl-full -mr-8 -mt-8 z-0 transition-transform group-hover:scale-110"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-3 mb-8">
+                                <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                </div>
+                                <h3 class="font-title font-bold text-xl text-secondary">Recent <span class="text-sm font-normal text-gray-400 block">Last 4 weeks</span></h3>
+                            </div>
+                            <div class="space-y-6">
+                                <div>
+                                    <p class="text-sm text-gray-500 font-medium mb-1">Distance</p>
+                                    <p class="text-4xl font-bold font-title text-gray-800">${formatDistance(recent.distance)}<span class="text-lg text-gray-400 ml-1">km</span></p>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 pt-4 border-t border-gray-50">
+                                    <div>
+                                        <p class="text-sm text-gray-500 font-medium mb-1">Elevation</p>
+                                        <p class="text-2xl font-bold text-gray-800">${formatElevation(recent.elevation_gain)}<span class="text-sm text-gray-400 ml-1">m</span></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500 font-medium mb-1">Rides</p>
+                                        <p class="text-2xl font-bold text-gray-800">${recent.count || 0}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- YTD Stats -->
+                    <div class="bg-[#11131f] text-white rounded-3xl p-8 shadow-xl relative overflow-hidden group hover:shadow-2xl transition-all transform hover:-translate-y-1">
+                        <div class="absolute inset-0 opacity-20 pointer-events-none transition-opacity group-hover:opacity-30" style="background: radial-gradient(circle at 100% 0%, #ea580c 0%, transparent 70%);"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-3 mb-8">
+                                <div class="w-10 h-10 rounded-full bg-[#ea580c] flex items-center justify-center text-white shadow-lg shadow-orange-500/30">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                                </div>
+                                <h3 class="font-title font-bold text-xl text-white">This Year <span class="text-sm font-normal text-gray-400 block">Year to date</span></h3>
+                            </div>
+                            <div class="space-y-6">
+                                <div>
+                                    <p class="text-sm text-gray-400 font-medium mb-1">Distance</p>
+                                    <p class="text-5xl font-bold font-title text-[#ea580c] drop-shadow-sm">${formatDistance(ytd.distance)}<span class="text-lg text-gray-500 ml-2">km</span></p>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 pt-4 border-t border-gray-800">
+                                    <div>
+                                        <p class="text-sm text-gray-400 font-medium mb-1">Elevation</p>
+                                        <p class="text-2xl font-bold text-white">${formatElevation(ytd.elevation_gain)}<span class="text-sm text-gray-500 ml-1">m</span></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-400 font-medium mb-1">Rides</p>
+                                        <p class="text-2xl font-bold text-white">${ytd.count || 0}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- All Time Stats -->
+                    <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-md transition-all">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-gray-50 rounded-bl-full -mr-8 -mt-8 z-0 transition-transform group-hover:scale-110"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-3 mb-8">
+                                <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                                </div>
+                                <h3 class="font-title font-bold text-xl text-secondary">All Time <span class="text-sm font-normal text-gray-400 block">Since joining</span></h3>
+                            </div>
+                            <div class="space-y-6">
+                                <div>
+                                    <p class="text-sm text-gray-500 font-medium mb-1">Distance</p>
+                                    <p class="text-4xl font-bold font-title text-gray-800">${formatDistance(all.distance)}<span class="text-lg text-gray-400 ml-1">km</span></p>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 pt-4 border-t border-gray-50">
+                                    <div>
+                                        <p class="text-sm text-gray-500 font-medium mb-1">Elevation</p>
+                                        <p class="text-2xl font-bold text-gray-800">${formatElevation(all.elevation_gain)}<span class="text-sm text-gray-400 ml-1">m</span></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500 font-medium mb-1">Rides</p>
+                                        <p class="text-2xl font-bold text-gray-800">${all.count || 0}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                
+                <!-- Chart Container -->
+                <div class="mt-8 bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
+                    <h3 class="font-title font-bold text-xl text-secondary mb-6 flex items-center gap-2">
+                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
+                        Recent Activity Volume
+                    </h3>
+                    <div class="w-full h-[300px] relative">
+                        <canvas id="activitiesChart"></canvas>
+                    </div>
+                </div>
+                
+                ${trophiesHTML}
+                ${starredHTML}
             </div>`;
+        },
+        init: async () => {
+            const canvas = document.getElementById('activitiesChart');
+            if (!canvas) return;
+            
+            // Si Chart.js no està carregat al window, esperem o avisem
+            if (typeof Chart === 'undefined') {
+                console.error("Chart.js not loaded.");
+                return;
+            }
+
+            const activities = await getRecentActivities(30);
+            if (!activities || activities.length === 0) {
+                canvas.parentElement.innerHTML = '<p class="text-gray-400 text-center mt-10">No recent activities found to display.</p>';
+                return;
+            }
+
+            // Prepare data: group by date
+            // Start from 30 days ago to today? Or just plot the last 15 activities
+            const recent = activities.slice(0, 15).reverse(); 
+            
+            const labels = recent.map(a => {
+                const d = new Date(a.start_date_local);
+                return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+            });
+            const dataDistance = recent.map(a => (a.distance / 1000).toFixed(1));
+
+            const ctx = canvas.getContext('2d');
+            
+            // Create gradient for the area under the line
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(234, 88, 12, 0.5)'); // #ea580c
+            gradient.addColorStop(1, 'rgba(234, 88, 12, 0.0)');
+
+            new Chart(canvas, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Distance',
+                        data: dataDistance,
+                        fill: true,
+                        backgroundColor: gradient,
+                        borderColor: '#ea580c',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#ea580c',
+                        pointBorderWidth: 2,
+                        pointRadius: 0,
+                        pointHoverRadius: 6,
+                        pointHitRadius: 15,
+                        tension: 0.4 // Smooth curves
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(17, 19, 31, 0.9)',
+                            titleColor: '#9ca3af',
+                            bodyColor: '#ffffff',
+                            padding: 12,
+                            titleFont: { family: 'Inter', size: 12, weight: 'normal' },
+                            bodyFont: { family: 'Inter', size: 15, weight: 'bold' },
+                            displayColors: false,
+                            cornerRadius: 8,
+                            callbacks: {
+                                title: function(context) {
+                                    return context[0].label;
+                                },
+                                label: function(context) {
+                                    return context.parsed.y + ' km';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#f3f4f6', drawBorder: false, borderDash: [5, 5] },
+                            ticks: { font: { family: 'Inter' }, color: '#9ca3af', maxTicksLimit: 5 }
+                        },
+                        x: {
+                            grid: { display: false, drawBorder: false },
+                            ticks: { font: { family: 'Inter' }, color: '#9ca3af', maxTicksLimit: 8 }
+                        }
+                    }
+                }
+            });
         }
     }
 };
@@ -262,6 +598,10 @@ export const router = async () => {
         if (path === "/segments") {
             resetFiltres();
         }
+    }
+
+    if (route.init) {
+        await route.init();
     }
 
     // Sempre s'executa per a que actualitzi els elements (ja sigui mapa o grid)
