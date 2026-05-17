@@ -118,7 +118,7 @@ const routes = {
                         </p>
                     </div>
                     <div class="flex-1 w-full aspect-video rounded-3xl overflow-hidden shadow-xl">
-                        <img src="media/photo.jpeg" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                        <img src="media/mallorcaCyclingLogo.png" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
                     </div>
                 </div>
             </section>
@@ -466,7 +466,7 @@ const routes = {
         init: async () => {
             const canvas = document.getElementById('activitiesChart');
             if (!canvas) return;
-            
+
             // Si Chart.js no està carregat al window, esperem o avisem
             if (typeof Chart === 'undefined') {
                 console.error("Chart.js not loaded.");
@@ -481,8 +481,8 @@ const routes = {
 
             // Prepare data: group by date
             // Start from 30 days ago to today? Or just plot the last 15 activities
-            const recent = activities.slice(0, 15).reverse(); 
-            
+            const recent = activities.slice(0, 15).reverse();
+
             const labels = recent.map(a => {
                 const d = new Date(a.start_date_local);
                 return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
@@ -490,7 +490,7 @@ const routes = {
             const dataDistance = recent.map(a => (a.distance / 1000).toFixed(1));
 
             const ctx = canvas.getContext('2d');
-            
+
             // Create gradient for the area under the line
             const gradient = ctx.createLinearGradient(0, 0, 0, 300);
             gradient.addColorStop(0, 'rgba(234, 88, 12, 0.5)'); // #ea580c
@@ -535,10 +535,10 @@ const routes = {
                             displayColors: false,
                             cornerRadius: 8,
                             callbacks: {
-                                title: function(context) {
+                                title: function (context) {
                                     return context[0].label;
                                 },
-                                label: function(context) {
+                                label: function (context) {
                                     return context.parsed.y + ' km';
                                 }
                             }

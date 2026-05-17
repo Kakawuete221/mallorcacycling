@@ -8,7 +8,7 @@ const ZOOM_INICIAL = 10;
 let map;
 let directionsService;
 let directionsRenderer;
-let llistatPolylines = [];
+let polylinesCache = new Map();
 let activeInfoWindow = null;
 let hoverMarker = null;
 let orangePolyline = null;
@@ -61,12 +61,15 @@ export const assignarComarcaAdministrativa = (port) => {
 };
 
 export function initGoogleMap() {
-    const MALLORCA_BOUNDS = { north: 40.3, south: 39.1, west: 2.2, east: 3.6 };
+    polylinesCache.clear(); // IMPORTANT: Si es recarrega la pàgina del mapa, hem de buidar la memòria cau perquè els objectes pertanyen al mapa anterior (ja destruït)
+    
+    const MALLORCA_BOUNDS = { north: 40.5, south: 38.8, west: 1.8, east: 4.0 };
 
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: ZOOM_INICIAL,
         center: CENTRE_MALLORCA,
         mapTypeId: 'terrain',
+        mapId: 'DEMO_MAP_ID', // Habilita els Mapes Vectorials (WebGl) que carreguen molt més ràpid que els Raster
         minZoom: 9,
         maxZoom: 18,
         restriction: { latLngBounds: MALLORCA_BOUNDS, strictBounds: false },
@@ -98,70 +101,90 @@ export function initGoogleMap() {
 }
 
 export function pintarPorts(ports, onSegmentClickCallback) {
-    llistatPolylines.forEach(element => {
-        if (element.setMap) element.setMap(null);
+    // Emmagatzemem el callback actual a l'àmbit global o del mòdul perquè els listeners antics el puguin utilitzar
+    window.currentSegmentClickCallback = onSegmentClickCallback;
+
+    // Primer amaguem tots els elements que estan actualment visibles
+    polylinesCache.forEach(cacheObj => {
+        if (cacheObj.visible) {
+            cacheObj.borderPolyline.setVisible(false);
+            cacheObj.mainPolyline.setVisible(false);
+            cacheObj.startMarker.setVisible(false);
+            cacheObj.visible = false;
+        }
     });
-    llistatPolylines = [];
 
     ports.forEach(port => {
         if (!port.polyline) return;
 
-        const path = google.maps.geometry.encoding.decodePath(port.polyline);
+        if (!polylinesCache.has(port.id)) {
+            // És la primera vegada que processem aquest port, creem els objectes de mapa
+            const path = google.maps.geometry.encoding.decodePath(port.polyline);
 
-        const borderPolyline = new google.maps.Polyline({
-            path: path, geodesic: true, strokeColor: '#FFFFFF', strokeOpacity: 0.9, strokeWeight: 6, zIndex: 1, map: map
-        });
-
-        const mainPolyline = new google.maps.Polyline({
-            path: path, geodesic: true, strokeColor: '#fc4c02', strokeOpacity: 0.7, strokeWeight: 3, zIndex: 2, map: map
-        });
-
-        const startMarker = new google.maps.Marker({
-            position: path[0],
-            map: map,
-            icon: {
-                path: google.maps.SymbolPath.CIRCLE, scale: 4, fillColor: '#fc4c02', fillOpacity: 1, strokeColor: '#ffffff', strokeWeight: 2
-            },
-            zIndex: 3
-        });
-
-        const ferHover = () => {
-            mainPolyline.setOptions({ strokeOpacity: 1.0, strokeColor: '#d94302', zIndex: 10 });
-            map.setOptions({ draggableCursor: 'pointer' });
-        };
-
-        const treureHover = () => {
-            mainPolyline.setOptions({ strokeOpacity: 0.7, strokeColor: '#fc4c02', zIndex: 2 });
-            map.setOptions({ draggableCursor: '' });
-        };
-
-        const clicarLinia = (event) => {
-            if (activeInfoWindow) activeInfoWindow.close();
-
-            activeInfoWindow = new google.maps.InfoWindow({
-                content: createMiniCardHTML(port),
-                position: event.latLng
+            const borderPolyline = new google.maps.Polyline({
+                path: path, geodesic: true, strokeColor: '#FFFFFF', strokeOpacity: 0.9, strokeWeight: 6, zIndex: 1, map: map
             });
-            activeInfoWindow.open(map);
 
-            if (onSegmentClickCallback) {
-                onSegmentClickCallback(port, activeInfoWindow, event.latLng);
-            }
-        };
+            const mainPolyline = new google.maps.Polyline({
+                path: path, geodesic: true, strokeColor: '#fc4c02', strokeOpacity: 0.7, strokeWeight: 3, zIndex: 2, map: map
+            });
 
-        google.maps.event.addListener(mainPolyline, 'mouseover', ferHover);
-        google.maps.event.addListener(mainPolyline, 'mouseout', treureHover);
-        google.maps.event.addListener(mainPolyline, 'click', clicarLinia);
+            const startMarker = new google.maps.Marker({
+                position: path[0],
+                map: map,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE, scale: 4, fillColor: '#fc4c02', fillOpacity: 1, strokeColor: '#ffffff', strokeWeight: 2
+                },
+                zIndex: 3
+            });
 
-        google.maps.event.addListener(borderPolyline, 'mouseover', ferHover);
-        google.maps.event.addListener(borderPolyline, 'mouseout', treureHover);
-        google.maps.event.addListener(borderPolyline, 'click', clicarLinia);
+            const ferHover = () => {
+                mainPolyline.setOptions({ strokeOpacity: 1.0, strokeColor: '#d94302', zIndex: 10 });
+                map.setOptions({ draggableCursor: 'pointer' });
+            };
 
-        google.maps.event.addListener(startMarker, 'mouseover', ferHover);
-        google.maps.event.addListener(startMarker, 'mouseout', treureHover);
-        google.maps.event.addListener(startMarker, 'click', (e) => clicarLinia(e));
+            const treureHover = () => {
+                mainPolyline.setOptions({ strokeOpacity: 0.7, strokeColor: '#fc4c02', zIndex: 2 });
+                map.setOptions({ draggableCursor: '' });
+            };
 
-        llistatPolylines.push(borderPolyline, mainPolyline, startMarker);
+            const clicarLinia = (event) => {
+                if (activeInfoWindow) activeInfoWindow.close();
+
+                activeInfoWindow = new google.maps.InfoWindow({
+                    content: createMiniCardHTML(port),
+                    position: event.latLng
+                });
+                activeInfoWindow.open(map);
+
+                if (window.currentSegmentClickCallback) {
+                    window.currentSegmentClickCallback(port, activeInfoWindow, event.latLng);
+                }
+            };
+
+            google.maps.event.addListener(mainPolyline, 'mouseover', ferHover);
+            google.maps.event.addListener(mainPolyline, 'mouseout', treureHover);
+            google.maps.event.addListener(mainPolyline, 'click', clicarLinia);
+
+            google.maps.event.addListener(borderPolyline, 'mouseover', ferHover);
+            google.maps.event.addListener(borderPolyline, 'mouseout', treureHover);
+            google.maps.event.addListener(borderPolyline, 'click', clicarLinia);
+
+            google.maps.event.addListener(startMarker, 'mouseover', ferHover);
+            google.maps.event.addListener(startMarker, 'mouseout', treureHover);
+            google.maps.event.addListener(startMarker, 'click', (e) => clicarLinia(e));
+
+            polylinesCache.set(port.id, {
+                borderPolyline, mainPolyline, startMarker, visible: true
+            });
+        } else {
+            // El port ja es va crear prèviament, només l'hem de tornar a fer visible
+            const cacheObj = polylinesCache.get(port.id);
+            cacheObj.borderPolyline.setVisible(true);
+            cacheObj.mainPolyline.setVisible(true);
+            cacheObj.startMarker.setVisible(true);
+            cacheObj.visible = true;
+        }
     });
 }
 
@@ -396,7 +419,7 @@ export const centrarMapaEnPort = (lat, lng, nom) => {
     const centreActual = map.getCenter();
     const puntIntermedi = { lat: (centreActual.lat() + latNum) / 2, lng: (centreActual.lng() + lngNum) / 2 };
 
-    map.setZoom(12);
+    map.setZoom(11);
     setTimeout(() => {
         map.panTo(puntIntermedi);
         setTimeout(() => {
@@ -405,8 +428,8 @@ export const centrarMapaEnPort = (lat, lng, nom) => {
                 map.setZoom(13);
                 google.maps.event.removeListener(listener);
             });
-        }, 400);
-    }, 200);
+        }, 600);
+    }, 400);
 };
 
 export const eliminarMarcadorCerca = () => {
@@ -421,12 +444,12 @@ export const resetearVistaMapa = () => {
     if (activeInfoWindow) activeInfoWindow.close();
 
     const centreActual = map.getCenter();
-    const puntIntermedi = { 
-        lat: (centreActual.lat() + CENTRE_MALLORCA.lat) / 2, 
-        lng: (centreActual.lng() + CENTRE_MALLORCA.lng) / 2 
+    const puntIntermedi = {
+        lat: (centreActual.lat() + CENTRE_MALLORCA.lat) / 2,
+        lng: (centreActual.lng() + CENTRE_MALLORCA.lng) / 2
     };
 
-    map.setZoom(11); 
+    map.setZoom(10); 
     setTimeout(() => {
         map.panTo(puntIntermedi);
         setTimeout(() => {
@@ -435,13 +458,13 @@ export const resetearVistaMapa = () => {
                 map.setZoom(ZOOM_INICIAL);
                 google.maps.event.removeListener(listener);
             });
-        }, 400);
-    }, 200);
+        }, 600);
+    }, 400);
 };
 
 export const centrarEnUsuari = () => {
     if (!map) return;
-    
+
     if (!userPos) {
         alert("Encara no hem pogut obtenir la teva ubicació. Revisa els permisos del GPS.");
         return;
@@ -450,12 +473,12 @@ export const centrarEnUsuari = () => {
     if (activeInfoWindow) activeInfoWindow.close();
 
     const centreActual = map.getCenter();
-    const puntIntermedi = { 
-        lat: (centreActual.lat() + userPos.lat) / 2, 
-        lng: (centreActual.lng() + userPos.lng) / 2 
+    const puntIntermedi = {
+        lat: (centreActual.lat() + userPos.lat) / 2,
+        lng: (centreActual.lng() + userPos.lng) / 2
     };
 
-    map.setZoom(12);
+    map.setZoom(11);
     setTimeout(() => {
         map.panTo(puntIntermedi);
         setTimeout(() => {
@@ -464,6 +487,6 @@ export const centrarEnUsuari = () => {
                 map.setZoom(14);
                 google.maps.event.removeListener(listener);
             });
-        }, 400);
-    }, 200);
+        }, 600);
+    }, 400);
 };
