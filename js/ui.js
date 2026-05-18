@@ -264,8 +264,8 @@ export const uiToggleCompletatsBtn = (btn) => {
     const isActive = btn.classList.contains('text-primary');
 
     if (isActive) {
-        btn.classList.remove('text-primary', 'border-primary', 'bg-orange-50');
-        btn.classList.add('text-gray-700', 'border-gray-300', 'bg-white');
+        btn.classList.remove('text-primary', 'border-primary', 'bg-orange-50', 'shadow-[0_0_15px_rgba(252,76,2,0.25)]');
+        btn.classList.add('text-gray-600', 'border-gray-200', 'bg-white');
         const switchEl = btn.querySelector('#toggle-completats-switch');
         if (switchEl) {
             switchEl.classList.remove('bg-primary');
@@ -273,8 +273,8 @@ export const uiToggleCompletatsBtn = (btn) => {
             switchEl.firstElementChild.classList.remove('translate-x-4');
         }
     } else {
-        btn.classList.remove('text-gray-700', 'border-gray-300', 'bg-white');
-        btn.classList.add('text-primary', 'border-primary', 'bg-orange-50');
+        btn.classList.remove('text-gray-600', 'border-gray-200', 'text-gray-700', 'border-gray-300', 'bg-white');
+        btn.classList.add('text-primary', 'border-primary', 'bg-orange-50', 'shadow-[0_0_15px_rgba(252,76,2,0.25)]');
         const switchEl = btn.querySelector('#toggle-completats-switch');
         if (switchEl) {
             switchEl.classList.remove('bg-gray-200');
@@ -288,7 +288,7 @@ export const uiToggleCompletatsBtn = (btn) => {
 
 export const uiToggleGeneric = (btn) => {
     const classesInactiu = ['bg-gray-50', 'text-gray-600', 'border-gray-200'];
-    const classesActiu = ['bg-orange-50', 'text-primary', 'border-primary'];
+    const classesActiu = ['bg-orange-50', 'text-primary', 'border-primary', 'shadow-[0_0_15px_rgba(252,76,2,0.25)]'];
 
     const esSeleccionat = btn.classList.contains('bg-orange-50');
 
@@ -319,7 +319,7 @@ export const uiNetejarFiltres = () => {
     }
 
     document.querySelectorAll('.pindola').forEach(btn => {
-        btn.classList.remove('bg-orange-50', 'text-primary', 'border-primary');
+        btn.classList.remove('bg-orange-50', 'text-primary', 'border-primary', 'shadow-[0_0_15px_rgba(252,76,2,0.25)]');
         btn.classList.add('bg-gray-50', 'text-gray-600', 'border-gray-200');
     });
 
@@ -355,22 +355,22 @@ export const createFiltresHTML = () => `
                     <div>
                         <h4 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">Region</h4>
                         <div class="grid grid-cols-2 gap-2">
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all" data-action="toggle-generic" data-camp="comarca" data-valor="Tramuntana">Tramuntana</button>
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all" data-action="toggle-generic" data-camp="comarca" data-valor="Raiguer">Raiguer</button>
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all" data-action="toggle-generic" data-camp="comarca" data-valor="Pla">Pla</button>
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all" data-action="toggle-generic" data-camp="comarca" data-valor="Migjorn">Migjorn</button>
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all" data-action="toggle-generic" data-camp="comarca" data-valor="Llevant">Llevant</button>
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all" data-action="toggle-generic" data-camp="comarca" data-valor="Palma">Palma</button>
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Tramuntana">Tramuntana</button>
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Raiguer">Raiguer</button>
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Pla">Pla</button>
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Migjorn">Migjorn</button>
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Llevant">Llevant</button>
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Palma">Palma</button>
                         </div>
                     </div>
 
                     <div>
                         <h4 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">Category</h4>
                         <div class="grid grid-cols-4 gap-2">
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="1">1</button>
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="2">2</button>
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="3">3</button>
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="4">4</button>
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="1">1</button>
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="2">2</button>
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="3">3</button>
+                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="4">4</button>
                         </div>
                     </div>
 
@@ -412,7 +412,7 @@ export const createFiltresHTML = () => `
             <ul id="llista-suggeriments" class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-100 shadow-xl rounded-lg overflow-hidden hidden z-50 max-h-60 overflow-y-auto"></ul>
         </div>
 
-        <button id="btn-completats" data-action="toggle-completats" class="bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">
+        <button id="btn-completats" data-action="toggle-completats" class="bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">
             <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
             Completed
         </button>
@@ -436,12 +436,12 @@ export const createSidebarFiltresHTML = () => `
                     <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </summary>
                 <div class="grid grid-cols-2 gap-2 mt-3">
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Tramuntana">Tramuntana</button>
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Raiguer">Raiguer</button>
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Pla">Pla</button>
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Migjorn">Migjorn</button>
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Llevant">Llevant</button>
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Palma">Palma</button>
+                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Tramuntana">Tramuntana</button>
+                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Raiguer">Raiguer</button>
+                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Pla">Pla</button>
+                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Migjorn">Migjorn</button>
+                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Llevant">Llevant</button>
+                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Palma">Palma</button>
                 </div>
             </details>
 
@@ -451,10 +451,10 @@ export const createSidebarFiltresHTML = () => `
                     <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </summary>
                 <div class="grid grid-cols-4 gap-2 mt-3">
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="1">1</button>
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="2">2</button>
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="3">3</button>
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 transition-all text-center" data-action="toggle-generic" data-camp="categoria" data-valor="4">4</button>
+                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="1">1</button>
+                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="2">2</button>
+                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="3">3</button>
+                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="4">4</button>
                 </div>
             </details>
 
@@ -514,6 +514,11 @@ export const createTopBarSegmentsHTML = () => `
         </div>
         
         <div class="flex items-center gap-3">
+            <button id="btn-completats" data-action="toggle-completats" class="bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">
+                <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Completed
+            </button>
+
             <div class="relative flex items-center">
                 <svg class="w-4 h-4 text-gray-500 absolute left-3 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h18M6 12h12M9 20h6"></path></svg>
                 <select id="select-ordenacio" class="bg-white border border-gray-200 hover:border-gray-300 rounded-lg h-10 pl-9 pr-3 text-sm font-medium text-gray-700 transition-colors focus:ring-0 outline-none cursor-pointer">

@@ -153,41 +153,49 @@ export const showModal = (puerto) => {
                             Loading nearby places...
                         </div>
                     </div>
-                </div>
-                <!-- Directions & Navigation Section (Not encapsulated, flows in harmony) -->
-                <div class="w-full border-t border-gray-100/80 pt-8 mt-8">
-                    <!-- Section Header matching Nearby Places -->
-                    <div class="flex items-start gap-4 mb-6">
-                        <div class="w-10 h-10 rounded-2xl bg-[#ea580c]/10 flex items-center justify-center shrink-0">
-                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
-                        </div>
-                        <div class="flex-1 text-left">
-                            <h4 class="font-title font-bold text-gray-900 text-xl m-0 leading-tight">Directions & Access</h4>
-                            <p class="text-xs text-gray-400 m-0 mt-1">Ready to tackle ${puerto.nom}? Calculate the best route directly to the start coordinates of this segment.</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Native Flow Row -->
-                    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4">
-                        <!-- Coordinates with modern live pulsing telemetry dots -->
-                        <div class="flex items-center gap-3">
-                            <div class="flex items-center gap-2 bg-gray-50 border border-gray-100/80 px-4 py-2 rounded-full shadow-sm text-xs font-semibold text-gray-600">
-                                <span class="w-1.5 h-1.5 rounded-full bg-[#ea580c] animate-pulse"></span>
-                                <span class="text-gray-400 font-bold uppercase">Lat</span>
-                                <span>${puerto.lat}</span>
+                    <!-- Directions & Access Section (Ultra-Clean Premium Modern Flow) -->
+                    <div class="w-full border-t border-gray-100/80 pt-8 mt-8">
+                        <!-- Section Header matching Nearby Places -->
+                        <div class="flex items-start gap-4 mb-6">
+                            <div class="w-10 h-10 rounded-2xl bg-[#fc4c02]/10 flex items-center justify-center shrink-0 border border-[#fc4c02]/20">
+                                <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
                             </div>
-                            <div class="flex items-center gap-2 bg-gray-50 border border-gray-100/80 px-4 py-2 rounded-full shadow-sm text-xs font-semibold text-gray-600">
-                                <span class="w-1.5 h-1.5 rounded-full bg-[#ea580c] animate-pulse"></span>
-                                <span class="text-gray-400 font-bold uppercase">Lng</span>
-                                <span>${puerto.lng}</span>
+                            <div class="flex-1 text-left">
+                                <h4 class="font-title font-bold text-gray-900 text-xl m-0 leading-tight">Access & Directions</h4>
+                                <p class="text-xs text-gray-400 m-0 mt-1">Ready to ride? Get precise coordinates for the base of the climb or launch optimized routing directly in Google Maps.</p>
                             </div>
                         </div>
-                        
-                        <!-- Premium Direct Navigation Hyperlink (Immune to Popup Blockers) -->
-                        <a href="https://www.google.com/maps/dir/?api=1&destination=${puerto.lat},${puerto.lng}&travelmode=bicycling" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto md:min-w-[220px] bg-primary text-white hover:bg-orange-600 border-none py-3.5 px-6 rounded-2xl text-sm font-bold cursor-pointer transition-all shadow-md hover:shadow-lg flex justify-center items-center gap-2 group no-underline text-center select-none">
-                            Get Directions
-                            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                        </a>
+
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 text-left mt-6">
+                            
+                            <!-- Left side: Clean GPS telemetry label and single high-end capsule -->
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                                    <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Start Coordinates</span>
+                                </div>
+                                
+                                <div class="flex items-center gap-2.5">
+                                    <!-- Clean unified coordinate capsule -->
+                                    <div class="bg-gray-50 border border-gray-100 rounded-xl px-4 py-2 text-xs font-mono font-bold text-gray-600 shadow-sm select-all">
+                                        ${puerto.lat}° N &nbsp;&middot;&nbsp; ${puerto.lng}° E
+                                    </div>
+                                    
+                                    <!-- Minimal copy action -->
+                                    <button onclick="navigator.clipboard.writeText('${puerto.lat}, ${puerto.lng}').then(() => { const b=this; const prev=b.innerHTML; b.innerHTML='✓'; b.classList.add('!text-emerald-500','!bg-emerald-50','!border-emerald-200'); setTimeout(()=>{b.innerHTML=prev; b.classList.remove('!text-emerald-500','!bg-emerald-50','!border-emerald-200')},2000); })" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-400 hover:text-gray-600 w-9 h-9 rounded-xl flex items-center justify-center cursor-pointer transition-all shadow-sm shrink-0 active:scale-95" title="Copy GPS Coordinates">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Right side: Clean premium Google Maps direction button -->
+                            <div class="shrink-0">
+                                <a href="https://www.google.com/maps/dir/?api=1&destination=${puerto.lat},${puerto.lng}&travelmode=bicycling" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-primary hover:bg-orange-600 text-white font-bold h-10 px-5 rounded-xl text-xs tracking-wider uppercase transition-all shadow-sm hover:shadow-[0_4px_12px_rgba(252,76,2,0.25)] no-underline select-none">
+                                    Get Directions
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -220,8 +228,9 @@ const _fetchAndRenderNearbyPlaces = (lat, lng) => {
             const sorted = results.sort((a, b) => (b.rating || 0) - (a.rating || 0)).slice(0, 6);
 
             sorted.forEach(place => {
-                const isCafe = place.types.includes('cafe') || place.types.includes('bakery') || place.types.includes('food');
+                const isCafe = place.types.includes('cafe') || place.types.includes('bakery');
                 const isBike = place.types.includes('bicycle_store');
+                const isHotel = place.types.includes('lodging') || place.types.includes('hotel');
 
                 let typeName, typeBg, typeColor, typeIcon, typeAccent;
                 if (isBike) {
@@ -230,6 +239,9 @@ const _fetchAndRenderNearbyPlaces = (lat, lng) => {
                 } else if (isCafe) {
                     typeName = 'Cafe'; typeBg = 'bg-amber-50'; typeColor = 'text-amber-700'; typeAccent = 'bg-amber-500';
                     typeIcon = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/></svg>';
+                } else if (isHotel) {
+                    typeName = 'Hotel / Lodging'; typeBg = 'bg-purple-50'; typeColor = 'text-purple-700'; typeAccent = 'bg-purple-500';
+                    typeIcon = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>';
                 } else {
                     typeName = 'Restaurant'; typeBg = 'bg-emerald-50'; typeColor = 'text-emerald-700'; typeAccent = 'bg-emerald-500';
                     typeIcon = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>';

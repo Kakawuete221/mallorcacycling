@@ -335,14 +335,15 @@ export const cercarLlocsPropers = (lat, lng, callback) => {
         const location = new google.maps.LatLng(lat, lng);
         let foodResults = [];
         let bikeResults = [];
+        let hotelResults = [];
         let done = 0;
 
         const finish = () => {
             done++;
-            if (done < 2) return;
+            if (done < 3) return;
             // Merge, deduplicate by place_id, sort by rating
             const seen = new Set();
-            const merged = [...foodResults, ...bikeResults].filter(p => {
+            const merged = [...foodResults, ...bikeResults, ...hotelResults].filter(p => {
                 if (seen.has(p.place_id)) return false;
                 seen.add(p.place_id);
                 return true;
@@ -363,6 +364,12 @@ export const cercarLlocsPropers = (lat, lng, callback) => {
         // Search 2: bike stores
         service.nearbySearch({ location, radius: '3000', type: 'bicycle_store' }, (res, st) => {
             if (st === google.maps.places.PlacesServiceStatus.OK) bikeResults = res;
+            finish();
+        });
+
+        // Search 3: hotels / lodging
+        service.nearbySearch({ location, radius: '3000', type: 'lodging' }, (res, st) => {
+            if (st === google.maps.places.PlacesServiceStatus.OK) hotelResults = res;
             finish();
         });
     };
