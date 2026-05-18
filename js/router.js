@@ -33,7 +33,7 @@ const routes = {
                 <div class="lg:col-span-8 flex flex-col gap-6 h-full">
                     <!-- Segment of the Month (Gran) -->
                     <div data-action="view-details" data-port="${p1Str}" class="group relative rounded-3xl overflow-hidden shadow-2xl flex-1 min-h-[400px] md:min-h-[450px] cursor-pointer block">
-                        <img src="media/${p1.nom || p1.nombre}.jpg" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <img src="${p1.imatge && p1.imatge !== 'media/photo.jpeg' ? p1.imatge : 'media/' + (p1.nom || p1.nombre) + '.jpg'}" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-6 md:p-10 text-white w-full">
                             <span class="bg-[#ea580c] text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest mb-4 inline-block shadow-lg">${t('segment_of_month')}</span>
@@ -48,7 +48,7 @@ const routes = {
                     
                     <!-- Segment Secundari Inferior -->
                     <div data-action="view-details" data-port="${p2Str}" class="group relative rounded-3xl overflow-hidden shadow-lg h-[180px] md:h-[220px] flex-shrink-0 cursor-pointer block">
-                        <img src="media/${p2.nom || p2.nombre}.jpg" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <img src="${p2.imatge && p2.imatge !== 'media/photo.jpeg' ? p2.imatge : 'media/' + (p2.nom || p2.nombre) + '.jpg'}" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/30 to-transparent opacity-90"></div>
                         <div class="absolute bottom-0 left-0 p-6 text-white w-full">
                             <h3 class="text-2xl md:text-3xl font-title font-bold mb-3">${p2.nom || p2.nombre}</h3>
@@ -64,10 +64,10 @@ const routes = {
                 <!-- Columna Dreta (3 segments) -->
                 <div class="lg:col-span-4 flex flex-col gap-6 h-full">
                     ${rest.map(p => {
-                        const pStr = JSON.stringify(p).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
-                        return `
+                const pStr = JSON.stringify(p).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+                return `
                         <div data-action="view-details" data-port="${pStr}" class="group relative rounded-3xl overflow-hidden shadow-lg flex-1 min-h-[160px] cursor-pointer block">
-                            <img src="media/${p.nom || p.nombre}.jpg" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <img src="${p.imatge && p.imatge !== 'media/photo.jpeg' ? p.imatge : 'media/' + (p.nom || p.nombre) + '.jpg'}" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                             <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent opacity-95"></div>
                             <div class="absolute bottom-0 left-0 p-5 text-white w-full">
                                 <h3 class="text-xl md:text-2xl font-title font-bold mb-3 leading-tight">${p.nom || p.nombre}</h3>
@@ -79,7 +79,7 @@ const routes = {
                             </div>
                         </div>
                         `;
-                    }).join('')}
+            }).join('')}
                 </div>
             </div>
             `;
@@ -128,7 +128,7 @@ const routes = {
                         <p class="text-gray-600 text-lg leading-relaxed">${t('about_p2')}</p>
                     </div>
                     <div class="flex-1 w-full aspect-video rounded-3xl overflow-hidden shadow-xl">
-                        <img src="media/mallorcaCyclingLogo.png" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                        <img src="media/mallorcaCyclingLogo.webp" alt="Logotip de Mallorca Cycling" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
                     </div>
                 </div>
             </section>
@@ -253,7 +253,7 @@ const routes = {
                     ${visibleTrophies.map(tr => `
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-1.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group block">
                         <div class="relative rounded-xl overflow-hidden h-36 mb-2">
-                            <img src="media/${tr.port.nom || tr.port.nombre}.jpg" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <img src="${tr.port.imatge && tr.port.imatge !== 'media/photo.jpeg' ? tr.port.imatge : 'media/' + (tr.port.nom || tr.port.nombre) + '.jpg'}" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute inset-0 bg-gradient-to-t from-[#11131f]/90 via-transparent to-transparent"></div>
                             <div class="absolute bottom-3 left-4 right-4">
                                 <h3 class="font-bold font-title text-white text-lg leading-tight truncate drop-shadow-md">${tr.port.nom || tr.port.nombre}</h3>
@@ -281,7 +281,7 @@ const routes = {
                     ${hiddenTrophies.map(tr => `
                     <div class="hidden-trophy hidden bg-white rounded-2xl shadow-sm border border-gray-100 p-1.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group block">
                         <div class="relative rounded-xl overflow-hidden h-36 mb-2">
-                            <img src="media/${tr.port.nom || tr.port.nombre}.jpg" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <img src="${tr.port.imatge && tr.port.imatge !== 'media/photo.jpeg' ? tr.port.imatge : 'media/' + (tr.port.nom || tr.port.nombre) + '.jpg'}" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute inset-0 bg-gradient-to-t from-[#11131f]/90 via-transparent to-transparent"></div>
                             <div class="absolute bottom-3 left-4 right-4">
                                 <h3 class="font-bold font-title text-white text-lg leading-tight truncate drop-shadow-md">${tr.port.nom || tr.port.nombre}</h3>

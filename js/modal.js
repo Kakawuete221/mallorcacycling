@@ -12,7 +12,7 @@ export const showModal = (puerto) => {
         <div class="flex flex-col w-full p-0 flex-1">
             <!-- Hero Header -->
             <div class="relative h-[220px] md:h-[280px] shrink-0 overflow-hidden flex items-end p-5 md:p-8 text-white md:rounded-t-3xl">
-                <img src="media/${puerto.nom}.jpg" class="absolute inset-0 w-full h-full object-cover z-0" onerror="this.src='media/photo.jpeg'">
+                <img src="${puerto.imatge && puerto.imatge !== 'media/photo.jpeg' ? puerto.imatge : 'media/' + puerto.nom + '.jpg'}" class="absolute inset-0 w-full h-full object-cover z-0" onerror="this.src='media/photo.jpeg'">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent z-0"></div>
                 <div class="relative z-10 w-full">
                     <h2 class="text-3xl md:text-5xl font-title font-bold drop-shadow-lg m-0 leading-tight">${puerto.nom}</h2>
