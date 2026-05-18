@@ -102,6 +102,11 @@ document.addEventListener('click', async (e) => {
         userDropdown.style.display = 'none';
     }
 
+    // Close modal if clicking directly on the blurred background overlay (outside container limits)
+    if (e.target.id === 'puerto-modal') {
+        closeModal();
+    }
+
     // 4. Accions específiques
     const target = e.target.closest('[data-action]');
     if (!target) return;
@@ -166,9 +171,6 @@ document.addEventListener('click', async (e) => {
             break;
         case 'calcular-ruta':
             calcularRutaPort(parseFloat(target.dataset.lat), parseFloat(target.dataset.lng));
-            break;
-        case 'cercar-serveis':
-            cercarServeisProp(parseFloat(target.dataset.lat), parseFloat(target.dataset.lng));
             break;
         
         // NOUS CASOS PER ALS BOTONS DEL MAPA

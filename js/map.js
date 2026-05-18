@@ -21,6 +21,7 @@ let pulseCircle = null;
 let intervalAura = null;
 let mapaActual = null;
 let searchMarker = null;
+let modalMap = null; // Map instance used in the modal (minimap)
 
 const MAPA_ID_COMARCA = {
     "7508462": "Tramuntana", "37982329": "Tramuntana", "653262": "Tramuntana",
@@ -192,13 +193,15 @@ export const dibuixarMiniMapa = (puerto) => {
     const miniMapElement = document.getElementById('modal-mini-map');
     if (!miniMapElement) return;
 
-    const miniMap = new google.maps.Map(miniMapElement, {
+    modalMap = new google.maps.Map(miniMapElement, {
         zoom: 14,
         center: { lat: puerto.lat, lng: puerto.lng },
         mapTypeId: 'terrain',
         disableDefaultUI: true,
         gestureHandling: 'none'
     });
+
+    const miniMap = modalMap;
 
     fullSegmentPath = google.maps.geometry.encoding.decodePath(puerto.polyline);
 
@@ -219,6 +222,19 @@ export const dibuixarMiniMapa = (puerto) => {
         map: miniMap,
         icon: { path: google.maps.SymbolPath.CIRCLE, scale: 5, fillColor: "#fc4c02", fillOpacity: 1, strokeColor: "white", strokeWeight: 2 },
         zIndex: 20
+    });
+
+    const finishIcon = {
+        url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><circle cx="16" cy="16" r="14" fill="#2f353b" stroke="white" stroke-width="2"/><text x="16" y="21" font-size="16" text-anchor="middle">🏁</text></svg>'),
+        scaledSize: new google.maps.Size(28, 28),
+        anchor: new google.maps.Point(14, 14)
+    };
+
+    new google.maps.Marker({
+        position: fullSegmentPath[fullSegmentPath.length - 1],
+        map: miniMap,
+        icon: finishIcon,
+        zIndex: 21
     });
 
     hoverMarker = new google.maps.Marker({
@@ -252,22 +268,111 @@ export const actualitzarMunicipiReal = (lat, lng) => {
 };
 
 export const calcularRutaPort = (destLat, destLng) => {
-    if (!navigator.geolocation) return alert("Geolocation is not supported by this browser.");
+    // If the main map is not active on the screen (e.g., they are on Segments, Home, or Profile),
+    // directly open Google Maps directions in a new window!
+    const isMapPage = window.location.hash === '#/map' || window.location.pathname === '/map';
+    if (!map || !isMapPage) {
+        const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${destLat},${destLng}&travelmode=driving`;
+        window.open(mapsUrl, '_blank');
+        return;
+    }
 
-    navigator.geolocation.getCurrentPosition(pos => {
-        const request = {
-            origin: { lat: pos.coords.latitude, lng: pos.coords.longitude },
-            destination: { lat: destLat, lng: destLng },
-            travelMode: google.maps.TravelMode.BICYCLING
+    if (!navigator.geolocation) {
+        const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${destLat},${destLng}&travelmode=driving`;
+        window.open(mapsUrl, '_blank');
+        return;
+    }
+
+    // Initialize lazily in case the main map wasn't loaded (e.g. opened from Segments page)
+    if (!directionsService) {
+        directionsService = new google.maps.DirectionsService();
+    }
+    if (!directionsRenderer) {
+        directionsRenderer = new google.maps.DirectionsRenderer();
+        if (map) directionsRenderer.setMap(map);
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        pos => {
+            const request = {
+                origin: { lat: pos.coords.latitude, lng: pos.coords.longitude },
+                destination: { lat: destLat, lng: destLng },
+                travelMode: google.maps.TravelMode.BICYCLING
+            };
+
+            directionsService.route(request, (result, status) => {
+                if (status === 'OK') {
+                    import('./modal.js').then(m => m.closeModal());
+                    directionsRenderer.setDirections(result);
+                } else {
+                    // Fallback: open Google Maps in browser if DirectionsService fails
+                    const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${pos.coords.latitude},${pos.coords.longitude}&destination=${destLat},${destLng}&travelmode=bicycling`;
+                    window.open(mapsUrl, '_blank');
+                }
+            });
+        },
+        () => {
+            // If geolocation denied or timed out, open Google Maps directions
+            const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${destLat},${destLng}&travelmode=driving`;
+            window.open(mapsUrl, '_blank');
+        },
+        { timeout: 6000 } // Geolocation timeout of 6 seconds to prevent hanging
+    );
+};
+
+export const getMiniMap = () => modalMap;
+
+export const cercarLlocsPropers = (lat, lng, callback) => {
+    const serviceMap = modalMap || map;
+    if (!serviceMap) {
+        console.warn('cercarLlocsPropers: no map instance available yet.');
+        callback([], google.maps.places.PlacesServiceStatus.ZERO_RESULTS);
+        return;
+    }
+
+    const doSearch = () => {
+        const service = new google.maps.places.PlacesService(serviceMap);
+        const location = new google.maps.LatLng(lat, lng);
+        let foodResults = [];
+        let bikeResults = [];
+        let done = 0;
+
+        const finish = () => {
+            done++;
+            if (done < 2) return;
+            // Merge, deduplicate by place_id, sort by rating
+            const seen = new Set();
+            const merged = [...foodResults, ...bikeResults].filter(p => {
+                if (seen.has(p.place_id)) return false;
+                seen.add(p.place_id);
+                return true;
+            });
+            if (merged.length > 0) {
+                callback(merged, google.maps.places.PlacesServiceStatus.OK);
+            } else {
+                callback([], google.maps.places.PlacesServiceStatus.ZERO_RESULTS);
+            }
         };
 
-        directionsService.route(request, (result, status) => {
-            if (status === 'OK') {
-                import('./modal.js').then(m => m.closeModal());
-                directionsRenderer.setDirections(result);
-            }
+        // Search 1: food / cafes / restaurants
+        service.nearbySearch({ location, radius: '3000', type: 'restaurant' }, (res, st) => {
+            if (st === google.maps.places.PlacesServiceStatus.OK) foodResults = res;
+            finish();
         });
-    });
+
+        // Search 2: bike stores
+        service.nearbySearch({ location, radius: '3000', type: 'bicycle_store' }, (res, st) => {
+            if (st === google.maps.places.PlacesServiceStatus.OK) bikeResults = res;
+            finish();
+        });
+    };
+
+    // Ensure the map is idle (fully initialized) before calling PlacesService
+    if (serviceMap.getBounds && serviceMap.getBounds()) {
+        doSearch(); // Map already loaded, go immediately
+    } else {
+        google.maps.event.addListenerOnce(serviceMap, 'idle', doSearch);
+    }
 };
 
 export const cercarServeisProp = (lat, lng) => {
@@ -295,6 +400,13 @@ export const dibuixarPerfilElevacio = (polyline) => {
             const ctx = document.getElementById('elevation-chart').getContext('2d');
             if (window.currentChart) window.currentChart.destroy();
 
+            const canvas = document.getElementById('elevation-chart');
+            const gradCtx = canvas.getContext('2d');
+            const gradient = gradCtx.createLinearGradient(0, 0, 0, canvas.offsetHeight || 200);
+            gradient.addColorStop(0, 'rgba(252, 76, 2, 0.45)');
+            gradient.addColorStop(0.6, 'rgba(252, 76, 2, 0.08)');
+            gradient.addColorStop(1, 'rgba(252, 76, 2, 0)');
+
             window.currentChart = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -302,10 +414,15 @@ export const dibuixarPerfilElevacio = (polyline) => {
                     datasets: [{
                         data: results.map(r => r.elevation),
                         borderColor: '#fc4c02',
-                        backgroundColor: 'rgba(252, 76, 2, 0.1)',
+                        borderWidth: 2.5,
+                        backgroundColor: gradient,
                         fill: true,
                         pointRadius: 0,
-                        tension: 0.1
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: '#fc4c02',
+                        pointHoverBorderColor: '#fff',
+                        pointHoverBorderWidth: 2,
+                        tension: 0.4
                     }]
                 },
                 options: {
@@ -315,14 +432,11 @@ export const dibuixarPerfilElevacio = (polyline) => {
                         if (chartElement.length > 0 && hoverMarker && orangePolyline && whiteBorderPolyline) {
                             const index = chartElement[0].index;
                             const currentPoint = results[index].location;
-
                             hoverMarker.setPosition(currentPoint);
                             hoverMarker.setVisible(true);
-
                             const remainingPath = results.slice(index).map(r => r.location);
                             orangePolyline.setPath(remainingPath);
                             whiteBorderPolyline.setPath(remainingPath);
-
                         } else if (hoverMarker) {
                             hoverMarker.setVisible(false);
                             orangePolyline.setPath(fullSegmentPath);
@@ -332,9 +446,39 @@ export const dibuixarPerfilElevacio = (polyline) => {
                     interaction: { mode: 'index', intersect: false },
                     plugins: {
                         legend: { display: false },
-                        tooltip: { callbacks: { label: (item) => `Altitud: ${item.raw.toFixed(0)} m` } }
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 15, 15, 0.85)',
+                            titleColor: '#fc4c02',
+                            bodyColor: '#e5e7eb',
+                            borderColor: 'rgba(252, 76, 2, 0.3)',
+                            borderWidth: 1,
+                            padding: { x: 12, y: 8 },
+                            cornerRadius: 10,
+                            displayColors: false,
+                            callbacks: {
+                                title: (items) => {
+                                    const pct = ((items[0].dataIndex / (results.length - 1)) * 100).toFixed(0);
+                                    return `${pct}% of climb`;
+                                },
+                                label: (item) => `Elevation: ${item.raw.toFixed(0)} m`
+                            }
+                        }
                     },
-                    scales: { x: { display: false }, y: { display: true } }
+                    scales: {
+                        x: { display: false },
+                        y: {
+                            display: true,
+                            position: 'left',
+                            grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false },
+                            ticks: {
+                                color: '#9ca3af',
+                                font: { size: 10, family: 'Inter, sans-serif' },
+                                callback: (v) => `${v}m`,
+                                maxTicksLimit: 5
+                            },
+                            border: { display: false }
+                        }
+                    }
                 }
             });
         }
