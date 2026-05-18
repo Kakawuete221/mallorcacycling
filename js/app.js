@@ -13,7 +13,7 @@ import {
     uiToggleCompletatsBtn, uiToggleGeneric, uiActualitzarSlider, uiNetejarFiltres, createMiniCardHTML, createCardHTML
 } from './ui.js';
 import { router } from './router.js';
-import { setLanguage, getActiveLanguage, translatePage } from './translations.js';
+import { setLanguage, getActiveLanguage, translatePage, initTranslations } from './translations.js';
 
 // Estat global de l'aplicació
 export const appState = {
@@ -252,13 +252,37 @@ document.addEventListener('input', (e) => {
     }
 });
 
+// Toggle custom language dropdown
+document.addEventListener('click', (e) => {
+    const btn = document.getElementById('language-dropdown-btn');
+    const menu = document.getElementById('language-dropdown-menu');
+    const chevron = document.getElementById('language-dropdown-chevron');
+    
+    if (btn && menu) {
+        if (btn.contains(e.target)) {
+            menu.classList.toggle('hidden');
+            if (chevron) chevron.classList.toggle('rotate-180');
+        } else {
+            menu.classList.add('hidden');
+            if (chevron) chevron.classList.remove('rotate-180');
+        }
+    }
+});
+
 // Escoltar canvis (selects)
 document.addEventListener('change', (e) => {
     if (e.target.id === 'select-ordenacio') {
         setOrdenacio(e.target.value);
         executarFiltre();
-    } else if (e.target.id === 'language-select') {
-        setLanguage(e.target.value);
+    }
+});
+
+// Escoltar clicks en opcions d'idioma
+document.addEventListener('click', (e) => {
+    const langBtn = e.target.closest('[data-lang]');
+    if (langBtn) {
+        const lang = langBtn.dataset.lang;
+        setLanguage(lang);
     }
 });
 
@@ -267,10 +291,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     await checkStravaCallback();
     if (!isStravaSessionValid()) logoutStrava();
 
-    // Set the language selector to the stored preference
+    // Carreguem dinàmicament el fitxer JSON d'idioma preferit
+    await initTranslations();
+
+    // Set the language label to the stored preference
     const activeLang = getActiveLanguage();
-    const select = document.getElementById('language-select');
-    if (select) select.value = activeLang;
+    const label = document.getElementById('current-lang-label');
+    if (label) label.textContent = activeLang.toUpperCase();
     translatePage();
 
     window.addEventListener("hashchange", router);

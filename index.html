@@ -70,12 +70,26 @@
                 <li class="flex justify-center"><a href="/segments"
                         class="text-secondary font-bold uppercase py-2 md:py-0 hover:text-primary hover:scale-105 transition-all duration-200"
                         data-link data-i18n="nav_segments">Segments</a></li>
-                <li class="flex justify-center items-center">
-                    <select id="language-select" class="bg-white border border-gray-200 rounded-full px-2.5 py-1.5 text-xs font-bold text-secondary uppercase hover:border-primary hover:text-primary transition-all duration-200 cursor-pointer outline-none shadow-sm">
-                        <option value="en">EN</option>
-                        <option value="es">ES</option>
-                        <option value="ca">CA</option>
-                    </select>
+                <li class="flex justify-center items-center relative">
+                    <div class="relative inline-block text-left" id="language-dropdown-wrapper">
+                        <button id="language-dropdown-btn" class="bg-gray-50/50 hover:bg-gray-50 border border-gray-200/80 hover:border-[#ea580c]/50 text-gray-700 hover:text-primary font-bold text-xs uppercase rounded-xl px-3 py-1.5 transition-all duration-200 flex items-center gap-1.5 shadow-sm outline-none focus:ring-2 focus:ring-primary/20">
+                            <span id="current-lang-label">EN</span>
+                            <svg id="language-dropdown-chevron" class="w-3.5 h-3.5 text-gray-500 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <ul id="language-dropdown-menu" class="absolute left-1/2 -translate-x-1/2 mt-2 w-24 bg-white/95 backdrop-blur-md border border-gray-100 rounded-xl shadow-xl overflow-hidden hidden z-[2000] flex flex-col p-1">
+                            <li>
+                                <button data-lang="en" class="w-full text-left px-3 py-2 text-xs font-bold text-gray-700 hover:bg-orange-55 hover:text-primary rounded-lg transition-colors select-none">EN</button>
+                            </li>
+                            <li>
+                                <button data-lang="es" class="w-full text-left px-3 py-2 text-xs font-bold text-gray-700 hover:bg-orange-55 hover:text-primary rounded-lg transition-colors select-none">ES</button>
+                            </li>
+                            <li>
+                                <button data-lang="ca" class="w-full text-left px-3 py-2 text-xs font-bold text-gray-700 hover:bg-orange-55 hover:text-primary rounded-lg transition-colors select-none">CA</button>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
                 <li class="flex justify-center md:ml-auto">
                     <div id="user-nav-area"></div>

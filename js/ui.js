@@ -28,7 +28,7 @@ export function actualitzarInterficieUsuari() {
                         <div class="flex items-center gap-4 mb-6">
                             <img src="${user.profile_medium}" class="w-16 h-16 rounded-full border-2 border-[#ea580c] object-cover">
                             <div>
-                                <h2 class="text-2xl md:text-3xl font-bold italic font-title text-white uppercase tracking-wider">HELLO, ${user.firstname}!</h2>
+                                <h2 class="text-2xl md:text-3xl font-bold italic font-title text-white uppercase tracking-wider">${t('strava_hello')}, <span class="text-[#ea580c]">${user.firstname.toUpperCase()}</span>!</h2>
                                 <p class="text-gray-400 text-sm">${t('connected_strava')}</p>
                             </div>
                         </div>
@@ -61,7 +61,7 @@ export function actualitzarInterficieUsuari() {
                         <div class="bg-[#1a1c29] border border-gray-800 rounded-xl p-6 w-full md:w-80 shadow-lg text-left">
                             <h3 class="text-white font-bold mb-4 flex items-center gap-2 text-sm tracking-wider">
                                 <svg class="w-5 h-5 text-[#ea580c]" fill="currentColor" viewBox="0 0 24 24"><path d="M4 10h3v10H4zM10 4h3v16h-3zM16 14h3v6h-3z"></path></svg>
-                                CYCLING STATS
+                                ${t('strava_cycling_stats')}
                             </h3>
                             <div class="grid grid-cols-2 gap-y-5 gap-x-4">
                                 <div>
