@@ -13,6 +13,7 @@ import {
     uiToggleCompletatsBtn, uiToggleGeneric, uiActualitzarSlider, uiNetejarFiltres, createMiniCardHTML, createCardHTML
 } from './ui.js';
 import { router } from './router.js';
+import { setLanguage, getActiveLanguage, translatePage } from './translations.js';
 
 // Estat global de l'aplicació
 export const appState = {
@@ -256,6 +257,8 @@ document.addEventListener('change', (e) => {
     if (e.target.id === 'select-ordenacio') {
         setOrdenacio(e.target.value);
         executarFiltre();
+    } else if (e.target.id === 'language-select') {
+        setLanguage(e.target.value);
     }
 });
 
@@ -263,6 +266,13 @@ document.addEventListener('change', (e) => {
 document.addEventListener("DOMContentLoaded", async () => {
     await checkStravaCallback();
     if (!isStravaSessionValid()) logoutStrava();
+
+    // Set the language selector to the stored preference
+    const activeLang = getActiveLanguage();
+    const select = document.getElementById('language-select');
+    if (select) select.value = activeLang;
+    translatePage();
+
     window.addEventListener("hashchange", router);
     router();
 });

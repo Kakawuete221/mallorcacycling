@@ -2,6 +2,7 @@
 import { isStravaSessionValid, getAthleteStats } from './stravaApi.js';
 import { formatTime } from './utils.js';
 import { setValorSlider } from './filters.js';
+import { t } from './translations.js';
 
 export function actualitzarInterficieUsuari() {
     const userStr = localStorage.getItem('strava_athlete');
@@ -28,11 +29,11 @@ export function actualitzarInterficieUsuari() {
                             <img src="${user.profile_medium}" class="w-16 h-16 rounded-full border-2 border-[#ea580c] object-cover">
                             <div>
                                 <h2 class="text-2xl md:text-3xl font-bold italic font-title text-white uppercase tracking-wider">HELLO, ${user.firstname}!</h2>
-                                <p class="text-gray-400 text-sm">You are connected to Strava.</p>
+                                <p class="text-gray-400 text-sm">${t('connected_strava')}</p>
                             </div>
                         </div>
-                        <p class="text-gray-400 mb-8 text-sm md:text-base leading-relaxed">Your account is fully linked. Head over to the map to see your segment efforts and real-time PRs.</p>
-                        <button class="bg-[#c2410c] hover:bg-[#ea580c] text-white font-bold py-3 px-8 rounded text-sm tracking-wider transition-colors flex items-center gap-2 uppercase" data-link href="/map">GO TO MAP &rarr;</button>
+                        <p class="text-gray-400 mb-8 text-sm md:text-base leading-relaxed">${t('connected_desc')}</p>
+                        <button class="bg-[#c2410c] hover:bg-[#ea580c] text-white font-bold py-3 px-8 rounded text-sm tracking-wider transition-colors flex items-center gap-2 uppercase" data-link href="/map">${t('go_to_map')} &rarr;</button>
                     </div>
                     
                     <div id="strava-stats-container" class="relative z-10 w-full md:w-auto flex-shrink-0">
@@ -64,27 +65,27 @@ export function actualitzarInterficieUsuari() {
                             </h3>
                             <div class="grid grid-cols-2 gap-y-5 gap-x-4">
                                 <div>
-                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">Recent Rides</p>
+                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">${t('strava_recent_rides')}</p>
                                     <p class="text-white font-bold text-lg">${recent ? recent.count : 0}</p>
                                 </div>
                                 <div>
-                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">YTD Rides</p>
+                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">${t('strava_ytd_rides')}</p>
                                     <p class="text-white font-bold text-lg">${ytd ? ytd.count : 0}</p>
                                 </div>
                                 <div>
-                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">Recent Dist</p>
+                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">${t('strava_recent_dist')}</p>
                                     <p class="text-white font-bold text-lg">${recent ? (recent.distance / 1000).toFixed(0) : 0} <span class="text-xs text-gray-500">km</span></p>
                                 </div>
                                 <div>
-                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">YTD Dist</p>
+                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">${t('strava_ytd_dist')}</p>
                                     <p class="text-[#ea580c] font-bold text-lg">${ytd ? (ytd.distance / 1000).toFixed(0) : 0} <span class="text-xs">km</span></p>
                                 </div>
                                 <div>
-                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">Recent Elev</p>
+                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">${t('strava_recent_elev')}</p>
                                     <p class="text-white font-bold text-lg">${recent ? recent.elevation_gain.toFixed(0) : 0} <span class="text-xs text-gray-500">m</span></p>
                                 </div>
                                 <div>
-                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">YTD Elev</p>
+                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">${t('strava_ytd_elev')}</p>
                                     <p class="text-white font-bold text-lg">${ytd ? ytd.elevation_gain.toFixed(0) : 0} <span class="text-xs text-gray-500">m</span></p>
                                 </div>
                             </div>
@@ -93,7 +94,7 @@ export function actualitzarInterficieUsuari() {
                 } else if (statsContainer) {
                     statsContainer.innerHTML = `
                         <div class="bg-[#1a1c29] border border-gray-800 rounded-xl p-6 w-full md:w-80 shadow-lg text-left flex items-center justify-center">
-                            <p class="text-xs text-gray-500">Stats unavailable</p>
+                        <p class="text-xs text-gray-500">${t('strava_stats_unavailable')}</p>
                         </div>
                     `;
                 }
@@ -101,7 +102,7 @@ export function actualitzarInterficieUsuari() {
         }
     } else {
         if (navArea) {
-            navArea.innerHTML = `<button data-action="login-strava" class="bg-primary hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg transition-transform hover:scale-105 duration-200 text-sm">LOGIN</button>`;
+            navArea.innerHTML = `<button data-action="login-strava" class="bg-primary hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg transition-transform hover:scale-105 duration-200 text-sm">${t('connect_strava').toUpperCase()}</button>`;
         }
         if (connectCard) {
             connectCard.innerHTML = `
@@ -112,9 +113,9 @@ export function actualitzarInterficieUsuari() {
                         <div class="w-10 h-10 bg-gray-800 rounded flex items-center justify-center mb-6">
                             <svg class="w-6 h-6 text-[#ea580c]" fill="currentColor" viewBox="0 0 24 24"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"></path></svg>
                         </div>
-                        <h2 class="text-3xl md:text-4xl font-bold italic font-title text-white mb-4 tracking-wide uppercase">Unleash the athlete within</h2>
-                        <p class="text-gray-400 mb-8 text-sm md:text-base leading-relaxed">Connect your Strava account to automatically track segments, compete on leaderboards, and visualize your progress on our precision maps.</p>
-                        <button class="bg-[#c2410c] hover:bg-[#ea580c] text-white font-bold py-3 px-8 rounded text-sm tracking-wider transition-colors flex items-center gap-2 uppercase" data-action="login-strava">CONNECT WITH STRAVA &rarr;</button>
+                        <h2 class="text-3xl md:text-4xl font-bold italic font-title text-white mb-4 tracking-wide uppercase">${t('unleash_title')}</h2>
+                        <p class="text-gray-400 mb-8 text-sm md:text-base leading-relaxed">${t('unleash_desc')}</p>
+                        <button class="bg-[#c2410c] hover:bg-[#ea580c] text-white font-bold py-3 px-8 rounded text-sm tracking-wider transition-colors flex items-center gap-2 uppercase" data-action="login-strava">${t('connect_strava').toUpperCase()} &rarr;</button>
                     </div>
 
                     <div class="relative z-10 w-full md:w-auto flex-shrink-0">
@@ -124,18 +125,18 @@ export function actualitzarInterficieUsuari() {
                                     <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M4 10h3v10H4zM10 4h3v16h-3zM16 14h3v6h-3z"></path></svg>
                                 </div>
                                 <div>
-                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Recent Activity</p>
+                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">${t('strava_recent_activity')}</p>
                                     <p class="text-white font-bold text-sm">Coll de Femenia</p>
                                 </div>
                             </div>
                             <div class="flex justify-between text-xs mb-2">
-                                <span class="text-gray-500">Your Rank</span>
+                                <span class="text-gray-500">${t('strava_your_rank')}</span>
                                 <span class="text-[#ea580c] font-bold">#14 / 2,451</span>
                             </div>
                             <div class="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden mb-3">
                                 <div class="bg-[#ea580c] h-full" style="width: 85%"></div>
                             </div>
-                            <p class="text-[10px] text-gray-600 italic">You are in the top 10% of all riders this month.</p>
+                            <p class="text-[10px] text-gray-600 italic">${t('strava_top_percent')}</p>
                         </div>
                     </div>
                 </div>`;
@@ -175,12 +176,12 @@ export const createMiniCardHTML = (port, dadesStrava = null) => {
                 <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"></path></svg> <span class="font-medium">QOM:</span> <span class="font-bold text-gray-800">${qom || '--:--'}</span></span>
             </div>
             <div class="flex items-center justify-between pt-2 border-t border-gray-200">
-                <span class="flex items-center gap-1.5 text-[11px] text-primary font-bold"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 4h-3V2h-8v2H5c-1.1 0-2 .9-2 2v2c0 2.2 1.8 4 4 4h.3c1.1 2.4 3.2 4.1 5.7 4.7V20H9v2h6v-2h-2v-3.3c2.5-.6 4.6-2.3 5.7-4.7H19c2.2 0 4-1.8 4-4V6c0-1.1-.9-2-2-2zM7 10c-1.1 0-2-.9-2-2V6h3v4H7zm12-2c0 1.1-.9 2-2 2h-1V6h3v2z"></path></svg> Your PR</span>
+                <span class="flex items-center gap-1.5 text-[11px] text-primary font-bold"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 4h-3V2h-8v2H5c-1.1 0-2 .9-2 2v2c0 2.2 1.8 4 4 4h.3c1.1 2.4 3.2 4.1 5.7 4.7V20H9v2h6v-2h-2v-3.3c2.5-.6 4.6-2.3 5.7-4.7H19c2.2 0 4-1.8 4-4V6c0-1.1-.9-2-2-2zM7 10c-1.1 0-2-.9-2-2V6h3v4H7zm12-2c0 1.1-.9 2-2 2h-1V6h3v2z"></path></svg> ${t('your_pr')}</span>
                 <span class="font-bold text-primary text-[11px]">${formatTime(pr)}</span>
             </div>
         </div>`;
 
-    let infoStrava = `<div class="bg-gray-50 rounded-lg p-2.5 mb-3 mt-3 border border-gray-100 text-[11px] text-gray-400 italic text-center">Loading Strava data...</div>`;
+    let infoStrava = `<div class="bg-gray-50 rounded-lg p-2.5 mb-3 mt-3 border border-gray-100 text-[11px] text-gray-400 italic text-center">${t('loading_strava')}</div>`;
 
     if (dadesStrava) {
         infoStrava = getStravaHTML(dadesStrava.xoms?.kom, dadesStrava.xoms?.qom, dadesStrava.athlete_segment_stats?.pr_elapsed_time);
@@ -201,7 +202,7 @@ export const createMiniCardHTML = (port, dadesStrava = null) => {
             </div>
             ${infoStrava}
             <button data-action="view-details" data-port="${portDataStr}" class="w-full bg-primary hover:bg-orange-600 text-white border-none py-2.5 px-4 rounded-lg text-sm font-bold cursor-pointer transition-colors shadow-sm flex justify-center items-center gap-2">
-                View Details
+                ${t('view_details')}
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             </button>
         </div>`;
@@ -342,7 +343,7 @@ export const createFiltresHTML = () => `
         <!-- Search bar (displayed first on mobile using order-1, and full width) -->
         <div class="relative order-1 sm:order-2 bg-white rounded-lg shadow-sm border border-gray-200 flex items-center h-10 px-3 w-full sm:w-64 md:w-72">
             <svg class="w-4 h-4 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <input type="text" id="input-cerca" autocomplete="off" class="w-full h-full outline-none border-none ring-0 focus:ring-0 text-sm text-gray-700 placeholder-gray-400 bg-transparent" placeholder="Search for a segment...">
+            <input type="text" id="input-cerca" autocomplete="off" class="w-full h-full outline-none border-none ring-0 focus:ring-0 text-sm text-gray-700 placeholder-gray-400 bg-transparent" placeholder="${t('filter_search_placeholder')}">
             
             <button id="btn-clear-search" data-action="netejar-cerca" class="hidden ml-2 text-gray-400 hover:text-gray-600">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -356,18 +357,18 @@ export const createFiltresHTML = () => `
             <div class="flex-1 sm:flex-none sm:relative">
                 <button data-action="toggle-filtres" id="btn-filtres-dropdown" class="w-full justify-center bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-                    Filters
+                    ${t('filter_filters')}
                 </button>
 
                 <div id="panel-filtres" class="hidden absolute top-full mt-2 left-0 w-full sm:w-[340px] max-w-[340px] bg-white border border-gray-100 shadow-2xl rounded-xl flex flex-col overflow-hidden max-h-[75vh] overflow-y-auto z-50">
                     <div class="flex justify-between items-center px-5 py-3.5 border-b border-gray-100 bg-gray-50/50">
-                        <span class="font-bold text-gray-800 text-sm">Refine search</span>
-                        <button data-action="netejar-filtres" class="text-xs font-semibold text-primary hover:text-orange-700">Clear</button>
+                        <span class="font-bold text-gray-800 text-sm">${t('filter_refine')}</span>
+                        <button data-action="netejar-filtres" class="text-xs font-semibold text-primary hover:text-orange-700">${t('filter_clear')}</button>
                     </div>
 
                     <div class="p-5 space-y-7">
                         <div>
-                            <h4 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">Region</h4>
+                            <h4 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">${t('filter_region')}</h4>
                             <div class="grid grid-cols-2 gap-2">
                                 <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Tramuntana">Tramuntana</button>
                                 <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Raiguer">Raiguer</button>
@@ -379,7 +380,7 @@ export const createFiltresHTML = () => `
                         </div>
 
                         <div>
-                            <h4 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">Category</h4>
+                            <h4 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">${t('filter_category')}</h4>
                             <div class="grid grid-cols-4 gap-2">
                                 <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="1">1</button>
                                 <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="2">2</button>
@@ -390,7 +391,7 @@ export const createFiltresHTML = () => `
 
                         <div>
                             <div class="flex justify-between items-end mb-2">
-                                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Max Distance</h4>
+                                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">${t('filter_max_dist')}</h4>
                                 <span class="text-[13px] font-bold text-primary" id="val-dist">10 km</span>
                             </div>
                             <input type="range" id="sl-distancia" data-camp="distanciaMax" data-val-id="val-dist" data-sufix=" km" min="1" max="10" value="10" step="0.5" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
@@ -398,7 +399,7 @@ export const createFiltresHTML = () => `
 
                         <div>
                             <div class="flex justify-between items-end mb-2">
-                                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Max Elevation Gain</h4>
+                                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">${t('filter_max_elev')}</h4>
                                 <span class="text-[13px] font-bold text-primary" id="val-desn">1000 m</span>
                             </div>
                             <input type="range" id="sl-desnivell" data-camp="desnivellMax" data-val-id="val-desn" data-sufix=" m" min="0" max="1000" value="1000" step="50" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
@@ -406,7 +407,7 @@ export const createFiltresHTML = () => `
 
                         <div>
                             <div class="flex justify-between items-end mb-2">
-                                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Max Gradient</h4>
+                                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">${t('filter_max_grad')}</h4>
                                 <span class="text-[13px] font-bold text-primary" id="val-pend">< 10 %</span>
                             </div>
                             <input type="range" id="sl-pendent" data-camp="pendentMax" data-val-id="val-pend" data-prefix="< " data-sufix=" %" min="2" max="10" value="10" step="0.5" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
@@ -417,7 +418,7 @@ export const createFiltresHTML = () => `
 
             <button id="btn-completats" data-action="toggle-completats" class="flex-1 sm:flex-none justify-center bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">
                 <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                Completed
+                ${t('filter_completed')}
             </button>
         </div>
     </div>
@@ -430,7 +431,7 @@ export const createSidebarFiltresHTML = () => `
         <button data-action="toggle-sidebar-filtres" class="lg:hidden w-full flex items-center justify-between bg-gray-50 border border-gray-100 hover:bg-gray-100 hover:border-gray-200 rounded-xl px-4 py-3 transition-all cursor-pointer">
             <span class="font-bold text-gray-700 flex items-center gap-2 text-sm">
                 <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
-                Filters & Refinements
+                ${t('filter_filters_refinements')}
             </span>
             <svg id="sidebar-filtres-caret" class="w-4 h-4 text-gray-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </button>
@@ -440,15 +441,15 @@ export const createSidebarFiltresHTML = () => `
             <div class="flex justify-between items-center border-b border-gray-100 pb-3">
                 <h3 class="hidden lg:flex font-bold text-gray-800 items-center gap-2 text-lg">
                     <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
-                    Filters
+                    ${t('filter_filters')}
                 </h3>
-                <button data-action="netejar-filtres" class="text-sm font-semibold text-primary hover:text-orange-700 transition-colors">Clear All</button>
+                <button data-action="netejar-filtres" class="text-sm font-semibold text-primary hover:text-orange-700 transition-colors">${t('filter_clear_all')}</button>
             </div>
 
             <div class="space-y-4">
                 <details class="group border-b border-gray-100 pb-4">
                     <summary class="text-xs font-bold text-gray-400 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                        <span>Region</span>
+                        <span>${t('filter_region')}</span>
                         <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
                     <div class="grid grid-cols-2 gap-2 mt-3">
@@ -463,7 +464,7 @@ export const createSidebarFiltresHTML = () => `
 
                 <details class="group border-b border-gray-100 pb-4">
                     <summary class="text-xs font-bold text-gray-400 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                        <span>Category</span>
+                        <span>${t('filter_category')}</span>
                         <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
                     <div class="grid grid-cols-4 gap-2 mt-3">
@@ -476,7 +477,7 @@ export const createSidebarFiltresHTML = () => `
 
                 <details class="group border-b border-gray-100 pb-4">
                     <summary class="text-xs font-bold text-gray-400 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                        <span>Max Distance</span>
+                        <span>${t('filter_max_dist')}</span>
                         <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
                     <div class="mt-3">
@@ -489,7 +490,7 @@ export const createSidebarFiltresHTML = () => `
 
                 <details class="group border-b border-gray-100 pb-4">
                     <summary class="text-xs font-bold text-gray-400 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                        <span>Max Elevation Gain</span>
+                        <span>${t('filter_max_elev')}</span>
                         <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
                     <div class="mt-3">
@@ -502,7 +503,7 @@ export const createSidebarFiltresHTML = () => `
 
                 <details class="group pb-2">
                     <summary class="text-xs font-bold text-gray-400 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                        <span>Max Gradient</span>
+                        <span>${t('filter_max_grad')}</span>
                         <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
                     <div class="mt-3">
@@ -521,7 +522,7 @@ export const createTopBarSegmentsHTML = () => `
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 flex flex-col md:flex-row gap-4 justify-between items-center w-full mb-6">
         <div class="relative flex-1 w-full md:w-auto max-w-md bg-white rounded-lg flex items-center h-10 px-3 border border-gray-200 hover:border-gray-300 transition-colors">
             <svg class="w-4 h-4 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <input type="text" id="input-cerca" autocomplete="off" class="w-full h-full outline-none border-none ring-0 focus:ring-0 text-sm text-gray-700 placeholder-gray-400 bg-transparent" placeholder="Search segments...">
+            <input type="text" id="input-cerca" autocomplete="off" class="w-full h-full outline-none border-none ring-0 focus:ring-0 text-sm text-gray-700 placeholder-gray-400 bg-transparent" placeholder="${t('filter_segments_placeholder')}">
             
             <button id="btn-clear-search" data-action="netejar-cerca" class="hidden ml-2 text-gray-400 hover:text-gray-600">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -533,17 +534,17 @@ export const createTopBarSegmentsHTML = () => `
         <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
             <button id="btn-completats" data-action="toggle-completats" class="flex-1 md:flex-none justify-center bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">
                 <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                Completed
+                ${t('filter_completed')}
             </button>
 
             <div class="relative flex-1 md:flex-none flex items-center">
                 <svg class="w-4 h-4 text-gray-500 absolute left-3 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h18M6 12h12M9 20h6"></path></svg>
                 <select id="select-ordenacio" class="w-full md:w-auto bg-white border border-gray-200 hover:border-gray-300 rounded-lg h-10 pl-9 pr-3 text-sm font-medium text-gray-700 transition-colors focus:ring-0 outline-none cursor-pointer">
-                    <option value="">Default order</option>
-                    <option value="dist_asc">Distance (Ascending)</option>
-                    <option value="dist_desc">Distance (Descending)</option>
-                    <option value="grad_asc">Gradient (Ascending)</option>
-                    <option value="grad_desc">Gradient (Descending)</option>
+                    <option value="">${t('filter_default_order')}</option>
+                    <option value="dist_asc">${t('filter_dist_asc')}</option>
+                    <option value="dist_desc">${t('filter_dist_desc')}</option>
+                    <option value="grad_asc">${t('filter_grad_asc')}</option>
+                    <option value="grad_desc">${t('filter_grad_desc')}</option>
                 </select>
             </div>
             

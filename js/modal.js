@@ -1,5 +1,6 @@
 // modal.js - Gestió de Modal
 import { formatTime } from './utils.js';
+import { t, getActiveLanguage } from './translations.js';
 import { dibuixarMiniMapa, actualitzarMunicipiReal, dibuixarPerfilElevacio, cercarLlocsPropers } from './map.js';
 
 export const showModal = (puerto) => {
@@ -17,7 +18,7 @@ export const showModal = (puerto) => {
                     <h2 class="text-3xl md:text-5xl font-title font-bold drop-shadow-lg m-0 leading-tight">${puerto.nom}</h2>
                     <div class="flex items-center gap-2 mt-3 opacity-90">
                         <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        <p id="modal-municipi" class="text-sm md:text-base m-0 font-medium tracking-wide">Finding location...</p>
+                        <p id="modal-municipi" class="text-sm md:text-base m-0 font-medium tracking-wide">${t('finding_location')}</p>
                     </div>
                 </div>
             </div>
@@ -26,27 +27,27 @@ export const showModal = (puerto) => {
                 <!-- Unified Horizontal Key Stats Card -->
                 <div class="order-1 md:order-none bg-gray-50/50 rounded-3xl p-6 border border-gray-100/80 shadow-sm grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 divide-y md:divide-y-0 lg:divide-x divide-gray-200/50">
                     <div class="flex flex-col items-center justify-center text-center px-2">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">Distance</span>
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">${t('distance')}</span>
                         <span class="text-xl font-title font-bold text-gray-800">${puerto.distancia} km</span>
                     </div>
                     <div class="flex flex-col items-center justify-center text-center px-2 pt-4 md:pt-0">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">Avg Grad</span>
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">${t('avg_grad')}</span>
                         <span class="text-xl font-title font-bold text-gray-800">${puerto.pendent_mitja}%</span>
                     </div>
                     <div class="flex flex-col items-center justify-center text-center px-2 pt-4 md:pt-0">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">Max Grad</span>
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">${t('max_grad')}</span>
                         <span class="text-xl font-title font-bold text-gray-800">${puerto.pendent_max}%</span>
                     </div>
                     <div class="flex flex-col items-center justify-center text-center px-2 pt-4 lg:pt-0">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">Elevation</span>
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">${t('elevation')}</span>
                         <span class="text-xl font-title font-bold text-gray-800">${puerto.desnivell} m</span>
                     </div>
                     <div class="flex flex-col items-center justify-center text-center px-2 pt-4 lg:pt-0">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">Max Elev</span>
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">${t('max_elev')}</span>
                         <span class="text-xl font-title font-bold text-gray-800">${puerto.altitud_max} m</span>
                     </div>
                     <div class="flex flex-col items-center justify-center text-center px-2 pt-4 lg:pt-0">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">Category</span>
+                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">${t('filter_category')}</span>
                         <span class="text-xl font-title font-bold text-primary">${puerto.categoria}</span>
                     </div>
                 </div>
@@ -56,15 +57,15 @@ export const showModal = (puerto) => {
                     <div class="flex flex-col gap-2.5">
                         <div class="flex items-center gap-2 px-1">
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
-                            <span class="text-xs text-gray-400 font-semibold uppercase tracking-wider">Segment Route</span>
+                            <span class="text-xs text-gray-400 font-semibold uppercase tracking-wider">${t('segment_route')}</span>
                         </div>
                         <div id="modal-mini-map" class="h-[280px] md:h-[320px] rounded-3xl border border-gray-100 shadow-sm w-full overflow-hidden"></div>
                     </div>
                     <div class="flex flex-col gap-2.5">
                         <div class="flex items-center gap-2 px-1">
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                            <span class="text-xs text-gray-400 font-semibold uppercase tracking-wider">Elevation Profile</span>
-                            <span class="ml-auto text-xs text-gray-300 font-medium bg-gray-50 px-2 py-0.5 rounded-full border border-gray-100 cursor-default">Hover to explore</span>
+                            <span class="text-xs text-gray-400 font-semibold uppercase tracking-wider">${t('elevation')}</span>
+                            <span class="ml-auto text-xs text-gray-300 font-medium bg-gray-50 px-2 py-0.5 rounded-full border border-gray-100 cursor-default">${t('hover_explore')}</span>
                         </div>
                         <div class="bg-white rounded-3xl p-5 border border-gray-100 shadow-sm w-full flex flex-col h-[280px] md:h-[320px]">
                             <div class="flex-1 w-full relative">
@@ -86,27 +87,27 @@ export const showModal = (puerto) => {
                                 <svg class="w-6 h-6 text-[#fc4c02]" fill="currentColor" viewBox="0 0 24 24"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"></path></svg>
                             </div>
                             <div>
-                                <h3 class="font-title font-bold text-white text-xl m-0 leading-tight">Strava Live Segment</h3>
-                                <p class="text-xs text-gray-400 m-0 mt-0.5 font-medium tracking-wide">Leaderboard stats & personal records</p>
+                                <h3 class="font-title font-bold text-white text-xl m-0 leading-tight">${t('pr_leaders_title')}</h3>
+                                <p class="text-xs text-gray-400 m-0 mt-0.5 font-medium tracking-wide">${t('pr_leaders_subtitle')}</p>
                             </div>
                         </div>
                         
                         <div class="mb-4">
                             <div class="flex justify-between items-center mb-2">
-                                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Performance Index (vs KOM)</span>
-                                <span id="comparison-text" class="text-xs font-bold text-[#fc4c02]">Calculating...</span>
+                                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">${t('performance_index')}</span>
+                                <span id="comparison-text" class="text-xs font-bold text-[#fc4c02]">${t('pr_calculating')}</span>
                             </div>
                             <div class="bg-gray-800 h-2.5 rounded-full overflow-hidden p-[2px] border border-gray-800">
                                 <div id="pr-progress-bar" class="bg-gradient-to-r from-[#fc4c02] to-orange-400 h-full rounded-full w-0 transition-all duration-[1500ms] ease-out">
                                 </div>
                             </div>
                             <div class="flex justify-between items-center mt-2 text-[10px] text-gray-500 font-bold">
-                                <span>🥇 KOM PACE</span>
-                                <span>YOUR PR PACE</span>
+                                <span>🥇 ${t('kom_pace')}</span>
+                                <span>${t('pr_pace')}</span>
                             </div>
                         </div>
                         <p class="text-xs text-gray-400 leading-relaxed m-0 border-l-2 border-[#fc4c02]/40 pl-3">
-                            Compare your personal record directly against the segment leaders. Connect your Strava account to sync your efforts automatically.
+                            ${t('pr_segment_leaders')}
                         </p>
                     </div>
                     
@@ -115,7 +116,7 @@ export const showModal = (puerto) => {
                         <div class="bg-[#1a1c29] border border-gray-800 rounded-2xl p-6 w-full md:w-80 shadow-lg text-left">
                             <h4 class="text-white font-bold mb-4 flex items-center gap-2 text-xs tracking-wider">
                                 <svg class="w-4 h-4 text-[#fc4c02]" fill="currentColor" viewBox="0 0 24 24"><path d="M4 10h3v10H4zM10 4h3v16h-3zM16 14h3v6h-3z"></path></svg>
-                                SEGMENT LEADERBOARD
+                                ${t('pr_leaderboard')}
                             </h4>
                             <div class="grid grid-cols-1 gap-y-3.5">
                                 <div class="flex justify-between items-center py-1.5 border-b border-gray-800/60">
@@ -127,7 +128,7 @@ export const showModal = (puerto) => {
                                     <strong id="modal-qom-real" class="font-title text-white text-base">--:--</strong>
                                 </div>
                                 <div class="flex justify-between items-center py-1.5">
-                                    <span class="text-[10px] text-[#fc4c02] font-bold uppercase tracking-wider">🏅 Your PR</span>
+                                    <span class="text-[10px] text-[#fc4c02] font-bold uppercase tracking-wider">🏅 ${t('your_pr')}</span>
                                     <strong id="modal-pr-real" class="font-title text-[#fc4c02] text-base">--:--</strong>
                                 </div>
                             </div>
@@ -143,13 +144,14 @@ export const showModal = (puerto) => {
                             <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         </div>
                         <div>
-                            <h4 class="font-title font-bold text-gray-900 text-xl m-0 leading-tight">Nearby Places</h4>
-                            <p class="text-xs text-gray-400 m-0 mt-1">Cafes, restaurants and bike stores within 3 km of the summit — perfect for a well-deserved break after the climb.</p>
+                            <h4 class="font-title font-bold text-gray-900 text-xl m-0 leading-tight">${t('nearby_places')}</h4>
+                            <p class="text-xs text-gray-400 m-0 mt-1">${t('nearby_desc')}</p>
                         </div>
                     </div>
                     <div id="nearby-places-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                         <div class="col-span-full flex items-center justify-center py-10 text-sm text-gray-400 gap-2">
                             <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            ${t('loading_nearby')}
                         </div>
                     </div>
                 </div>
@@ -162,8 +164,8 @@ export const showModal = (puerto) => {
                                 <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
                             </div>
                             <div class="flex-1 text-left">
-                                <h4 class="font-title font-bold text-gray-900 text-xl m-0 leading-tight">Access & Directions</h4>
-                                <p class="text-xs text-gray-400 m-0 mt-1">Ready to ride? Get precise coordinates for the base of the climb or launch optimized routing directly in Google Maps.</p>
+                                <h4 class="font-title font-bold text-gray-900 text-xl m-0 leading-tight">${t('access_directions')}</h4>
+                                <p class="text-xs text-gray-400 m-0 mt-1">${t('access_desc')}</p>
                             </div>
                         </div>
 
@@ -173,7 +175,7 @@ export const showModal = (puerto) => {
                             <div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
                                 <div class="flex items-center gap-2">
                                     <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-                                    <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Start Coordinates</span>
+                                    <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">${t('start_coordinates')}</span>
                                 </div>
                                 
                                 <div class="flex items-center gap-2.5 w-full sm:w-auto">
@@ -183,7 +185,7 @@ export const showModal = (puerto) => {
                                     </div>
                                     
                                     <!-- Minimal copy action -->
-                                    <button onclick="navigator.clipboard.writeText('${puerto.lat}, ${puerto.lng}').then(() => { const b=this; const prev=b.innerHTML; b.innerHTML='✓'; b.classList.add('!text-emerald-500','!bg-emerald-50','!border-emerald-200'); setTimeout(()=>{b.innerHTML=prev; b.classList.remove('!text-emerald-500','!bg-emerald-50','!border-emerald-200')},2000); })" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-400 hover:text-gray-600 w-10 h-10 rounded-xl flex items-center justify-center cursor-pointer transition-all shadow-sm shrink-0 active:scale-95" title="Copy GPS Coordinates">
+                                    <button onclick="navigator.clipboard.writeText('${puerto.lat}, ${puerto.lng}').then(() => { const b=this; const prev=b.innerHTML; b.innerHTML='✓'; b.classList.add('!text-emerald-500','!bg-emerald-50','!border-emerald-200'); setTimeout(()=>{b.innerHTML=prev; b.classList.remove('!text-emerald-500','!bg-emerald-50','!border-emerald-200')},2000); })" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-400 hover:text-gray-600 w-10 h-10 rounded-xl flex items-center justify-center cursor-pointer transition-all shadow-sm shrink-0 active:scale-95" title="${t('copy_coords')}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
                                     </button>
                                 </div>
@@ -192,7 +194,7 @@ export const showModal = (puerto) => {
                             <!-- Right side: Premium button, full width on mobile, auto on sm -->
                             <div class="w-full sm:w-auto">
                                 <a href="https://www.google.com/maps/dir/?api=1&destination=${puerto.lat},${puerto.lng}&travelmode=bicycling" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-primary hover:bg-orange-600 text-white font-bold h-11 sm:h-10 px-5 rounded-xl text-xs tracking-wider uppercase transition-all shadow-sm hover:shadow-[0_4px_12px_rgba(252,76,2,0.25)] no-underline select-none">
-                                    Get Directions
+                                    ${t('get_directions')}
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                                 </a>
                             </div>
@@ -234,16 +236,16 @@ const _fetchAndRenderNearbyPlaces = (lat, lng) => {
 
                 let typeName, typeBg, typeColor, typeIcon, typeAccent;
                 if (isBike) {
-                    typeName = 'Bike Store'; typeBg = 'bg-blue-50'; typeColor = 'text-blue-600'; typeAccent = 'bg-blue-500';
+                    typeName = t('place_bike'); typeBg = 'bg-blue-50'; typeColor = 'text-blue-600'; typeAccent = 'bg-blue-500';
                     typeIcon = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16a4 4 0 11-8 0 4 4 0 018 0zM9 16V9m4 7V7m-4 2h4M5 7l2 2m10-2l-2 2"/></svg>';
                 } else if (isCafe) {
-                    typeName = 'Cafe'; typeBg = 'bg-amber-50'; typeColor = 'text-amber-700'; typeAccent = 'bg-amber-500';
+                    typeName = t('place_cafe'); typeBg = 'bg-amber-50'; typeColor = 'text-amber-700'; typeAccent = 'bg-amber-500';
                     typeIcon = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/></svg>';
                 } else if (isHotel) {
-                    typeName = 'Hotel / Lodging'; typeBg = 'bg-purple-50'; typeColor = 'text-purple-700'; typeAccent = 'bg-purple-500';
-                    typeIcon = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>';
+                    typeName = t('place_lodging'); typeBg = 'bg-purple-50'; typeColor = 'text-purple-700'; typeAccent = 'bg-purple-500';
+                    typeIcon = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>';
                 } else {
-                    typeName = 'Restaurant'; typeBg = 'bg-emerald-50'; typeColor = 'text-emerald-700'; typeAccent = 'bg-emerald-500';
+                    typeName = t('place_restaurant'); typeBg = 'bg-emerald-50'; typeColor = 'text-emerald-700'; typeAccent = 'bg-emerald-500';
                     typeIcon = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>';
                 }
 
@@ -264,7 +266,7 @@ const _fetchAndRenderNearbyPlaces = (lat, lng) => {
                         <span class="text-xs font-bold text-white">${place.rating.toFixed(1)}</span>
                         ${place.user_ratings_total ? `<span class="text-[10px] text-gray-400">(${place.user_ratings_total})</span>` : ''}
                        </div>`
-                    : '<span class="text-xs text-gray-400 italic">No reviews yet</span>';
+                    : `<span class="text-xs text-gray-400 italic">${t('place_no_reviews')}</span>`;
 
                 let openStatus = '';
                 if (place.opening_hours) {
@@ -272,8 +274,8 @@ const _fetchAndRenderNearbyPlaces = (lat, lng) => {
                         ? place.opening_hours.open_now
                         : (typeof place.opening_hours.isOpen === 'function' ? place.opening_hours.isOpen() : false);
                     openStatus = isOpen
-                        ? '<span class="absolute top-4 right-4 text-[9px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full text-emerald-400 bg-emerald-950/80 border border-emerald-500/20 backdrop-blur-sm shadow-sm z-10">Open</span>'
-                        : '<span class="absolute top-4 right-4 text-[9px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full text-red-400 bg-red-950/80 border border-red-500/20 backdrop-blur-sm shadow-sm z-10">Closed</span>';
+                        ? `<span class="absolute top-4 right-4 text-[9px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full text-emerald-400 bg-emerald-950/80 border border-emerald-500/20 backdrop-blur-sm shadow-sm z-10">${t('place_open')}</span>`
+                        : `<span class="absolute top-4 right-4 text-[9px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full text-red-400 bg-red-950/80 border border-red-500/20 backdrop-blur-sm shadow-sm z-10">${t('place_closed')}</span>`;
                 }
 
                 let photoHtml = '';
@@ -325,7 +327,7 @@ const _fetchAndRenderNearbyPlaces = (lat, lng) => {
                             <div class="flex items-center justify-between text-xs text-gray-300 font-medium mt-2">
                                 ${ratingHtml}
                                 <span class="flex items-center gap-1 text-[11px] font-bold text-primary group-hover:translate-x-1.5 transition-transform duration-300">
-                                    Directions <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                    ${t('get_directions')} <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7m0 0l-7 7m7-7H3"/></svg>
                                 </span>
                             </div>
                         </div>
@@ -333,7 +335,7 @@ const _fetchAndRenderNearbyPlaces = (lat, lng) => {
                 `);
             });
         } else {
-            container.innerHTML = '<div class="col-span-full py-8 text-center text-sm text-gray-400">No places found nearby.</div>';
+            container.innerHTML = `<div class="col-span-full py-8 text-center text-sm text-gray-400">${t('place_no_found')}</div>`;
         }
     });
 };
@@ -356,7 +358,7 @@ const _omplirDadesStravaModal = (port) => {
             setTimeout(() => { bar.style.width = `${percent}%`; }, 200);
 
             const text = document.getElementById('comparison-text');
-            text.innerHTML = prSec > komSec ? `You are ${formatTime(prSec - komSec)} away from the KOM` : `<span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"></path></svg> You have the KOM!</span>`;
+            text.innerHTML = prSec > komSec ? t('pr_away').replace('{time}', formatTime(prSec - komSec)) : `<span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg> ${t('pr_have_kom')}</span>`;
         }
     }
 };
