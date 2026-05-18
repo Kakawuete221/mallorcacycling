@@ -23,12 +23,15 @@ const routes = {
             const p2 = puertos[1];
             const rest = puertos.slice(2, 5);
 
+            const p1Str = JSON.stringify(p1).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+            const p2Str = JSON.stringify(p2).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+
             const bentoHTML = `
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-8">
                 <!-- Columna Esquerra (2 segments) -->
                 <div class="lg:col-span-8 flex flex-col gap-6 h-full">
                     <!-- Segment of the Month (Gran) -->
-                    <a href="/map" data-link class="group relative rounded-3xl overflow-hidden shadow-2xl flex-1 min-h-[400px] md:min-h-[450px] cursor-pointer block">
+                    <div data-action="view-details" data-port="${p1Str}" class="group relative rounded-3xl overflow-hidden shadow-2xl flex-1 min-h-[400px] md:min-h-[450px] cursor-pointer block">
                         <img src="media/${p1.nom || p1.nombre}.jpg" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-6 md:p-10 text-white w-full">
@@ -40,10 +43,10 @@ const routes = {
                                 <span class="flex items-center gap-2"><svg class="w-5 h-5 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Cat. ${p1.categoria}</span>
                             </div>
                         </div>
-                    </a>
+                    </div>
                     
                     <!-- Segment Secundari Inferior -->
-                    <a href="/map" data-link class="group relative rounded-3xl overflow-hidden shadow-lg h-[180px] md:h-[220px] flex-shrink-0 cursor-pointer block">
+                    <div data-action="view-details" data-port="${p2Str}" class="group relative rounded-3xl overflow-hidden shadow-lg h-[180px] md:h-[220px] flex-shrink-0 cursor-pointer block">
                         <img src="media/${p2.nom || p2.nombre}.jpg" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/30 to-transparent opacity-90"></div>
                         <div class="absolute bottom-0 left-0 p-6 text-white w-full">
@@ -54,25 +57,28 @@ const routes = {
                                 <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Cat. ${p2.categoria}</span>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
 
                 <!-- Columna Dreta (3 segments) -->
                 <div class="lg:col-span-4 flex flex-col gap-6 h-full">
-                    ${rest.map(p => `
-                    <a href="/map" data-link class="group relative rounded-3xl overflow-hidden shadow-lg flex-1 min-h-[160px] cursor-pointer block">
-                        <img src="media/${p.nom || p.nombre}.jpg" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent opacity-95"></div>
-                        <div class="absolute bottom-0 left-0 p-5 text-white w-full">
-                            <h3 class="text-xl md:text-2xl font-title font-bold mb-3 leading-tight">${p.nom || p.nombre}</h3>
-                            <div class="flex flex-wrap items-center gap-3 md:gap-5 text-xs font-medium text-gray-300 tracking-wide">
-                                <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg> ${p.distancia || p.distancia_km} km</span>
-                                <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11l7-7 7 7M5 19l7-7 7 7"></path></svg> ${p.desnivell || p.elevacion_m} m</span>
-                                <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Cat. ${p.categoria}</span>
+                    ${rest.map(p => {
+                        const pStr = JSON.stringify(p).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+                        return `
+                        <div data-action="view-details" data-port="${pStr}" class="group relative rounded-3xl overflow-hidden shadow-lg flex-1 min-h-[160px] cursor-pointer block">
+                            <img src="media/${p.nom || p.nombre}.jpg" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent opacity-95"></div>
+                            <div class="absolute bottom-0 left-0 p-5 text-white w-full">
+                                <h3 class="text-xl md:text-2xl font-title font-bold mb-3 leading-tight">${p.nom || p.nombre}</h3>
+                                <div class="flex flex-wrap items-center gap-3 md:gap-5 text-xs font-medium text-gray-300 tracking-wide">
+                                    <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg> ${p.distancia || p.distancia_km} km</span>
+                                    <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11l7-7 7 7M5 19l7-7 7 7"></path></svg> ${p.desnivell || p.elevacion_m} m</span>
+                                    <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Cat. ${p.categoria}</span>
+                                </div>
                             </div>
                         </div>
-                    </a>
-                    `).join('')}
+                        `;
+                    }).join('')}
                 </div>
             </div>
             `;
