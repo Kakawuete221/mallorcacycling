@@ -338,70 +338,9 @@ export const uiNetejarFiltres = () => {
 };
 
 export const createFiltresHTML = () => `
-    <div class="flex flex-wrap items-start gap-3">
-        <div class="relative">
-            <button data-action="toggle-filtres" id="btn-filtres-dropdown" class="bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-                Filters
-            </button>
-
-            <div id="panel-filtres" class="hidden absolute top-full mt-2 left-0 w-[340px] bg-white border border-gray-100 shadow-2xl rounded-xl flex flex-col overflow-hidden max-h-[75vh] overflow-y-auto z-50">
-                <div class="flex justify-between items-center px-5 py-3.5 border-b border-gray-100 bg-gray-50/50">
-                    <span class="font-bold text-gray-800 text-sm">Refine search</span>
-                    <button data-action="netejar-filtres" class="text-xs font-semibold text-primary hover:text-orange-700">Clear</button>
-                </div>
-
-                <div class="p-5 space-y-7">
-                    <div>
-                        <h4 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">Region</h4>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Tramuntana">Tramuntana</button>
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Raiguer">Raiguer</button>
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Pla">Pla</button>
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Migjorn">Migjorn</button>
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Llevant">Llevant</button>
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Palma">Palma</button>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h4 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">Category</h4>
-                        <div class="grid grid-cols-4 gap-2">
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="1">1</button>
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="2">2</button>
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="3">3</button>
-                            <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="4">4</button>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-end mb-2">
-                            <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Max Distance</h4>
-                            <span class="text-[13px] font-bold text-primary" id="val-dist">10 km</span>
-                        </div>
-                        <input type="range" id="sl-distancia" data-camp="distanciaMax" data-val-id="val-dist" data-sufix=" km" min="1" max="10" value="10" step="0.5" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-end mb-2">
-                            <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Max Elevation Gain</h4>
-                            <span class="text-[13px] font-bold text-primary" id="val-desn">1000 m</span>
-                        </div>
-                        <input type="range" id="sl-desnivell" data-camp="desnivellMax" data-val-id="val-desn" data-sufix=" m" min="0" max="1000" value="1000" step="50" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-end mb-2">
-                            <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Max Gradient</h4>
-                            <span class="text-[13px] font-bold text-primary" id="val-pend">< 10 %</span>
-                        </div>
-                        <input type="range" id="sl-pendent" data-camp="pendentMax" data-val-id="val-pend" data-prefix="< " data-sufix=" %" min="2" max="10" value="10" step="0.5" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
-                    </div>
-                </div>
-            </div>
-        </div>  
-
-        <div class="relative bg-white rounded-lg shadow-sm border border-gray-200 flex items-center h-10 px-3 w-64 md:w-72">
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto relative sm:static">
+        <!-- Search bar (displayed first on mobile using order-1, and full width) -->
+        <div class="relative order-1 sm:order-2 bg-white rounded-lg shadow-sm border border-gray-200 flex items-center h-10 px-3 w-full sm:w-64 md:w-72">
             <svg class="w-4 h-4 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             <input type="text" id="input-cerca" autocomplete="off" class="w-full h-full outline-none border-none ring-0 focus:ring-0 text-sm text-gray-700 placeholder-gray-400 bg-transparent" placeholder="Search for a segment...">
             
@@ -412,90 +351,168 @@ export const createFiltresHTML = () => `
             <ul id="llista-suggeriments" class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-100 shadow-xl rounded-lg overflow-hidden hidden z-50 max-h-60 overflow-y-auto"></ul>
         </div>
 
-        <button id="btn-completats" data-action="toggle-completats" class="bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">
-            <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-            Completed
-        </button>
+        <!-- Buttons area (Filters & Completed side-by-side on mobile, compact on desktop) -->
+        <div class="flex items-center gap-3 order-2 sm:order-1 w-full sm:w-auto">
+            <div class="flex-1 sm:flex-none sm:relative">
+                <button data-action="toggle-filtres" id="btn-filtres-dropdown" class="w-full justify-center bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                    Filters
+                </button>
+
+                <div id="panel-filtres" class="hidden absolute top-full mt-2 left-0 w-full sm:w-[340px] max-w-[340px] bg-white border border-gray-100 shadow-2xl rounded-xl flex flex-col overflow-hidden max-h-[75vh] overflow-y-auto z-50">
+                    <div class="flex justify-between items-center px-5 py-3.5 border-b border-gray-100 bg-gray-50/50">
+                        <span class="font-bold text-gray-800 text-sm">Refine search</span>
+                        <button data-action="netejar-filtres" class="text-xs font-semibold text-primary hover:text-orange-700">Clear</button>
+                    </div>
+
+                    <div class="p-5 space-y-7">
+                        <div>
+                            <h4 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">Region</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Tramuntana">Tramuntana</button>
+                                <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Raiguer">Raiguer</button>
+                                <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Pla">Pla</button>
+                                <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Migjorn">Migjorn</button>
+                                <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Llevant">Llevant</button>
+                                <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Palma">Palma</button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">Category</h4>
+                            <div class="grid grid-cols-4 gap-2">
+                                <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="1">1</button>
+                                <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="2">2</button>
+                                <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="3">3</button>
+                                <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="4">4</button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-end mb-2">
+                                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Max Distance</h4>
+                                <span class="text-[13px] font-bold text-primary" id="val-dist">10 km</span>
+                            </div>
+                            <input type="range" id="sl-distancia" data-camp="distanciaMax" data-val-id="val-dist" data-sufix=" km" min="1" max="10" value="10" step="0.5" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-end mb-2">
+                                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Max Elevation Gain</h4>
+                                <span class="text-[13px] font-bold text-primary" id="val-desn">1000 m</span>
+                            </div>
+                            <input type="range" id="sl-desnivell" data-camp="desnivellMax" data-val-id="val-desn" data-sufix=" m" min="0" max="1000" value="1000" step="50" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-end mb-2">
+                                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Max Gradient</h4>
+                                <span class="text-[13px] font-bold text-primary" id="val-pend">< 10 %</span>
+                            </div>
+                            <input type="range" id="sl-pendent" data-camp="pendentMax" data-val-id="val-pend" data-prefix="< " data-sufix=" %" min="2" max="10" value="10" step="0.5" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                        </div>
+                    </div>
+                </div>
+            </div>  
+
+            <button id="btn-completats" data-action="toggle-completats" class="flex-1 sm:flex-none justify-center bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">
+                <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Completed
+            </button>
+        </div>
     </div>
 `;
 
 export const createSidebarFiltresHTML = () => `
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col gap-6 w-full lg:w-72 flex-shrink-0 sticky top-[100px]">
-        <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-            <h3 class="font-bold text-gray-800 flex items-center gap-2 text-lg">
-                <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
-                Filters
-            </h3>
-            <button data-action="netejar-filtres" class="text-sm font-semibold text-primary hover:text-orange-700 transition-colors">Clear</button>
-        </div>
+    <div class="bg-white lg:bg-transparent rounded-xl lg:rounded-none shadow-sm lg:shadow-none border border-gray-100 lg:border-none p-4 lg:p-0 flex flex-col gap-4 lg:gap-6 w-full lg:w-72 flex-shrink-0 lg:sticky lg:top-[100px]">
+        
+        <!-- Mobile Toggle Button (Only visible on mobile/tablet) -->
+        <button data-action="toggle-sidebar-filtres" class="lg:hidden w-full flex items-center justify-between bg-gray-50 border border-gray-100 hover:bg-gray-100 hover:border-gray-200 rounded-xl px-4 py-3 transition-all cursor-pointer">
+            <span class="font-bold text-gray-700 flex items-center gap-2 text-sm">
+                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                Filters & Refinements
+            </span>
+            <svg id="sidebar-filtres-caret" class="w-4 h-4 text-gray-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </button>
 
-        <div class="space-y-4">
-            <details class="group border-b border-gray-100 pb-4">
-                <summary class="text-xs font-bold text-gray-400 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                    <span>Region</span>
-                    <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </summary>
-                <div class="grid grid-cols-2 gap-2 mt-3">
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Tramuntana">Tramuntana</button>
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Raiguer">Raiguer</button>
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Pla">Pla</button>
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Migjorn">Migjorn</button>
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Llevant">Llevant</button>
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Palma">Palma</button>
-                </div>
-            </details>
+        <!-- Filters Content Panel (Always visible on lg, toggled on mobile) -->
+        <div id="sidebar-filtres-content" class="hidden lg:flex flex-col gap-6 bg-white lg:rounded-xl lg:shadow-sm lg:border lg:border-gray-100 lg:p-5 w-full">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+                <h3 class="hidden lg:flex font-bold text-gray-800 items-center gap-2 text-lg">
+                    <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                    Filters
+                </h3>
+                <button data-action="netejar-filtres" class="text-sm font-semibold text-primary hover:text-orange-700 transition-colors">Clear All</button>
+            </div>
 
-            <details class="group border-b border-gray-100 pb-4">
-                <summary class="text-xs font-bold text-gray-400 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                    <span>Category</span>
-                    <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </summary>
-                <div class="grid grid-cols-4 gap-2 mt-3">
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="1">1</button>
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="2">2</button>
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="3">3</button>
-                    <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="4">4</button>
-                </div>
-            </details>
-
-            <details class="group border-b border-gray-100 pb-4">
-                <summary class="text-xs font-bold text-gray-400 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                    <span>Max Distance</span>
-                    <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </summary>
-                <div class="mt-3">
-                    <div class="flex justify-end items-end mb-2">
-                        <span class="text-[13px] font-bold text-primary" id="val-dist">10 km</span>
+            <div class="space-y-4">
+                <details class="group border-b border-gray-100 pb-4">
+                    <summary class="text-xs font-bold text-gray-400 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                        <span>Region</span>
+                        <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <div class="grid grid-cols-2 gap-2 mt-3">
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Tramuntana">Tramuntana</button>
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Raiguer">Raiguer</button>
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Pla">Pla</button>
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Migjorn">Migjorn</button>
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Llevant">Llevant</button>
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Palma">Palma</button>
                     </div>
-                    <input type="range" id="sl-distancia" data-camp="distanciaMax" data-val-id="val-dist" data-sufix=" km" min="1" max="10" value="10" step="0.5" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
-                </div>
-            </details>
+                </details>
 
-            <details class="group border-b border-gray-100 pb-4">
-                <summary class="text-xs font-bold text-gray-400 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                    <span>Max Elevation Gain</span>
-                    <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </summary>
-                <div class="mt-3">
-                    <div class="flex justify-end items-end mb-2">
-                        <span class="text-[13px] font-bold text-primary" id="val-desn">1000 m</span>
+                <details class="group border-b border-gray-100 pb-4">
+                    <summary class="text-xs font-bold text-gray-400 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                        <span>Category</span>
+                        <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <div class="grid grid-cols-4 gap-2 mt-3">
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="1">1</button>
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="2">2</button>
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="3">3</button>
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="4">4</button>
                     </div>
-                    <input type="range" id="sl-desnivell" data-camp="desnivellMax" data-val-id="val-desn" data-sufix=" m" min="0" max="1000" value="1000" step="50" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
-                </div>
-            </details>
+                </details>
 
-            <details class="group">
-                <summary class="text-xs font-bold text-gray-400 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                    <span>Max Gradient</span>
-                    <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </summary>
-                <div class="mt-3">
-                    <div class="flex justify-end items-end mb-2">
-                        <span class="text-[13px] font-bold text-primary" id="val-pend">< 10 %</span>
+                <details class="group border-b border-gray-100 pb-4">
+                    <summary class="text-xs font-bold text-gray-400 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                        <span>Max Distance</span>
+                        <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <div class="mt-3">
+                        <div class="flex justify-end items-end mb-2">
+                            <span class="text-[13px] font-bold text-primary" id="val-dist">10 km</span>
+                        </div>
+                        <input type="range" id="sl-distancia" data-camp="distanciaMax" data-val-id="val-dist" data-sufix=" km" min="1" max="10" value="10" step="0.5" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
                     </div>
-                    <input type="range" id="sl-pendent" data-camp="pendentMax" data-val-id="val-pend" data-prefix="< " data-sufix=" %" min="2" max="10" value="10" step="0.5" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
-                </div>
-            </details>
+                </details>
+
+                <details class="group border-b border-gray-100 pb-4">
+                    <summary class="text-xs font-bold text-gray-400 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                        <span>Max Elevation Gain</span>
+                        <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <div class="mt-3">
+                        <div class="flex justify-end items-end mb-2">
+                            <span class="text-[13px] font-bold text-primary" id="val-desn">1000 m</span>
+                        </div>
+                        <input type="range" id="sl-desnivell" data-camp="desnivellMax" data-val-id="val-desn" data-sufix=" m" min="0" max="1000" value="1000" step="50" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                    </div>
+                </details>
+
+                <details class="group pb-2">
+                    <summary class="text-xs font-bold text-gray-400 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                        <span>Max Gradient</span>
+                        <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <div class="mt-3">
+                        <div class="flex justify-end items-end mb-2">
+                            <span class="text-[13px] font-bold text-primary" id="val-pend">< 10 %</span>
+                        </div>
+                        <input type="range" id="sl-pendent" data-camp="pendentMax" data-val-id="val-pend" data-prefix="< " data-sufix=" %" min="2" max="10" value="10" step="0.5" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                    </div>
+                </details>
+            </div>
         </div>
     </div>
 `;
@@ -513,15 +530,15 @@ export const createTopBarSegmentsHTML = () => `
             <ul id="llista-suggeriments" class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-100 shadow-xl rounded-lg overflow-hidden hidden z-50 max-h-60 overflow-y-auto"></ul>
         </div>
         
-        <div class="flex items-center gap-3">
-            <button id="btn-completats" data-action="toggle-completats" class="bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">
+        <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
+            <button id="btn-completats" data-action="toggle-completats" class="flex-1 md:flex-none justify-center bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">
                 <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 Completed
             </button>
 
-            <div class="relative flex items-center">
+            <div class="relative flex-1 md:flex-none flex items-center">
                 <svg class="w-4 h-4 text-gray-500 absolute left-3 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h18M6 12h12M9 20h6"></path></svg>
-                <select id="select-ordenacio" class="bg-white border border-gray-200 hover:border-gray-300 rounded-lg h-10 pl-9 pr-3 text-sm font-medium text-gray-700 transition-colors focus:ring-0 outline-none cursor-pointer">
+                <select id="select-ordenacio" class="w-full md:w-auto bg-white border border-gray-200 hover:border-gray-300 rounded-lg h-10 pl-9 pr-3 text-sm font-medium text-gray-700 transition-colors focus:ring-0 outline-none cursor-pointer">
                     <option value="">Default order</option>
                     <option value="dist_asc">Distance (Ascending)</option>
                     <option value="dist_desc">Distance (Descending)</option>
@@ -530,7 +547,7 @@ export const createTopBarSegmentsHTML = () => `
                 </select>
             </div>
             
-            <div class="flex bg-gray-50 rounded-lg p-1 gap-1 border border-gray-100">
+            <div class="hidden sm:flex bg-gray-50 rounded-lg p-1 gap-1 border border-gray-100">
                 <button data-action="view-size-2" class="w-8 h-8 rounded-md flex items-center justify-center text-gray-400 hover:text-gray-800 transition-colors hover:bg-white view-toggle-btn" title="2 Columns">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M4 4h7v16H4zm9 0h7v16h-7z"></path></svg>
                 </button>

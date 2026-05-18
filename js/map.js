@@ -2,8 +2,8 @@
 import { createMiniCardHTML } from './ui.js';
 
 // CONSTANTS DE VISTA DEL MAPA
-const CENTRE_MALLORCA = { lat: 39.62, lng: 2.98 };
-const ZOOM_INICIAL = 10;
+let CENTRE_MALLORCA = { lat: 39.62, lng: 2.98 };
+let ZOOM_INICIAL = 10;
 
 let map;
 let directionsService;
@@ -63,7 +63,11 @@ export const assignarComarcaAdministrativa = (port) => {
 
 export function initGoogleMap() {
     polylinesCache.clear(); // IMPORTANT: Si es recarrega la pàgina del mapa, hem de buidar la memòria cau perquè els objectes pertanyen al mapa anterior (ja destruït)
-    
+
+    const isMobile = window.innerWidth < 640;
+    ZOOM_INICIAL = isMobile ? 9 : 10;
+    CENTRE_MALLORCA = isMobile ? { lat: 39.68, lng: 2.98 } : { lat: 39.62, lng: 2.98 };
+
     const MALLORCA_BOUNDS = { north: 40.5, south: 38.8, west: 1.8, east: 4.0 };
 
     map = new google.maps.Map(document.getElementById('map'), {
@@ -83,7 +87,7 @@ export function initGoogleMap() {
         gestureHandling: 'greedy',
         mapTypeControlOptions: {
             style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
-            position: google.maps.ControlPosition.TOP_RIGHT
+            position: google.maps.ControlPosition.BOTTOM_LEFT
         }
     });
 
@@ -600,7 +604,7 @@ export const resetearVistaMapa = () => {
         lng: (centreActual.lng() + CENTRE_MALLORCA.lng) / 2
     };
 
-    map.setZoom(10); 
+    map.setZoom(ZOOM_INICIAL);
     setTimeout(() => {
         map.panTo(puntIntermedi);
         setTimeout(() => {

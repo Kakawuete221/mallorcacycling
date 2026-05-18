@@ -96,6 +96,13 @@ const routes = {
                     <a href="/segments" data-link class="hidden md:block text-[#ea580c] font-bold tracking-wider hover:text-orange-700 transition-colors uppercase text-sm">View All Segments &rarr;</a>
                 </div>
                 ${bentoHTML}
+                
+                <!-- Mobile only View All Segments button -->
+                <div class="mt-8 flex justify-center md:hidden w-full">
+                    <a href="/segments" data-link class="w-full text-center bg-white border border-gray-200 text-[#ea580c] font-bold py-3.5 px-6 rounded-2xl text-sm transition-all hover:bg-orange-50 hover:border-[#ea580c] uppercase tracking-wider shadow-sm">
+                        View All Segments &rarr;
+                    </a>
+                </div>
             </section>
             
             <section class="max-w-[1200px] w-[90%] mx-auto pb-24 pt-12 px-5">
@@ -153,7 +160,7 @@ const routes = {
             <section class="relative h-[calc(100vh-80px)] w-full overflow-hidden bg-gray-100">
                 <div id="map" class="absolute top-0 left-0 w-full h-full z-0"></div>
 
-                <div class="absolute top-4 left-4 z-40 flex flex-col gap-3">
+                <div class="absolute top-4 left-4 right-4 sm:right-auto z-40 flex flex-col gap-3">
                     ${createFiltresHTML()}
 
                     <div class="flex flex-col bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden w-10 mt-1">

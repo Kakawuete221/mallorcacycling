@@ -2,15 +2,15 @@
 import { loginWithStrava, logoutStrava, getSegmentDetails, checkStravaCallback, isStravaSessionValid } from './stravaApi.js';
 import { aplicarFiltres, resetFiltres, setCerca, toggleFiltreGeneric, setToggleCompletats, setValorSlider, setOrdenacio } from './filters.js';
 // NOU IMPORT ACTUALITZAT: S'han afegit resetearVistaMapa i centrarEnUsuari al final
-import { 
-    initGoogleMap, pintarPorts, centrarMapaEnPort, eliminarMarcadorCerca, 
-    actualitzarMunicipiReal, calcularRutaPort, cercarServeisProp, 
-    resetearVistaMapa, centrarEnUsuari 
+import {
+    initGoogleMap, pintarPorts, centrarMapaEnPort, eliminarMarcadorCerca,
+    actualitzarMunicipiReal, calcularRutaPort, cercarServeisProp,
+    resetearVistaMapa, centrarEnUsuari
 } from './map.js';
 import { showModal, closeModal } from './modal.js';
-import { 
-    uiToggleDropdownFiltres, uiCercaToggle, uiNetejarCercaUnica, 
-    uiToggleCompletatsBtn, uiToggleGeneric, uiActualitzarSlider, uiNetejarFiltres, createMiniCardHTML, createCardHTML 
+import {
+    uiToggleDropdownFiltres, uiCercaToggle, uiNetejarCercaUnica,
+    uiToggleCompletatsBtn, uiToggleGeneric, uiActualitzarSlider, uiNetejarFiltres, createMiniCardHTML, createCardHTML
 } from './ui.js';
 import { router } from './router.js';
 
@@ -24,7 +24,7 @@ export const executarFiltre = () => {
         const portsFiltrats = aplicarFiltres(appState.totsElsPorts);
         let path = window.location.hash.slice(1);
         if (!path) path = "/";
-        
+
         if (path === "/map") {
             pintarPorts(portsFiltrats, handlePortClick);
         } else if (path === "/segments") {
@@ -54,7 +54,7 @@ document.addEventListener('click', async (e) => {
     const link = e.target.closest("[data-link]");
     if (link) {
         e.preventDefault();
-        
+
         // Tancar menú mòbil si està obert
         const menu = document.querySelector('.nav-menu');
         const toggleBtn = document.querySelector('.nav-toggle');
@@ -131,6 +131,14 @@ document.addEventListener('click', async (e) => {
                 toggleBtn.setAttribute('aria-expanded', String(isActive));
             }
             break;
+        case 'toggle-sidebar-filtres':
+            const sidebarContent = document.getElementById('sidebar-filtres-content');
+            const sidebarCaret = document.getElementById('sidebar-filtres-caret');
+            if (sidebarContent && sidebarCaret) {
+                sidebarContent.classList.toggle('hidden');
+                sidebarCaret.classList.toggle('rotate-180');
+            }
+            break;
         case 'view-details':
             const portData = JSON.parse(target.dataset.port);
             showModal(portData);
@@ -153,8 +161,8 @@ document.addEventListener('click', async (e) => {
             executarFiltre();
             break;
         case 'toggle-completats':
-            const nouEstatComp = uiToggleCompletatsBtn(target); 
-            setToggleCompletats(nouEstatComp); 
+            const nouEstatComp = uiToggleCompletatsBtn(target);
+            setToggleCompletats(nouEstatComp);
             executarFiltre();
             break;
         case 'toggle-generic':
@@ -172,7 +180,7 @@ document.addEventListener('click', async (e) => {
         case 'calcular-ruta':
             calcularRutaPort(parseFloat(target.dataset.lat), parseFloat(target.dataset.lng));
             break;
-        
+
         // NOUS CASOS PER ALS BOTONS DEL MAPA
         case 'reset-map-view':
             resetearVistaMapa();
@@ -180,24 +188,24 @@ document.addEventListener('click', async (e) => {
         case 'center-on-user':
             centrarEnUsuari();
             break;
-            
+
         case 'view-size-2':
         case 'view-size-3':
         case 'view-size-4':
             const grid = document.getElementById('segments-grid');
             if (!grid) break;
-            
+
             document.querySelectorAll('.view-toggle-btn').forEach(b => {
                 b.classList.remove('active-view', 'shadow-sm', 'bg-white', 'text-gray-800');
                 b.classList.add('text-gray-400');
             });
-            
+
             const btnToggle = target.closest('.view-toggle-btn');
             if (btnToggle) {
                 btnToggle.classList.add('active-view', 'shadow-sm', 'bg-white', 'text-gray-800');
                 btnToggle.classList.remove('text-gray-400');
             }
-            
+
             grid.className = 'grid gap-6 pb-20 transition-all duration-500';
             if (action === 'view-size-2') {
                 grid.classList.add('grid-cols-1', 'md:grid-cols-2');
@@ -224,7 +232,7 @@ document.addEventListener('input', (e) => {
     if (e.target.id === 'input-cerca') {
         const textCerca = e.target.value;
         const teCaractersValids = uiCercaToggle(textCerca, appState.totsElsPorts);
-        
+
         if (!teCaractersValids) {
             setCerca("");
             eliminarMarcadorCerca();
@@ -233,9 +241,9 @@ document.addEventListener('input', (e) => {
     } else if (e.target.classList.contains('custom-slider')) {
         const target = e.target;
         uiActualitzarSlider(
-            target.value, 
-            target.dataset.valId, 
-            target.dataset.prefix || '', 
+            target.value,
+            target.dataset.valId,
+            target.dataset.prefix || '',
             target.dataset.sufix || ''
         );
         setValorSlider(target.dataset.camp, target.value);

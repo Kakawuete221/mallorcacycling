@@ -166,31 +166,31 @@ export const showModal = (puerto) => {
                             </div>
                         </div>
 
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 text-left mt-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 text-left mt-6">
                             
-                            <!-- Left side: Clean GPS telemetry label and single high-end capsule -->
-                            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                            <!-- Left side: GPS label and coordinates capsule -->
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
                                 <div class="flex items-center gap-2">
                                     <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
                                     <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Start Coordinates</span>
                                 </div>
                                 
-                                <div class="flex items-center gap-2.5">
-                                    <!-- Clean unified coordinate capsule -->
-                                    <div class="bg-gray-50 border border-gray-100 rounded-xl px-4 py-2 text-xs font-mono font-bold text-gray-600 shadow-sm select-all">
+                                <div class="flex items-center gap-2.5 w-full sm:w-auto">
+                                    <!-- Coordinate capsule - expands on mobile, content centered -->
+                                    <div class="flex-1 sm:flex-none text-center bg-gray-50 border border-gray-100 rounded-xl px-4 py-2.5 text-xs font-mono font-bold text-gray-600 shadow-sm select-all">
                                         ${puerto.lat}° N &nbsp;&middot;&nbsp; ${puerto.lng}° E
                                     </div>
                                     
                                     <!-- Minimal copy action -->
-                                    <button onclick="navigator.clipboard.writeText('${puerto.lat}, ${puerto.lng}').then(() => { const b=this; const prev=b.innerHTML; b.innerHTML='✓'; b.classList.add('!text-emerald-500','!bg-emerald-50','!border-emerald-200'); setTimeout(()=>{b.innerHTML=prev; b.classList.remove('!text-emerald-500','!bg-emerald-50','!border-emerald-200')},2000); })" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-400 hover:text-gray-600 w-9 h-9 rounded-xl flex items-center justify-center cursor-pointer transition-all shadow-sm shrink-0 active:scale-95" title="Copy GPS Coordinates">
+                                    <button onclick="navigator.clipboard.writeText('${puerto.lat}, ${puerto.lng}').then(() => { const b=this; const prev=b.innerHTML; b.innerHTML='✓'; b.classList.add('!text-emerald-500','!bg-emerald-50','!border-emerald-200'); setTimeout(()=>{b.innerHTML=prev; b.classList.remove('!text-emerald-500','!bg-emerald-50','!border-emerald-200')},2000); })" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-400 hover:text-gray-600 w-10 h-10 rounded-xl flex items-center justify-center cursor-pointer transition-all shadow-sm shrink-0 active:scale-95" title="Copy GPS Coordinates">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
                                     </button>
                                 </div>
                             </div>
                             
-                            <!-- Right side: Clean premium Google Maps direction button -->
-                            <div class="shrink-0">
-                                <a href="https://www.google.com/maps/dir/?api=1&destination=${puerto.lat},${puerto.lng}&travelmode=bicycling" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-primary hover:bg-orange-600 text-white font-bold h-10 px-5 rounded-xl text-xs tracking-wider uppercase transition-all shadow-sm hover:shadow-[0_4px_12px_rgba(252,76,2,0.25)] no-underline select-none">
+                            <!-- Right side: Premium button, full width on mobile, auto on sm -->
+                            <div class="w-full sm:w-auto">
+                                <a href="https://www.google.com/maps/dir/?api=1&destination=${puerto.lat},${puerto.lng}&travelmode=bicycling" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-primary hover:bg-orange-600 text-white font-bold h-11 sm:h-10 px-5 rounded-xl text-xs tracking-wider uppercase transition-all shadow-sm hover:shadow-[0_4px_12px_rgba(252,76,2,0.25)] no-underline select-none">
                                     Get Directions
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                                 </a>
