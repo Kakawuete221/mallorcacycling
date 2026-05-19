@@ -33,7 +33,7 @@ const routes = {
                 <div class="lg:col-span-8 flex flex-col gap-6 h-full">
                     <!-- Segment of the Month (Gran) -->
                     <div data-action="view-details" data-port="${p1Str}" class="group relative rounded-3xl overflow-hidden shadow-2xl flex-1 min-h-[400px] md:min-h-[450px] cursor-pointer block">
-                        <img src="${p1.imatge && p1.imatge !== 'media/photo.jpeg' ? p1.imatge : 'media/' + (p1.nom || p1.nombre) + '.jpg'}" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <img src="${p1.imatge && p1.imatge !== 'media/ColldeSoller.jpeg' ? p1.imatge : 'media/' + (p1.nom || p1.nombre) + '.jpg'}" alt="${p1.nom || p1.nombre}" onerror="this.src='media/ColldeSoller.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-6 md:p-10 text-white w-full">
                             <span class="bg-[#ea580c] text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest mb-4 inline-block shadow-lg">${t('segment_of_month')}</span>
@@ -48,7 +48,7 @@ const routes = {
                     
                     <!-- Segment Secundari Inferior -->
                     <div data-action="view-details" data-port="${p2Str}" class="group relative rounded-3xl overflow-hidden shadow-lg h-[180px] md:h-[220px] flex-shrink-0 cursor-pointer block">
-                        <img src="${p2.imatge && p2.imatge !== 'media/photo.jpeg' ? p2.imatge : 'media/' + (p2.nom || p2.nombre) + '.jpg'}" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <img src="${p2.imatge && p2.imatge !== 'media/ColldeSoller.jpeg' ? p2.imatge : 'media/' + (p2.nom || p2.nombre) + '.jpg'}" alt="${p2.nom || p2.nombre}" onerror="this.src='media/ColldeSoller.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/30 to-transparent opacity-90"></div>
                         <div class="absolute bottom-0 left-0 p-6 text-white w-full">
                             <h3 class="text-2xl md:text-3xl font-title font-bold mb-3">${p2.nom || p2.nombre}</h3>
@@ -67,7 +67,7 @@ const routes = {
                 const pStr = JSON.stringify(p).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
                 return `
                         <div data-action="view-details" data-port="${pStr}" class="group relative rounded-3xl overflow-hidden shadow-lg flex-1 min-h-[160px] cursor-pointer block">
-                            <img src="${p.imatge && p.imatge !== 'media/photo.jpeg' ? p.imatge : 'media/' + (p.nom || p.nombre) + '.jpg'}" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <img src="${p.imatge && p.imatge !== 'media/ColldeSoller.jpeg' ? p.imatge : 'media/' + (p.nom || p.nombre) + '.jpg'}" alt="${p.nom || p.nombre}" onerror="this.src='media/ColldeSoller.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                             <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent opacity-95"></div>
                             <div class="absolute bottom-0 left-0 p-5 text-white w-full">
                                 <h3 class="text-xl md:text-2xl font-title font-bold mb-3 leading-tight">${p.nom || p.nombre}</h3>
@@ -87,7 +87,7 @@ const routes = {
             return `
             <section id="intro" class="fade-in">
                 <div class="relative w-full h-[calc(100vh-40px)] overflow-hidden">
-                    <img src="media/photo.jpeg" class="w-full h-full object-cover">
+                    <img src="media/ColldeSoller.jpeg" alt="Vista del Coll de Sóller" class="w-full h-full object-cover">
                     <div class="absolute inset-0 flex flex-col justify-center items-center text-white bg-black/40 text-center p-5">
                         <h1 class="font-title text-4xl md:text-5xl lg:text-7xl font-bold mb-4">Mallorca Cycling</h1>
                         <p class="text-lg md:text-2xl opacity-90 tracking-wide">${t('hero_subtitle')}</p>
@@ -141,14 +141,14 @@ const routes = {
                 <div class="flex flex-wrap justify-center gap-12 md:gap-24">
                     <div class="flex flex-col items-center group">
                         <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shadow-xl border-4 border-white ring-4 ring-[#ea580c]/20 group-hover:ring-[#ea580c] transition-all duration-500 mb-5">
-                            <img src="media/photo.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Pau">
+                            <img src="media/ColldeSoller.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Pau">
                         </div>
                         <h4 class="font-bold text-gray-800 text-2xl font-title">Pau Antich</h4>
                         <p class="text-sm text-[#ea580c] uppercase tracking-widest font-bold mt-1">${t('creators_role')}</p>
                     </div>
                     <div class="flex flex-col items-center group">
                         <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shadow-xl border-4 border-white ring-4 ring-[#ea580c]/20 group-hover:ring-[#ea580c] transition-all duration-500 mb-5">
-                            <img src="media/photo.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Creator 2">
+                            <img src="media/ColldeSoller.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Creator 2">
                         </div>
                         <h4 class="font-bold text-gray-800 text-2xl font-title">Jaume Ribas</h4>
                         <p class="text-sm text-[#ea580c] uppercase tracking-widest font-bold mt-1">${t('creators_role')}</p>
@@ -253,7 +253,7 @@ const routes = {
                     ${visibleTrophies.map(tr => `
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-1.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group block">
                         <div class="relative rounded-xl overflow-hidden h-36 mb-2">
-                            <img src="${tr.port.imatge && tr.port.imatge !== 'media/photo.jpeg' ? tr.port.imatge : 'media/' + (tr.port.nom || tr.port.nombre) + '.jpg'}" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <img src="${tr.port.imatge && tr.port.imatge !== 'media/ColldeSoller.jpeg' ? tr.port.imatge : 'media/' + (tr.port.nom || tr.port.nombre) + '.jpg'}" alt="${tr.port.nom || tr.port.nombre}" onerror="this.src='media/ColldeSoller.jpeg'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute inset-0 bg-gradient-to-t from-[#11131f]/90 via-transparent to-transparent"></div>
                             <div class="absolute bottom-3 left-4 right-4">
                                 <h3 class="font-bold font-title text-white text-lg leading-tight truncate drop-shadow-md">${tr.port.nom || tr.port.nombre}</h3>
@@ -281,7 +281,7 @@ const routes = {
                     ${hiddenTrophies.map(tr => `
                     <div class="hidden-trophy hidden bg-white rounded-2xl shadow-sm border border-gray-100 p-1.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group block">
                         <div class="relative rounded-xl overflow-hidden h-36 mb-2">
-                            <img src="${tr.port.imatge && tr.port.imatge !== 'media/photo.jpeg' ? tr.port.imatge : 'media/' + (tr.port.nom || tr.port.nombre) + '.jpg'}" onerror="this.src='media/photo.jpeg'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <img src="${tr.port.imatge && tr.port.imatge !== 'media/ColldeSoller.jpeg' ? tr.port.imatge : 'media/' + (tr.port.nom || tr.port.nombre) + '.jpg'}" alt="${tr.port.nom || tr.port.nombre}" onerror="this.src='media/ColldeSoller.jpeg'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute inset-0 bg-gradient-to-t from-[#11131f]/90 via-transparent to-transparent"></div>
                             <div class="absolute bottom-3 left-4 right-4">
                                 <h3 class="font-bold font-title text-white text-lg leading-tight truncate drop-shadow-md">${tr.port.nom || tr.port.nombre}</h3>
@@ -346,7 +346,7 @@ const routes = {
             <div class="w-full max-w-[1200px] mx-auto py-16 px-5 fade-in min-h-[70vh]">
                 <div class="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 md:p-12 mb-8">
                     <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
-                        <img src="${user.profile_medium}" class="w-32 h-32 rounded-full border-4 border-[#ea580c] object-cover shadow-md">
+                        <img src="${user.profile_medium}" alt="${user.firstname} ${user.lastname}" class="w-32 h-32 rounded-full border-4 border-[#ea580c] object-cover shadow-md">
                         <div class="text-center md:text-left flex-1">
                             <h1 class="text-4xl font-bold font-title text-secondary mb-2">${user.firstname} ${user.lastname}</h1>
                             <p class="text-gray-500 flex items-center justify-center md:justify-start gap-2 mb-6">

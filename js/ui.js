@@ -16,7 +16,7 @@ export function actualitzarInterficieUsuari() {
             navArea.innerHTML = `
                 <a href="/profile" data-link class="flex items-center gap-2.5 cursor-pointer hover:bg-gray-100 px-3 py-1.5 rounded-lg transition-colors select-none">
                     <span class="font-bold text-secondary">${user.firstname}</span>
-                    <img src="${user.profile_medium}" class="w-[38px] h-[38px] rounded-full border-2 border-primary object-cover">
+                    <img src="${user.profile_medium}" alt="${user.firstname} ${user.lastname}" class="w-[38px] h-[38px] rounded-full border-2 border-primary object-cover">
                 </a>`;
         }
 
@@ -26,7 +26,7 @@ export function actualitzarInterficieUsuari() {
                     <div class="absolute inset-0 opacity-20 pointer-events-none" style="background: radial-gradient(circle at 100% 50%, #ea580c 0%, transparent 60%);"></div>
                     <div class="relative z-10 flex flex-col items-start max-w-lg text-left">
                         <div class="flex items-center gap-4 mb-6">
-                            <img src="${user.profile_medium}" class="w-16 h-16 rounded-full border-2 border-[#ea580c] object-cover">
+                            <img src="${user.profile_medium}" alt="${user.firstname} ${user.lastname}" class="w-16 h-16 rounded-full border-2 border-[#ea580c] object-cover">
                             <div>
                                 <h2 class="text-2xl md:text-3xl font-bold italic font-title text-white uppercase tracking-wider">${t('strava_hello')}, <span class="text-[#ea580c]">${user.firstname.toUpperCase()}</span>!</h2>
                                 <p class="text-gray-400 text-sm">${t('connected_strava')}</p>
@@ -153,7 +153,7 @@ export const createCardHTML = (puerto, index = 0) => {
 
     return `
     <div class="group relative rounded-3xl overflow-hidden shadow-lg aspect-[4/3] w-full cursor-pointer hover:shadow-2xl transition-all duration-300" data-action="view-details" data-port="${portDataStr}">
-        <img src="${puerto.imatge && puerto.imatge !== 'media/photo.jpeg' ? puerto.imatge : 'media/' + nom + '.jpg'}" onerror="this.onerror=null; this.src='media/photo.jpeg';" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+        <img src="${puerto.imatge && puerto.imatge !== 'media/ColldeSoller.jpeg' ? puerto.imatge : 'media/' + nom + '.jpg'}" alt="${nom}" onerror="this.onerror=null; this.src='media/ColldeSoller.jpeg';" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
         <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent opacity-95"></div>
         <div class="absolute bottom-0 left-0 p-5 text-white w-full">
             <h3 class="text-xl md:text-2xl font-title font-bold mb-3 leading-tight pr-4">${nom}</h3>
