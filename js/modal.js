@@ -3,10 +3,15 @@ import { formatTime } from './utils.js';
 import { t, getActiveLanguage } from './translations.js';
 import { dibuixarMiniMapa, actualitzarMunicipiReal, dibuixarPerfilElevacio, cercarLlocsPropers } from './map.js';
 
+let triggeringElement = null;
+
 export const showModal = (puerto) => {
     const modal = document.getElementById('puerto-modal');
     const modalBody = document.getElementById('modal-body');
     if (!modal || !modalBody) return;
+
+    triggeringElement = document.activeElement;
+    modal.removeAttribute('aria-hidden');
 
     modalBody.innerHTML = `
         <div class="flex flex-col w-full p-0 flex-1">
@@ -15,7 +20,7 @@ export const showModal = (puerto) => {
                 <img src="${puerto.imatge && puerto.imatge !== 'media/ColldeSoller.jpeg' ? puerto.imatge : 'media/' + puerto.nom + '.jpg'}" alt="${puerto.nom}" class="absolute inset-0 w-full h-full object-cover z-0" onerror="this.src='media/ColldeSoller.jpeg'">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent z-0"></div>
                 <div class="relative z-10 w-full">
-                    <h2 class="text-3xl md:text-5xl font-title font-bold drop-shadow-lg m-0 leading-tight">${puerto.nom}</h2>
+                    <h2 id="modal-title" class="text-3xl md:text-5xl font-title font-bold drop-shadow-lg m-0 leading-tight">${puerto.nom}</h2>
                     <div class="flex items-center gap-2 mt-3 opacity-90">
                         <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         <p id="modal-municipi" class="text-sm md:text-base m-0 font-medium tracking-wide">${t('finding_location')}</p>
@@ -27,27 +32,27 @@ export const showModal = (puerto) => {
                 <!-- Unified Horizontal Key Stats Card -->
                 <div class="order-1 md:order-none bg-gray-50/50 rounded-3xl p-6 border border-gray-100/80 shadow-sm grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 divide-y md:divide-y-0 lg:divide-x divide-gray-200/50">
                     <div class="flex flex-col items-center justify-center text-center px-2">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">${t('distance')}</span>
+                        <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">${t('distance')}</span>
                         <span class="text-xl font-title font-bold text-gray-800">${puerto.distancia} km</span>
                     </div>
                     <div class="flex flex-col items-center justify-center text-center px-2 pt-4 md:pt-0">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">${t('avg_grad')}</span>
+                        <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">${t('avg_grad')}</span>
                         <span class="text-xl font-title font-bold text-gray-800">${puerto.pendent_mitja}%</span>
                     </div>
                     <div class="flex flex-col items-center justify-center text-center px-2 pt-4 md:pt-0">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">${t('max_grad')}</span>
+                        <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">${t('max_grad')}</span>
                         <span class="text-xl font-title font-bold text-gray-800">${puerto.pendent_max}%</span>
                     </div>
                     <div class="flex flex-col items-center justify-center text-center px-2 pt-4 lg:pt-0">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">${t('elevation')}</span>
+                        <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">${t('elevation')}</span>
                         <span class="text-xl font-title font-bold text-gray-800">${puerto.desnivell} m</span>
                     </div>
                     <div class="flex flex-col items-center justify-center text-center px-2 pt-4 lg:pt-0">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">${t('max_elev')}</span>
+                        <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">${t('max_elev')}</span>
                         <span class="text-xl font-title font-bold text-gray-800">${puerto.altitud_max} m</span>
                     </div>
                     <div class="flex flex-col items-center justify-center text-center px-2 pt-4 lg:pt-0">
-                        <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">${t('filter_category')}</span>
+                        <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">${t('filter_category')}</span>
                         <span class="text-xl font-title font-bold text-primary">${puerto.categoria}</span>
                     </div>
                 </div>
@@ -56,16 +61,16 @@ export const showModal = (puerto) => {
                 <div class="order-3 md:order-none grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                     <div class="flex flex-col gap-2.5">
                         <div class="flex items-center gap-2 px-1">
-                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
-                            <span class="text-xs text-gray-400 font-semibold uppercase tracking-wider">${t('segment_route')}</span>
+                            <svg class="w-4 h-4 text-gray-550" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+                            <span class="text-xs text-gray-550 font-semibold uppercase tracking-wider">${t('segment_route')}</span>
                         </div>
                         <div id="modal-mini-map" class="h-[280px] md:h-[320px] rounded-3xl border border-gray-100 shadow-sm w-full overflow-hidden"></div>
                     </div>
                     <div class="flex flex-col gap-2.5">
                         <div class="flex items-center gap-2 px-1">
-                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                            <span class="text-xs text-gray-400 font-semibold uppercase tracking-wider">${t('elevation')}</span>
-                            <span class="ml-auto text-xs text-gray-300 font-medium bg-gray-50 px-2 py-0.5 rounded-full border border-gray-100 cursor-default">${t('hover_explore')}</span>
+                            <svg class="w-4 h-4 text-gray-550" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                            <span class="text-xs text-gray-550 font-semibold uppercase tracking-wider">${t('elevation')}</span>
+                            <span class="ml-auto text-xs text-gray-550 font-medium bg-gray-50 px-2 py-0.5 rounded-full border border-gray-100 cursor-default">${t('hover_explore')}</span>
                         </div>
                         <div class="bg-white rounded-3xl p-5 border border-gray-100 shadow-sm w-full flex flex-col h-[280px] md:h-[320px]">
                             <div class="flex-1 w-full relative">
@@ -101,7 +106,7 @@ export const showModal = (puerto) => {
                                 <div id="pr-progress-bar" class="bg-gradient-to-r from-[#fc4c02] to-orange-400 h-full rounded-full w-0 transition-all duration-[1500ms] ease-out">
                                 </div>
                             </div>
-                            <div class="flex justify-between items-center mt-2 text-[10px] text-gray-500 font-bold">
+                            <div class="flex justify-between items-center mt-2 text-[10px] text-gray-400 font-bold">
                                 <span>🥇 ${t('kom_pace')}</span>
                                 <span>${t('pr_pace')}</span>
                             </div>
@@ -120,11 +125,11 @@ export const showModal = (puerto) => {
                             </h4>
                             <div class="grid grid-cols-1 gap-y-3.5">
                                 <div class="flex justify-between items-center py-1.5 border-b border-gray-800/60">
-                                    <span class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">🥇 KOM</span>
+                                    <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">🥇 KOM</span>
                                     <strong id="modal-kom-real" class="font-title text-white text-base">--:--</strong>
                                 </div>
                                 <div class="flex justify-between items-center py-1.5 border-b border-gray-800/60">
-                                    <span class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">👑 QOM</span>
+                                    <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">👑 QOM</span>
                                     <strong id="modal-qom-real" class="font-title text-white text-base">--:--</strong>
                                 </div>
                                 <div class="flex justify-between items-center py-1.5">
@@ -136,8 +141,7 @@ export const showModal = (puerto) => {
                     </div>
                 </div>
 
-                <!-- Nearby Places Section with clean line separator -->
-                <div class="order-5 md:order-none w-full border-t border-gray-100/80 pt-8">
+                <!-- Nearby Places Section with clean line se                 <div class="order-5 md:order-none w-full border-t border-gray-100/80 pt-8">
                     <!-- Section Header -->
                     <div class="flex items-start gap-4 mb-6">
                         <div class="w-10 h-10 rounded-2xl bg-[#fc4c02]/10 flex items-center justify-center shrink-0">
@@ -145,19 +149,18 @@ export const showModal = (puerto) => {
                         </div>
                         <div>
                             <h4 class="font-title font-bold text-gray-900 text-xl m-0 leading-tight">${t('nearby_places')}</h4>
-                            <p class="text-xs text-gray-400 m-0 mt-1">${t('nearby_desc')}</p>
+                            <p class="text-xs text-gray-550 m-0 mt-1">${t('nearby_desc')}</p>
                         </div>
                     </div>
                     <div id="nearby-places-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        <div class="col-span-full flex items-center justify-center py-10 text-sm text-gray-400 gap-2">
+                        <div class="col-span-full flex items-center justify-center py-10 text-sm text-gray-550 gap-2">
                             <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                             ${t('loading_nearby')}
                         </div>
-                    </div>
+                    </div>       </div>
                 </div>
 
-                <!-- Directions & Access Section (Ultra-Clean Premium Modern Flow) -->
-                <div class="order-2 md:order-none w-full border-t-0 md:border-t border-gray-100/80 pt-0 md:pt-8 mt-0 md:mt-8">
+                <!-- Directions & Access Section (Ultra-Clean Premium Moder                 <div class="order-2 md:order-none w-full border-t-0 md:border-t border-gray-100/80 pt-0 md:pt-8 mt-0 md:mt-8">
                         <!-- Section Header matching Nearby Places -->
                         <div class="flex items-start gap-4 mb-6">
                             <div class="w-10 h-10 rounded-2xl bg-[#fc4c02]/10 flex items-center justify-center shrink-0 border border-[#fc4c02]/20">
@@ -165,7 +168,7 @@ export const showModal = (puerto) => {
                             </div>
                             <div class="flex-1 text-left">
                                 <h4 class="font-title font-bold text-gray-900 text-xl m-0 leading-tight">${t('access_directions')}</h4>
-                                <p class="text-xs text-gray-400 m-0 mt-1">${t('access_desc')}</p>
+                                <p class="text-xs text-gray-550 m-0 mt-1">${t('access_desc')}</p>
                             </div>
                         </div>
 
@@ -175,17 +178,17 @@ export const showModal = (puerto) => {
                             <div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
                                 <div class="flex items-center gap-2">
                                     <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-                                    <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">${t('start_coordinates')}</span>
+                                    <span class="text-xs font-bold text-gray-550 uppercase tracking-wider">${t('start_coordinates')}</span>
                                 </div>
                                 
                                 <div class="flex items-center gap-2.5 w-full sm:w-auto">
                                     <!-- Coordinate capsule - expands on mobile, content centered -->
-                                    <div class="flex-1 sm:flex-none text-center bg-gray-50 border border-gray-100 rounded-xl px-4 py-2.5 text-xs font-mono font-bold text-gray-600 shadow-sm select-all">
+                                    <div class="flex-1 sm:flex-none text-center bg-gray-50 border border-gray-100 rounded-xl px-4 py-2.5 text-xs font-mono font-bold text-gray-650 shadow-sm select-all">
                                         ${puerto.lat}° N &nbsp;&middot;&nbsp; ${puerto.lng}° E
                                     </div>
                                     
                                     <!-- Minimal copy action -->
-                                    <button onclick="navigator.clipboard.writeText('${puerto.lat}, ${puerto.lng}').then(() => { const b=this; const prev=b.innerHTML; b.innerHTML='✓'; b.classList.add('!text-emerald-500','!bg-emerald-50','!border-emerald-200'); setTimeout(()=>{b.innerHTML=prev; b.classList.remove('!text-emerald-500','!bg-emerald-50','!border-emerald-200')},2000); })" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-400 hover:text-gray-600 w-10 h-10 rounded-xl flex items-center justify-center cursor-pointer transition-all shadow-sm shrink-0 active:scale-95" title="${t('copy_coords')}">
+                                    <button onclick="navigator.clipboard.writeText('${puerto.lat}, ${puerto.lng}').then(() => { const b=this; const prev=b.innerHTML; b.innerHTML='✓'; b.classList.add('!text-emerald-500','!bg-emerald-50','!border-emerald-200'); setTimeout(()=>{b.innerHTML=prev; b.classList.remove('!text-emerald-500','!bg-emerald-50','!border-emerald-200')},2000); })" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-550 hover:text-gray-700 w-10 h-10 rounded-xl flex items-center justify-center cursor-pointer transition-all shadow-sm shrink-0 active:scale-95" title="${t('copy_coords')}">'copy_coords')}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
                                     </button>
                                 </div>
@@ -212,12 +215,18 @@ export const showModal = (puerto) => {
         container.classList.add('scale-100', 'opacity-100');
     }
 
-    dibuixarMiniMapa(puerto); 
-    actualitzarMunicipiReal(puerto.lat, puerto.lng); 
-    dibuixarPerfilElevacio(puerto.polyline); 
-    
+    dibuixarMiniMapa(puerto);
+    actualitzarMunicipiReal(puerto.lat, puerto.lng);
+    dibuixarPerfilElevacio(puerto.polyline);
+
     _omplirDadesStravaModal(puerto);
     _fetchAndRenderNearbyPlaces(puerto.lat, puerto.lng);
+
+    // Focus close button for accessibility
+    setTimeout(() => {
+        const closeBtn = document.querySelector('#puerto-modal [data-action="close-modal"]');
+        if (closeBtn) closeBtn.focus();
+    }, 100);
 };
 
 const _fetchAndRenderNearbyPlaces = (lat, lng) => {
@@ -335,7 +344,7 @@ const _fetchAndRenderNearbyPlaces = (lat, lng) => {
                 `);
             });
         } else {
-            container.innerHTML = `<div class="col-span-full py-8 text-center text-sm text-gray-400">${t('place_no_found')}</div>`;
+            container.innerHTML = `<div class="col-span-full py-8 text-center text-sm text-gray-550">${t('place_no_found')}</div>`;
         }
     });
 };
@@ -374,6 +383,7 @@ const _timeToSeconds = (timeStr) => {
 export const closeModal = () => {
     const modal = document.getElementById('puerto-modal');
     if (!modal) return;
+    modal.setAttribute('aria-hidden', 'true');
     const container = document.getElementById('modal-container');
     if (container) {
         container.classList.remove('scale-100', 'opacity-100');
@@ -381,4 +391,12 @@ export const closeModal = () => {
     }
     modal.classList.remove('pointer-events-auto', 'bg-black/60', 'backdrop-blur-sm');
     modal.classList.add('pointer-events-none', 'bg-black/0', 'backdrop-blur-none');
+
+    // Restore focus
+    if (triggeringElement && typeof triggeringElement.focus === 'function') {
+        setTimeout(() => {
+            triggeringElement.focus();
+            triggeringElement = null;
+        }, 100);
+    }
 };

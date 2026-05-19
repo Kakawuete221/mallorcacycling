@@ -117,5 +117,12 @@
     "footer_connect_desc": "Intégrate con Strava para ver tus récords personales y comparar esfuerzos.",
     "footer_copyright": "© 2026 Mallorca Cycling. Desarrollado por Pau Antich & Jaume Ribas. Proyecto Académico UIB - Tecnologia Multimedia.",
     "footer_privacy": "Política de Privacidad",
-    "footer_terms": "Términos del Servicio"
+    "footer_terms": "Términos del Servicio",
+    "skip_to_content": "Saltar al contenido principal",
+    "close_modal": "Cerrar detalles",
+    "view_details_of": "Ver detalles de",
+    "select_language": "Seleccionar idioma",
+    "reset_map_view": "Restablecer vista del mapa",
+    "summit": "Cima",
+    "center_on_user": "Mi ubicación"
 }

@@ -1,5 +1,6 @@
 // map.js - Module for handling Google Maps services
 import { createMiniCardHTML } from './ui.js';
+import { t } from './translations.js';
 
 // CONSTANTS DE VISTA DEL MAPA
 let CENTRE_MALLORCA = { lat: 39.62, lng: 2.98 };
@@ -137,6 +138,7 @@ export function pintarPorts(ports, onSegmentClickCallback) {
             const startMarker = new google.maps.Marker({
                 position: path[0],
                 map: map,
+                title: port.nom,
                 icon: {
                     path: google.maps.SymbolPath.CIRCLE, scale: 4, fillColor: '#fc4c02', fillOpacity: 1, strokeColor: '#ffffff', strokeWeight: 2
                 },
@@ -224,6 +226,7 @@ export const dibuixarMiniMapa = (puerto) => {
     new google.maps.Marker({
         position: fullSegmentPath[0],
         map: miniMap,
+        title: t('start_coordinates'),
         icon: { path: google.maps.SymbolPath.CIRCLE, scale: 5, fillColor: "#fc4c02", fillOpacity: 1, strokeColor: "white", strokeWeight: 2 },
         zIndex: 20
     });
@@ -237,6 +240,7 @@ export const dibuixarMiniMapa = (puerto) => {
     new google.maps.Marker({
         position: fullSegmentPath[fullSegmentPath.length - 1],
         map: miniMap,
+        title: t('summit'),
         icon: finishIcon,
         zIndex: 21
     });
@@ -523,6 +527,7 @@ function actualitzarOcrearSistemaUbicacio(position, mapInstance) {
 
         userMarker = new google.maps.Marker({
             position: userPos, map: mapInstance,
+            title: t('center_on_user'),
             icon: { path: google.maps.SymbolPath.CIRCLE, scale: 8, fillColor: "#4285F4", fillOpacity: 1, strokeColor: "white", strokeWeight: 2 },
             zIndex: 1000
         });

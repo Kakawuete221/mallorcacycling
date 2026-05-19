@@ -136,8 +136,9 @@ document.addEventListener('click', async (e) => {
             const sidebarContent = document.getElementById('sidebar-filtres-content');
             const sidebarCaret = document.getElementById('sidebar-filtres-caret');
             if (sidebarContent && sidebarCaret) {
-                sidebarContent.classList.toggle('hidden');
+                const isHidden = sidebarContent.classList.toggle('hidden');
                 sidebarCaret.classList.toggle('rotate-180');
+                target.setAttribute('aria-expanded', String(!isHidden));
             }
             break;
         case 'view-details':
@@ -260,11 +261,13 @@ document.addEventListener('click', (e) => {
     
     if (btn && menu) {
         if (btn.contains(e.target)) {
-            menu.classList.toggle('hidden');
+            const isHidden = menu.classList.toggle('hidden');
             if (chevron) chevron.classList.toggle('rotate-180');
+            btn.setAttribute('aria-expanded', String(!isHidden));
         } else {
             menu.classList.add('hidden');
             if (chevron) chevron.classList.remove('rotate-180');
+            btn.setAttribute('aria-expanded', 'false');
         }
     }
 });
@@ -283,6 +286,72 @@ document.addEventListener('click', (e) => {
     if (langBtn) {
         const lang = langBtn.dataset.lang;
         setLanguage(lang);
+    }
+});
+
+// Global Keyboard Orchestration for Accessibility (WCAG compliance)
+document.addEventListener('keydown', (e) => {
+    // 1. Escape Key Closing (Modals and Dropdowns)
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('puerto-modal');
+        if (modal && !modal.classList.contains('pointer-events-none')) {
+            closeModal();
+            return;
+        }
+        const langDropdown = document.getElementById('language-dropdown-menu');
+        const langChevron = document.getElementById('language-dropdown-chevron');
+        if (langDropdown && !langDropdown.classList.contains('hidden')) {
+            langDropdown.classList.add('hidden');
+            if (langChevron) langChevron.classList.remove('rotate-180');
+            const langBtn = document.getElementById('language-dropdown-btn');
+            if (langBtn) {
+                langBtn.setAttribute('aria-expanded', 'false');
+                langBtn.focus();
+            }
+            return;
+        }
+    }
+
+    // 2. Keyboard Focus Trap (Tab and Shift+Tab cycling inside the Details Modal)
+    const modal = document.getElementById('puerto-modal');
+    if (modal && !modal.classList.contains('pointer-events-none')) {
+        if (e.key === 'Tab') {
+            const container = document.getElementById('modal-container');
+            if (container) {
+                const focusableElements = Array.from(container.querySelectorAll(
+                    'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+                )).filter(el => {
+                    const style = window.getComputedStyle(el);
+                    return style.display !== 'none' && style.visibility !== 'hidden';
+                });
+
+                if (focusableElements.length > 0) {
+                    const firstElement = focusableElements[0];
+                    const lastElement = focusableElements[focusableElements.length - 1];
+
+                    if (e.shiftKey) { // Shift + Tab
+                        if (document.activeElement === firstElement) {
+                            lastElement.focus();
+                            e.preventDefault();
+                        }
+                    } else { // Tab
+                        if (document.activeElement === lastElement) {
+                            firstElement.focus();
+                            e.preventDefault();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // 3. Keyboard Activation (Enter or Space on custom role="button" elements)
+    const roleButton = e.target.closest('[role="button"]');
+    if (roleButton) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            roleButton.click();
+        }
     }
 });
 

@@ -3,9 +3,18 @@
    ========================================= */
 
 /* Google Maps InfoWindow Tweaks */
-.gm-style-iw-d { overflow: hidden !important; }
-.gm-style-iw-c { padding: 0 !important; max-height: none !important; }
-.gm-ui-hover-effect { display: none !important; }
+.gm-style-iw-d {
+    overflow: hidden !important;
+}
+
+.gm-style-iw-c {
+    padding: 0 !important;
+    max-height: none !important;
+}
+
+.gm-ui-hover-effect {
+    display: none !important;
+}
 
 /* Amagar footer en la vista del mapa */
 body:has(.map-section) footer {
@@ -13,7 +22,8 @@ body:has(.map-section) footer {
 }
 
 /* Treure el requadre blau del mapa al fer clic */
-#map *, .gm-style * {
+#map *,
+.gm-style * {
     outline: none !important;
 }
 
@@ -23,8 +33,15 @@ body:has(.map-section) footer {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Posicionament i animació d'entrada del custom dropdown centrat */
@@ -39,8 +56,15 @@ body:has(.map-section) footer {
 }
 
 @keyframes dropdownSlideIn {
-    from { opacity: 0; transform: translateX(-50%) translateY(-8px) scale(0.95); }
-    to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-8px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
 }
 
 
@@ -57,6 +81,39 @@ body:has(.map-section) footer {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-#select-ordenacio:hover, #select-ordenacio:focus {
+#select-ordenacio:hover,
+#select-ordenacio:focus {
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23ea580c' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3E%3C/svg%3E") !important;
-}
+}
+
+/* =========================================
+   ACCESSIBILITY & FOCUS STYLES
+   ========================================= */
+
+/* Premium Focus Ring System for Accessibility */
+*:focus-visible {
+    outline: 3px solid #ea580c !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.4) !important;
+}
+
+/* Skip to main content link styled */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fc4c02;
+    color: white !important;
+    padding: 10px 20px;
+    z-index: 10000;
+    transition: top 0.2s ease;
+    font-weight: bold;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 4px 15px rgba(252, 76, 2, 0.4);
+    text-decoration: none !important;
+}
+
+.skip-link:focus-visible {
+    top: 0;
+}

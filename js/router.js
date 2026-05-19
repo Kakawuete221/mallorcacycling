@@ -32,11 +32,11 @@ const routes = {
                 <!-- Columna Esquerra (2 segments) -->
                 <div class="lg:col-span-8 flex flex-col gap-6 h-full">
                     <!-- Segment of the Month (Gran) -->
-                    <div data-action="view-details" data-port="${p1Str}" class="group relative rounded-3xl overflow-hidden shadow-2xl flex-1 min-h-[400px] md:min-h-[450px] cursor-pointer block">
+                    <div data-action="view-details" data-port="${p1Str}" role="button" tabindex="0" aria-label="${t('view_details_of')} ${p1.nom || p1.nombre}" class="group relative rounded-3xl overflow-hidden shadow-2xl flex-1 min-h-[400px] md:min-h-[450px] cursor-pointer block">
                         <img src="${p1.imatge && p1.imatge !== 'media/ColldeSoller.jpeg' ? p1.imatge : 'media/' + (p1.nom || p1.nombre) + '.jpg'}" alt="${p1.nom || p1.nombre}" onerror="this.src='media/ColldeSoller.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-6 md:p-10 text-white w-full">
-                            <span class="bg-[#ea580c] text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest mb-4 inline-block shadow-lg">${t('segment_of_month')}</span>
+                            <span class="bg-[#cf4002] text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest mb-4 inline-block shadow-lg">${t('segment_of_month')}</span>
                             <h3 class="text-4xl md:text-6xl font-title font-bold mb-4 tracking-tight">${p1.nom || p1.nombre}</h3>
                             <div class="flex items-center gap-6 md:gap-8 text-sm md:text-base font-medium">
                                 <span class="flex items-center gap-2"><svg class="w-5 h-5 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg> ${p1.distancia || p1.distancia_km} km</span>
@@ -47,7 +47,7 @@ const routes = {
                     </div>
                     
                     <!-- Segment Secundari Inferior -->
-                    <div data-action="view-details" data-port="${p2Str}" class="group relative rounded-3xl overflow-hidden shadow-lg h-[180px] md:h-[220px] flex-shrink-0 cursor-pointer block">
+                    <div data-action="view-details" data-port="${p2Str}" role="button" tabindex="0" aria-label="${t('view_details_of')} ${p2.nom || p2.nombre}" class="group relative rounded-3xl overflow-hidden shadow-lg h-[180px] md:h-[220px] flex-shrink-0 cursor-pointer block">
                         <img src="${p2.imatge && p2.imatge !== 'media/ColldeSoller.jpeg' ? p2.imatge : 'media/' + (p2.nom || p2.nombre) + '.jpg'}" alt="${p2.nom || p2.nombre}" onerror="this.src='media/ColldeSoller.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/30 to-transparent opacity-90"></div>
                         <div class="absolute bottom-0 left-0 p-6 text-white w-full">
@@ -66,7 +66,7 @@ const routes = {
                     ${rest.map(p => {
                 const pStr = JSON.stringify(p).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
                 return `
-                        <div data-action="view-details" data-port="${pStr}" class="group relative rounded-3xl overflow-hidden shadow-lg flex-1 min-h-[160px] cursor-pointer block">
+                        <div data-action="view-details" data-port="${pStr}" role="button" tabindex="0" aria-label="${t('view_details_of')} ${p.nom || p.nombre}" class="group relative rounded-3xl overflow-hidden shadow-lg flex-1 min-h-[160px] cursor-pointer block">
                             <img src="${p.imatge && p.imatge !== 'media/ColldeSoller.jpeg' ? p.imatge : 'media/' + (p.nom || p.nombre) + '.jpg'}" alt="${p.nom || p.nombre}" onerror="this.src='media/ColldeSoller.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                             <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent opacity-95"></div>
                             <div class="absolute bottom-0 left-0 p-5 text-white w-full">
@@ -100,13 +100,13 @@ const routes = {
                         <h2 class="text-4xl md:text-5xl font-bold font-title text-secondary tracking-tight">${t('featured_segments')}</h2>
                         <p class="text-gray-500 mt-2 text-lg">${t('home_handpicked')}</p>
                     </div>
-                    <a href="/segments" data-link class="hidden md:block text-[#ea580c] font-bold tracking-wider hover:text-orange-700 transition-colors uppercase text-sm">${t('home_view_all')} &rarr;</a>
+                    <a href="/segments" data-link class="hidden md:block text-[#cf4002] font-bold tracking-wider hover:text-orange-700 transition-colors uppercase text-sm">${t('home_view_all')} &rarr;</a>
                 </div>
                 ${bentoHTML}
                 
                 <!-- Mobile only View All Segments button -->
                 <div class="mt-8 flex justify-center md:hidden w-full">
-                    <a href="/segments" data-link class="w-full text-center bg-white border border-gray-200 text-[#ea580c] font-bold py-3.5 px-6 rounded-2xl text-sm transition-all hover:bg-orange-50 hover:border-[#ea580c] uppercase tracking-wider shadow-sm">
+                    <a href="/segments" data-link class="w-full text-center bg-white border border-gray-200 text-[#cf4002] font-bold py-3.5 px-6 rounded-2xl text-sm transition-all hover:bg-orange-50 hover:border-[#ea580c] uppercase tracking-wider shadow-sm">
                         ${t('home_view_all')} &rarr;
                     </a>
                 </div>
@@ -143,15 +143,15 @@ const routes = {
                         <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shadow-xl border-4 border-white ring-4 ring-[#ea580c]/20 group-hover:ring-[#ea580c] transition-all duration-500 mb-5">
                             <img src="media/ColldeSoller.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Pau">
                         </div>
-                        <h4 class="font-bold text-gray-800 text-2xl font-title">Pau Antich</h4>
-                        <p class="text-sm text-[#ea580c] uppercase tracking-widest font-bold mt-1">${t('creators_role')}</p>
+                        <h3 class="font-bold text-gray-800 text-2xl font-title">Pau Antich</h4>
+                        <p class="text-sm text-[#cf4002] uppercase tracking-widest font-bold mt-1">${t('creators_role')}</p>
                     </div>
                     <div class="flex flex-col items-center group">
                         <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shadow-xl border-4 border-white ring-4 ring-[#ea580c]/20 group-hover:ring-[#ea580c] transition-all duration-500 mb-5">
                             <img src="media/ColldeSoller.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Creator 2">
                         </div>
-                        <h4 class="font-bold text-gray-800 text-2xl font-title">Jaume Ribas</h4>
-                        <p class="text-sm text-[#ea580c] uppercase tracking-widest font-bold mt-1">${t('creators_role')}</p>
+                        <h3 class="font-bold text-gray-800 text-2xl font-title">Jaume Ribas</h4>
+                        <p class="text-sm text-[#cf4002] uppercase tracking-widest font-bold mt-1">${t('creators_role')}</p>
                     </div>
                 </div>
             </section>`;
@@ -167,10 +167,10 @@ const routes = {
                     ${createFiltresHTML()}
 
                     <div class="flex flex-col bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden w-10 mt-1">
-                        <button data-action="center-on-user" title="La meva ubicació" class="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-primary hover:bg-gray-50 transition-colors border-b border-gray-100 focus:outline-none">
+                        <button data-action="center-on-user" title="${t('center_on_user')}" aria-label="${t('center_on_user')}" class="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-primary hover:bg-gray-50 transition-colors border-b border-gray-100 focus:outline-none">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v2m0 12v2m8-8h-2M6 12H4m12 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                         </button>
-                        <button data-action="reset-map-view" title="Restablir vista" class="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-primary hover:bg-gray-50 transition-colors focus:outline-none">
+                        <button data-action="reset-map-view" title="${t('reset_map_view')}" aria-label="${t('reset_map_view')}" class="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-primary hover:bg-gray-50 transition-colors focus:outline-none">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
                         </button>
                     </div>
@@ -262,7 +262,7 @@ const routes = {
                         <div class="px-2 pb-2">
                             <div class="flex items-center gap-2 bg-gray-50 rounded-lg p-2.5 border border-gray-100 group-hover:bg-orange-50 group-hover:border-orange-100 transition-colors">
                                 <div class="flex-1 pl-1">
-                                    <span class="text-[9px] text-gray-400 font-bold uppercase tracking-widest block mb-0.5 group-hover:text-primary transition-colors">${t('your_pr')}</span>
+                                    <span class="text-[9px] text-gray-550 font-bold uppercase tracking-widest block mb-0.5 group-hover:text-primary transition-colors">${t('your_pr')}</span>
                                     <span class="text-lg font-bold font-title text-gray-800 flex items-center gap-1.5 group-hover:text-primary transition-colors">
                                         <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
                                         ${formatTime(tr.pr)}
@@ -270,7 +270,7 @@ const routes = {
                                 </div>
                                 <div class="w-px h-8 bg-gray-200 mx-1 group-hover:bg-orange-200 transition-colors"></div>
                                 <div class="text-center px-3">
-                                    <span class="text-[9px] text-gray-400 font-bold uppercase tracking-widest block mb-0.5 group-hover:text-primary transition-colors">${t('profile_efforts')}</span>
+                                    <span class="text-[9px] text-gray-550 font-bold uppercase tracking-widest block mb-0.5 group-hover:text-primary transition-colors">${t('profile_efforts')}</span>
                                     <span class="text-lg font-bold text-gray-700 group-hover:text-primary transition-colors">${tr.efforts}</span>
                                 </div>
                             </div>
@@ -290,7 +290,7 @@ const routes = {
                         <div class="px-2 pb-2">
                             <div class="flex items-center gap-2 bg-gray-50 rounded-lg p-2.5 border border-gray-100 group-hover:bg-orange-50 group-hover:border-orange-100 transition-colors">
                                 <div class="flex-1 pl-1">
-                                    <span class="text-[9px] text-gray-400 font-bold uppercase tracking-widest block mb-0.5 group-hover:text-primary transition-colors">${t('your_pr')}</span>
+                                    <span class="text-[9px] text-gray-550 font-bold uppercase tracking-widest block mb-0.5 group-hover:text-primary transition-colors">${t('your_pr')}</span>
                                     <span class="text-lg font-bold font-title text-gray-800 flex items-center gap-1.5 group-hover:text-primary transition-colors">
                                         <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
                                         ${formatTime(tr.pr)}
@@ -298,7 +298,7 @@ const routes = {
                                 </div>
                                 <div class="w-px h-8 bg-gray-200 mx-1 group-hover:bg-orange-200 transition-colors"></div>
                                 <div class="text-center px-3">
-                                    <span class="text-[9px] text-gray-400 font-bold uppercase tracking-widest block mb-0.5 group-hover:text-primary transition-colors">Efforts</span>
+                                    <span class="text-[9px] text-gray-550 font-bold uppercase tracking-widest block mb-0.5 group-hover:text-primary transition-colors">Efforts</span>
                                     <span class="text-lg font-bold text-gray-700 group-hover:text-primary transition-colors">${tr.efforts}</span>
                                 </div>
                             </div>
@@ -378,17 +378,17 @@ const routes = {
                                 <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 </div>
-                                <h3 class="font-title font-bold text-xl text-secondary">${t('stats_recent')} <span class="text-sm font-normal text-gray-400 block">${t('stats_recent_sub')}</span></h3>
+                                <h3 class="font-title font-bold text-xl text-secondary">${t('stats_recent')} <span class="text-sm font-normal text-gray-550 block">${t('stats_recent_sub')}</span></h3>
                             </div>
                             <div class="space-y-6">
                                 <div>
                                     <p class="text-sm text-gray-500 font-medium mb-1">${t('stats_distance')}</p>
-                                    <p class="text-4xl font-bold font-title text-gray-800">${formatDistance(recent.distance)}<span class="text-lg text-gray-400 ml-1">km</span></p>
+                                    <p class="text-4xl font-bold font-title text-gray-800">${formatDistance(recent.distance)}<span class="text-lg text-gray-550 ml-1">km</span></p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4 pt-4 border-t border-gray-50">
                                     <div>
                                         <p class="text-sm text-gray-500 font-medium mb-1">${t('stats_elevation')}</p>
-                                        <p class="text-2xl font-bold text-gray-800">${formatElevation(recent.elevation_gain)}<span class="text-sm text-gray-400 ml-1">m</span></p>
+                                        <p class="text-2xl font-bold text-gray-800">${formatElevation(recent.elevation_gain)}<span class="text-sm text-gray-550 ml-1">m</span></p>
                                     </div>
                                     <div>
                                         <p class="text-sm text-gray-500 font-medium mb-1">${t('stats_rides')}</p>
@@ -412,12 +412,12 @@ const routes = {
                             <div class="space-y-6">
                                 <div>
                                     <p class="text-sm text-gray-400 font-medium mb-1">${t('stats_distance')}</p>
-                                    <p class="text-5xl font-bold font-title text-[#ea580c] drop-shadow-sm">${formatDistance(ytd.distance)}<span class="text-lg text-gray-500 ml-2">km</span></p>
+                                    <p class="text-5xl font-bold font-title text-[#ea580c] drop-shadow-sm">${formatDistance(ytd.distance)}<span class="text-lg text-gray-400 ml-2">km</span></p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4 pt-4 border-t border-gray-800">
                                     <div>
                                         <p class="text-sm text-gray-400 font-medium mb-1">${t('stats_elevation')}</p>
-                                        <p class="text-2xl font-bold text-white">${formatElevation(ytd.elevation_gain)}<span class="text-sm text-gray-500 ml-1">m</span></p>
+                                        <p class="text-2xl font-bold text-white">${formatElevation(ytd.elevation_gain)}<span class="text-sm text-gray-400 ml-1">m</span></p>
                                     </div>
                                     <div>
                                         <p class="text-sm text-gray-400 font-medium mb-1">${t('stats_rides')}</p>
@@ -436,17 +436,17 @@ const routes = {
                                 <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
                                 </div>
-                                <h3 class="font-title font-bold text-xl text-secondary">${t('stats_alltime')} <span class="text-sm font-normal text-gray-400 block">${t('stats_alltime_sub')}</span></h3>
+                                <h3 class="font-title font-bold text-xl text-secondary">${t('stats_alltime')} <span class="text-sm font-normal text-gray-550 block">${t('stats_alltime_sub')}</span></h3>
                             </div>
                             <div class="space-y-6">
                                 <div>
                                     <p class="text-sm text-gray-500 font-medium mb-1">${t('stats_distance')}</p>
-                                    <p class="text-4xl font-bold font-title text-gray-800">${formatDistance(all.distance)}<span class="text-lg text-gray-400 ml-1">km</span></p>
+                                    <p class="text-4xl font-bold font-title text-gray-800">${formatDistance(all.distance)}<span class="text-lg text-gray-550 ml-1">km</span></p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4 pt-4 border-t border-gray-50">
                                     <div>
                                         <p class="text-sm text-gray-500 font-medium mb-1">${t('stats_elevation')}</p>
-                                        <p class="text-2xl font-bold text-gray-800">${formatElevation(all.elevation_gain)}<span class="text-sm text-gray-400 ml-1">m</span></p>
+                                        <p class="text-2xl font-bold text-gray-800">${formatElevation(all.elevation_gain)}<span class="text-sm text-gray-550 ml-1">m</span></p>
                                     </div>
                                     <div>
                                         <p class="text-sm text-gray-500 font-medium mb-1">${t('stats_rides')}</p>
@@ -485,7 +485,7 @@ const routes = {
 
             const activities = await getRecentActivities(30);
             if (!activities || activities.length === 0) {
-                canvas.parentElement.innerHTML = `<p class="text-gray-400 text-center mt-10">${t('profile_no_activities')}</p>`;
+                canvas.parentElement.innerHTML = `<p class="text-gray-550 text-center mt-10">${t('profile_no_activities')}</p>`;
                 return;
             }
 
@@ -576,9 +576,9 @@ export const router = async () => {
     if (!path) path = "/";
     const route = routes[path] || routes["/"];
     document.getElementById("app-viewport").innerHTML = await route.render() + `
-        <div id="puerto-modal" class="fixed inset-0 z-[2000] bg-black/0 backdrop-blur-none flex items-center justify-center pointer-events-none transition-all duration-300 ease-in-out">
+        <div id="puerto-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-title" class="fixed inset-0 z-[2000] bg-black/0 backdrop-blur-none flex items-center justify-center pointer-events-none transition-all duration-300 ease-in-out">
             <div id="modal-container" class="bg-white w-full h-full md:w-[95%] md:h-auto md:rounded-3xl max-w-[1200px] max-h-[100dvh] md:max-h-[90vh] overflow-y-auto relative shadow-2xl flex flex-col transform scale-95 opacity-0 transition-all duration-300 ease-out">
-                <button class="absolute top-4 right-4 w-10 h-10 md:w-8 md:h-8 flex items-center justify-center rounded-full bg-black/30 text-white hover:bg-black/50 backdrop-blur z-[2100] transition-colors" data-action="close-modal">
+                <button class="absolute top-4 right-4 w-10 h-10 md:w-8 md:h-8 flex items-center justify-center rounded-full bg-black/30 text-white hover:bg-black/50 backdrop-blur z-[2100] transition-colors" data-action="close-modal" aria-label="${t('close_modal')}">
                     <svg class="w-6 h-6 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
                 <div id="modal-body" class="flex-1 w-full flex flex-col"></div>

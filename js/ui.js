@@ -65,28 +65,28 @@ export function actualitzarInterficieUsuari() {
                             </h3>
                             <div class="grid grid-cols-2 gap-y-5 gap-x-4">
                                 <div>
-                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">${t('strava_recent_rides')}</p>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-0.5">${t('strava_recent_rides')}</p>
                                     <p class="text-white font-bold text-lg">${recent ? recent.count : 0}</p>
                                 </div>
                                 <div>
-                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">${t('strava_ytd_rides')}</p>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-0.5">${t('strava_ytd_rides')}</p>
                                     <p class="text-white font-bold text-lg">${ytd ? ytd.count : 0}</p>
                                 </div>
                                 <div>
-                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">${t('strava_recent_dist')}</p>
-                                    <p class="text-white font-bold text-lg">${recent ? (recent.distance / 1000).toFixed(0) : 0} <span class="text-xs text-gray-500">km</span></p>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-0.5">${t('strava_recent_dist')}</p>
+                                    <p class="text-white font-bold text-lg">${recent ? (recent.distance / 1000).toFixed(0) : 0} <span class="text-xs text-gray-400">km</span></p>
                                 </div>
                                 <div>
-                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">${t('strava_ytd_dist')}</p>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-0.5">${t('strava_ytd_dist')}</p>
                                     <p class="text-[#ea580c] font-bold text-lg">${ytd ? (ytd.distance / 1000).toFixed(0) : 0} <span class="text-xs">km</span></p>
                                 </div>
                                 <div>
-                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">${t('strava_recent_elev')}</p>
-                                    <p class="text-white font-bold text-lg">${recent ? recent.elevation_gain.toFixed(0) : 0} <span class="text-xs text-gray-500">m</span></p>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-0.5">${t('strava_recent_elev')}</p>
+                                    <p class="text-white font-bold text-lg">${recent ? recent.elevation_gain.toFixed(0) : 0} <span class="text-xs text-gray-400">m</span></p>
                                 </div>
                                 <div>
-                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">${t('strava_ytd_elev')}</p>
-                                    <p class="text-white font-bold text-lg">${ytd ? ytd.elevation_gain.toFixed(0) : 0} <span class="text-xs text-gray-500">m</span></p>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-0.5">${t('strava_ytd_elev')}</p>
+                                    <p class="text-white font-bold text-lg">${ytd ? ytd.elevation_gain.toFixed(0) : 0} <span class="text-xs text-gray-400">m</span></p>
                                 </div>
                             </div>
                         </div>
@@ -94,7 +94,7 @@ export function actualitzarInterficieUsuari() {
                 } else if (statsContainer) {
                     statsContainer.innerHTML = `
                         <div class="bg-[#1a1c29] border border-gray-800 rounded-xl p-6 w-full md:w-80 shadow-lg text-left flex items-center justify-center">
-                        <p class="text-xs text-gray-500">${t('strava_stats_unavailable')}</p>
+                        <p class="text-xs text-gray-400">${t('strava_stats_unavailable')}</p>
                         </div>
                     `;
                 }
@@ -125,18 +125,18 @@ export function actualitzarInterficieUsuari() {
                                     <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M4 10h3v10H4zM10 4h3v16h-3zM16 14h3v6h-3z"></path></svg>
                                 </div>
                                 <div>
-                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">${t('strava_recent_activity')}</p>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">${t('strava_recent_activity')}</p>
                                     <p class="text-white font-bold text-sm">Coll de Femenia</p>
                                 </div>
                             </div>
                             <div class="flex justify-between text-xs mb-2">
-                                <span class="text-gray-500">${t('strava_your_rank')}</span>
+                                <span class="text-gray-400">${t('strava_your_rank')}</span>
                                 <span class="text-[#ea580c] font-bold">#14 / 2,451</span>
                             </div>
                             <div class="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden mb-3">
                                 <div class="bg-[#ea580c] h-full" style="width: 85%"></div>
                             </div>
-                            <p class="text-[10px] text-gray-600 italic">${t('strava_top_percent')}</p>
+                            <p class="text-[10px] text-gray-400 italic">${t('strava_top_percent')}</p>
                         </div>
                     </div>
                 </div>`;
@@ -152,7 +152,7 @@ export const createCardHTML = (puerto, index = 0) => {
     const portDataStr = JSON.stringify(puerto).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
 
     return `
-    <div class="group relative rounded-3xl overflow-hidden shadow-lg aspect-[4/3] w-full cursor-pointer hover:shadow-2xl transition-all duration-300" data-action="view-details" data-port="${portDataStr}">
+    <div class="group relative rounded-3xl overflow-hidden shadow-lg aspect-[4/3] w-full cursor-pointer hover:shadow-2xl transition-all duration-300" data-action="view-details" data-port="${portDataStr}" role="button" tabindex="0" aria-label="${t('view_details_of')} ${nom}">
         <img src="${puerto.imatge && puerto.imatge !== 'media/ColldeSoller.jpeg' ? puerto.imatge : 'media/' + nom + '.jpg'}" alt="${nom}" onerror="this.onerror=null; this.src='media/ColldeSoller.jpeg';" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
         <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent opacity-95"></div>
         <div class="absolute bottom-0 left-0 p-5 text-white w-full">
@@ -181,7 +181,7 @@ export const createMiniCardHTML = (port, dadesStrava = null) => {
             </div>
         </div>`;
 
-    let infoStrava = `<div class="bg-gray-50 rounded-lg p-2.5 mb-3 mt-3 border border-gray-100 text-[11px] text-gray-400 italic text-center">${t('loading_strava')}</div>`;
+    let infoStrava = `<div class="bg-gray-50 rounded-lg p-2.5 mb-3 mt-3 border border-gray-100 text-[11px] text-gray-500 italic text-center">${t('loading_strava')}</div>`;
 
     if (dadesStrava) {
         infoStrava = getStravaHTML(dadesStrava.xoms?.kom, dadesStrava.xoms?.qom, dadesStrava.athlete_segment_stats?.pr_elapsed_time);
@@ -211,11 +211,14 @@ export const createMiniCardHTML = (port, dadesStrava = null) => {
 export const uiToggleDropdownFiltres = () => {
     const panel = document.getElementById('panel-filtres');
     const btn = document.getElementById('btn-filtres-dropdown');
-    panel.classList.toggle('hidden');
-    if (panel.classList.contains('hidden')) {
+    if (!panel || !btn) return;
+    const isHidden = panel.classList.toggle('hidden');
+    if (isHidden) {
         btn.classList.remove('bg-gray-100', 'border-gray-400');
+        btn.setAttribute('aria-expanded', 'false');
     } else {
         btn.classList.add('bg-gray-100', 'border-gray-400');
+        btn.setAttribute('aria-expanded', 'true');
     }
 };
 
@@ -243,7 +246,7 @@ export const uiCercaToggle = (valor, totsElsPorts) => {
         suggeriments.forEach(port => {
             const li = document.createElement('li');
             li.className = "px-4 py-2.5 hover:bg-orange-50 cursor-pointer text-sm text-gray-700 border-b border-gray-50 last:border-0 transition-colors";
-            li.innerHTML = `<span class="font-bold">${port.nom}</span> <span class="text-xs text-gray-400 ml-1">${port.municipi || ''}</span>`;
+            li.innerHTML = `<span class="font-bold">${port.nom}</span> <span class="text-xs text-gray-500 ml-1">${port.municipi || ''}</span>`;
             li.setAttribute('data-action', 'seleccionar-suggeriment');
             li.setAttribute('data-port', JSON.stringify(port));
             llista.appendChild(li);
@@ -267,6 +270,7 @@ export const uiToggleCompletatsBtn = (btn) => {
     if (isActive) {
         btn.classList.remove('text-primary', 'border-primary', 'bg-orange-50', 'shadow-[0_0_15px_rgba(252,76,2,0.25)]');
         btn.classList.add('text-gray-600', 'border-gray-200', 'bg-white');
+        btn.setAttribute('aria-pressed', 'false'); // Accessibility
         const switchEl = btn.querySelector('#toggle-completats-switch');
         if (switchEl) {
             switchEl.classList.remove('bg-primary');
@@ -276,6 +280,7 @@ export const uiToggleCompletatsBtn = (btn) => {
     } else {
         btn.classList.remove('text-gray-600', 'border-gray-200', 'text-gray-700', 'border-gray-300', 'bg-white');
         btn.classList.add('text-primary', 'border-primary', 'bg-orange-50', 'shadow-[0_0_15px_rgba(252,76,2,0.25)]');
+        btn.setAttribute('aria-pressed', 'true'); // Accessibility
         const switchEl = btn.querySelector('#toggle-completats-switch');
         if (switchEl) {
             switchEl.classList.remove('bg-gray-200');
@@ -296,9 +301,11 @@ export const uiToggleGeneric = (btn) => {
     if (esSeleccionat) {
         btn.classList.remove(...classesActiu);
         btn.classList.add(...classesInactiu);
+        btn.setAttribute('aria-pressed', 'false'); // Accessibility
     } else {
         btn.classList.remove(...classesInactiu);
         btn.classList.add(...classesActiu);
+        btn.setAttribute('aria-pressed', 'true'); // Accessibility
     }
 };
 
@@ -343,19 +350,19 @@ export const createFiltresHTML = () => `
         <!-- Search bar (displayed first on mobile using order-1, and full width) -->
         <div class="relative order-1 sm:order-2 bg-white rounded-lg shadow-sm border border-gray-200 flex items-center h-10 px-3 w-full sm:w-64 md:w-72">
             <svg class="w-4 h-4 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <input type="text" id="input-cerca" autocomplete="off" class="w-full h-full outline-none border-none ring-0 focus:ring-0 text-sm text-gray-700 placeholder-gray-400 bg-transparent" placeholder="${t('filter_search_placeholder')}">
+            <input type="text" id="input-cerca" autocomplete="off" aria-label="${t('filter_search_placeholder')}" class="w-full h-full outline-none border-none ring-0 focus:ring-0 text-sm text-gray-700 placeholder-gray-400 bg-transparent" placeholder="${t('filter_search_placeholder')}">
             
-            <button id="btn-clear-search" data-action="netejar-cerca" class="hidden ml-2 text-gray-400 hover:text-gray-600">
+            <button id="btn-clear-search" data-action="netejar-cerca" aria-label="${t('filter_clear')}" class="hidden ml-2 text-gray-400 hover:text-gray-600">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
 
-            <ul id="llista-suggeriments" class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-100 shadow-xl rounded-lg overflow-hidden hidden z-50 max-h-60 overflow-y-auto"></ul>
+            <ul id="llista-suggeriments" role="listbox" aria-label="Suggestions" class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-100 shadow-xl rounded-lg overflow-hidden hidden z-50 max-h-60 overflow-y-auto"></ul>
         </div>
 
         <!-- Buttons area (Filters & Completed side-by-side on mobile, compact on desktop) -->
         <div class="flex items-center gap-3 order-2 sm:order-1 w-full sm:w-auto">
             <div class="flex-1 sm:flex-none sm:relative">
-                <button data-action="toggle-filtres" id="btn-filtres-dropdown" class="w-full justify-center bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                <button data-action="toggle-filtres" id="btn-filtres-dropdown" aria-haspopup="true" aria-expanded="false" class="w-full justify-center bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
                     ${t('filter_filters')}
                 </button>
@@ -368,7 +375,7 @@ export const createFiltresHTML = () => `
 
                     <div class="p-5 space-y-7">
                         <div>
-                            <h4 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">${t('filter_region')}</h4>
+                            <h4 class="text-xs font-bold text-gray-500 mb-3 uppercase tracking-wider">${t('filter_region')}</h4>
                             <div class="grid grid-cols-2 gap-2">
                                 <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Tramuntana">Tramuntana</button>
                                 <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Raiguer">Raiguer</button>
@@ -380,7 +387,7 @@ export const createFiltresHTML = () => `
                         </div>
 
                         <div>
-                            <h4 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">${t('filter_category')}</h4>
+                            <h4 class="text-xs font-bold text-gray-500 mb-3 uppercase tracking-wider">${t('filter_category')}</h4>
                             <div class="grid grid-cols-4 gap-2">
                                 <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="1">1</button>
                                 <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="2">2</button>
@@ -428,7 +435,7 @@ export const createSidebarFiltresHTML = () => `
     <div class="bg-white lg:bg-transparent rounded-xl lg:rounded-none shadow-sm lg:shadow-none border border-gray-100 lg:border-none p-4 lg:p-0 flex flex-col gap-4 lg:gap-6 w-full lg:w-72 flex-shrink-0 lg:sticky lg:top-[100px]">
         
         <!-- Mobile Toggle Button (Only visible on mobile/tablet) -->
-        <button data-action="toggle-sidebar-filtres" class="lg:hidden w-full flex items-center justify-between bg-gray-50 border border-gray-100 hover:bg-gray-100 hover:border-gray-200 rounded-xl px-4 py-3 transition-all cursor-pointer">
+        <button data-action="toggle-sidebar-filtres" aria-expanded="false" aria-controls="sidebar-filtres-content" class="lg:hidden w-full flex items-center justify-between bg-gray-50 border border-gray-100 hover:bg-gray-100 hover:border-gray-200 rounded-xl px-4 py-3 transition-all cursor-pointer">
             <span class="font-bold text-gray-700 flex items-center gap-2 text-sm">
                 <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
                 ${t('filter_filters_refinements')}
@@ -448,35 +455,35 @@ export const createSidebarFiltresHTML = () => `
 
             <div class="space-y-4">
                 <details class="group border-b border-gray-100 pb-4">
-                    <summary class="text-xs font-bold text-gray-400 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                    <summary class="text-xs font-bold text-gray-500 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                         <span>${t('filter_region')}</span>
                         <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
                     <div class="grid grid-cols-2 gap-2 mt-3">
-                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Tramuntana">Tramuntana</button>
-                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Raiguer">Raiguer</button>
-                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Pla">Pla</button>
-                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Migjorn">Migjorn</button>
-                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Llevant">Llevant</button>
-                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Palma">Palma</button>
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Tramuntana" aria-pressed="false">Tramuntana</button>
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Raiguer" aria-pressed="false">Raiguer</button>
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Pla" aria-pressed="false">Pla</button>
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Migjorn" aria-pressed="false">Migjorn</button>
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Llevant" aria-pressed="false">Llevant</button>
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="comarca" data-valor="Palma" aria-pressed="false">Palma</button>
                     </div>
                 </details>
 
                 <details class="group border-b border-gray-100 pb-4">
-                    <summary class="text-xs font-bold text-gray-400 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                    <summary class="text-xs font-bold text-gray-500 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                         <span>${t('filter_category')}</span>
                         <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
                     <div class="grid grid-cols-4 gap-2 mt-3">
-                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="1">1</button>
-                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="2">2</button>
-                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="3">3</button>
-                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="4">4</button>
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="1" aria-pressed="false">1</button>
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="2" aria-pressed="false">2</button>
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="3" aria-pressed="false">3</button>
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="4" aria-pressed="false">4</button>
                     </div>
                 </details>
 
                 <details class="group border-b border-gray-100 pb-4">
-                    <summary class="text-xs font-bold text-gray-400 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                    <summary class="text-xs font-bold text-gray-500 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                         <span>${t('filter_max_dist')}</span>
                         <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
@@ -484,12 +491,12 @@ export const createSidebarFiltresHTML = () => `
                         <div class="flex justify-end items-end mb-2">
                             <span class="text-[13px] font-bold text-primary" id="val-dist">10 km</span>
                         </div>
-                        <input type="range" id="sl-distancia" data-camp="distanciaMax" data-val-id="val-dist" data-sufix=" km" min="1" max="10" value="10" step="0.5" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                        <input type="range" id="sl-distancia" data-camp="distanciaMax" data-val-id="val-dist" data-sufix=" km" min="1" max="10" value="10" step="0.5" aria-label="${t('filter_max_dist')}" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
                     </div>
                 </details>
 
                 <details class="group border-b border-gray-100 pb-4">
-                    <summary class="text-xs font-bold text-gray-400 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                    <summary class="text-xs font-bold text-gray-500 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                         <span>${t('filter_max_elev')}</span>
                         <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
@@ -497,12 +504,12 @@ export const createSidebarFiltresHTML = () => `
                         <div class="flex justify-end items-end mb-2">
                             <span class="text-[13px] font-bold text-primary" id="val-desn">1000 m</span>
                         </div>
-                        <input type="range" id="sl-desnivell" data-camp="desnivellMax" data-val-id="val-desn" data-sufix=" m" min="0" max="1000" value="1000" step="50" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                        <input type="range" id="sl-desnivell" data-camp="desnivellMax" data-val-id="val-desn" data-sufix=" m" min="0" max="1000" value="1000" step="50" aria-label="${t('filter_max_elev')}" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
                     </div>
                 </details>
 
                 <details class="group pb-2">
-                    <summary class="text-xs font-bold text-gray-400 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                    <summary class="text-xs font-bold text-gray-500 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                         <span>${t('filter_max_grad')}</span>
                         <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
@@ -510,7 +517,7 @@ export const createSidebarFiltresHTML = () => `
                         <div class="flex justify-end items-end mb-2">
                             <span class="text-[13px] font-bold text-primary" id="val-pend">< 10 %</span>
                         </div>
-                        <input type="range" id="sl-pendent" data-camp="pendentMax" data-val-id="val-pend" data-prefix="< " data-sufix=" %" min="2" max="10" value="10" step="0.5" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                        <input type="range" id="sl-pendent" data-camp="pendentMax" data-val-id="val-pend" data-prefix="< " data-sufix=" %" min="2" max="10" value="10" step="0.5" aria-label="${t('filter_max_grad')}" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
                     </div>
                 </details>
             </div>
@@ -522,24 +529,24 @@ export const createTopBarSegmentsHTML = () => `
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 flex flex-col md:flex-row gap-4 justify-between items-center w-full mb-6">
         <div class="relative flex-1 w-full md:w-auto max-w-md bg-white rounded-lg flex items-center h-10 px-3 border border-gray-200 hover:border-gray-300 transition-colors">
             <svg class="w-4 h-4 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <input type="text" id="input-cerca" autocomplete="off" class="w-full h-full outline-none border-none ring-0 focus:ring-0 text-sm text-gray-700 placeholder-gray-400 bg-transparent" placeholder="${t('filter_segments_placeholder')}">
+            <input type="text" id="input-cerca" autocomplete="off" aria-label="${t('filter_segments_placeholder')}" class="w-full h-full outline-none border-none ring-0 focus:ring-0 text-sm text-gray-700 placeholder-gray-400 bg-transparent" placeholder="${t('filter_segments_placeholder')}">
             
-            <button id="btn-clear-search" data-action="netejar-cerca" class="hidden ml-2 text-gray-400 hover:text-gray-600">
+            <button id="btn-clear-search" data-action="netejar-cerca" aria-label="${t('filter_clear')}" class="hidden ml-2 text-gray-400 hover:text-gray-600">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
 
-            <ul id="llista-suggeriments" class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-100 shadow-xl rounded-lg overflow-hidden hidden z-50 max-h-60 overflow-y-auto"></ul>
+            <ul id="llista-suggeriments" role="listbox" aria-label="Suggestions" class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-100 shadow-xl rounded-lg overflow-hidden hidden z-50 max-h-60 overflow-y-auto"></ul>
         </div>
         
         <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
-            <button id="btn-completats" data-action="toggle-completats" class="flex-1 md:flex-none justify-center bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">
+            <button id="btn-completats" data-action="toggle-completats" aria-pressed="false" class="flex-1 md:flex-none justify-center bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">
                 <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 ${t('filter_completed')}
             </button>
 
             <div class="relative flex-1 md:flex-none flex items-center">
                 <svg class="w-4 h-4 text-gray-500 absolute left-3 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h18M6 12h12M9 20h6"></path></svg>
-                <select id="select-ordenacio" class="w-full md:w-auto bg-white border border-gray-200 hover:border-gray-300 rounded-lg h-10 pl-9 pr-3 text-sm font-medium text-gray-700 transition-colors focus:ring-0 outline-none cursor-pointer">
+                <select id="select-ordenacio" aria-label="${t('filter_refine')}" class="w-full md:w-auto bg-white border border-gray-200 hover:border-gray-300 rounded-lg h-10 pl-9 pr-3 text-sm font-medium text-gray-700 transition-colors focus:ring-0 outline-none cursor-pointer">
                     <option value="">${t('filter_default_order')}</option>
                     <option value="dist_asc">${t('filter_dist_asc')}</option>
                     <option value="dist_desc">${t('filter_dist_desc')}</option>
@@ -549,13 +556,13 @@ export const createTopBarSegmentsHTML = () => `
             </div>
             
             <div class="hidden sm:flex bg-gray-50 rounded-lg p-1 gap-1 border border-gray-100">
-                <button data-action="view-size-2" class="w-8 h-8 rounded-md flex items-center justify-center text-gray-400 hover:text-gray-800 transition-colors hover:bg-white view-toggle-btn" title="2 Columns">
+                <button data-action="view-size-2" aria-label="2 columns view" class="w-8 h-8 rounded-md flex items-center justify-center text-gray-400 hover:text-gray-800 transition-colors hover:bg-white view-toggle-btn" title="2 Columns">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M4 4h7v16H4zm9 0h7v16h-7z"></path></svg>
                 </button>
-                <button data-action="view-size-3" class="w-8 h-8 rounded-md flex items-center justify-center text-gray-400 hover:text-gray-800 transition-colors hover:bg-white view-toggle-btn active-view shadow-sm bg-white" title="3 Columns">
+                <button data-action="view-size-3" aria-label="3 columns view" class="w-8 h-8 rounded-md flex items-center justify-center text-gray-400 hover:text-gray-800 transition-colors hover:bg-white view-toggle-btn active-view shadow-sm bg-white" title="3 Columns">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M4 4h4v16H4zm6 0h4v16h-4zm6 0h4v16h-4z"></path></svg>
                 </button>
-                <button data-action="view-size-4" class="w-8 h-8 rounded-md flex items-center justify-center text-gray-400 hover:text-gray-800 transition-colors hover:bg-white view-toggle-btn" title="4 Columns">
+                <button data-action="view-size-4" aria-label="4 columns view" class="w-8 h-8 rounded-md flex items-center justify-center text-gray-400 hover:text-gray-800 transition-colors hover:bg-white view-toggle-btn" title="4 Columns">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M4 4h3v16H4zm5 0h3v16H9zm5 0h3v16h-3zm5 0h3v16h-3z"></path></svg>
                 </button>
             </div>

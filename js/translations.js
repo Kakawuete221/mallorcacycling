@@ -13,6 +13,7 @@ export const loadTranslations = async (lang) => {
         activeTranslations = await response.json();
         currentLang = lang;
         localStorage.setItem('preferredLanguage', lang);
+        document.documentElement.lang = lang; // Accessibility: Update language attribute dynamically
     } catch (error) {
         console.error("Error carregant les traduccions:", error);
         activeTranslations = {};
@@ -38,6 +39,12 @@ export const translatePage = () => {
         const key = el.dataset.i18nPlaceholder;
         const text = t(key);
         if (text) el.placeholder = text;
+    });
+    // Accessibility: Support translating elements with dynamic aria-labels
+    document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+        const key = el.dataset.i18nAriaLabel;
+        const text = t(key);
+        if (text) el.setAttribute('aria-label', text);
     });
 };
 

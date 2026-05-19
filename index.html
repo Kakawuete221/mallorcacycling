@@ -46,10 +46,12 @@
 </head>
 
 <body class="font-body text-gray-800 bg-[#fcfcfc] overflow-y-auto">
+    <a href="#app-viewport" class="skip-link" data-i18n="skip_to_content">Skip to main content</a>
+
     <nav
         class="nav-container fixed top-0 w-full h-[80px] bg-white/95 backdrop-blur z-[1000] shadow-sm flex items-center">
         <div class="flex justify-between items-center w-full h-full mx-auto px-5 relative">
-            <a href="/" data-link class="flex items-center gap-3">
+            <a href="/" data-link class="flex items-center gap-3" aria-label="Mallorca Cycling Home">
                 <h2 class="text-primary italic font-title text-2xl font-bold">Mallorca Cycling</h2>
             </a>
             <button
@@ -72,7 +74,8 @@
                         data-link data-i18n="nav_segments">Segments</a></li>
                 <li class="flex justify-center items-center relative">
                     <div class="relative inline-block text-left" id="language-dropdown-wrapper">
-                        <button id="language-dropdown-btn"
+                        <button id="language-dropdown-btn" aria-haspopup="listbox" aria-expanded="false"
+                            aria-label="Select language" data-i18n-aria-label="select_language"
                             class="bg-gray-50/50 hover:bg-gray-50 border border-gray-200/80 hover:border-[#ea580c]/50 text-gray-700 hover:text-primary font-bold text-xs uppercase rounded-xl px-3 py-1.5 transition-all duration-200 flex items-center gap-1.5 shadow-sm outline-none focus:ring-2 focus:ring-primary/20">
                             <span id="current-lang-label">EN</span>
                             <svg id="language-dropdown-chevron"
@@ -82,18 +85,18 @@
                                     d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
-                        <ul id="language-dropdown-menu"
+                        <ul id="language-dropdown-menu" role="listbox" aria-label="Languages"
                             class="absolute left-1/2 -translate-x-1/2 mt-2 w-24 bg-white/95 backdrop-blur-md border border-gray-100 rounded-xl shadow-xl overflow-hidden hidden z-[2000] flex flex-col p-1">
-                            <li>
-                                <button data-lang="en"
+                            <li role="presentation">
+                                <button data-lang="en" role="option" aria-selected="false"
                                     class="w-full text-left px-3 py-2 text-xs font-bold text-gray-700 hover:bg-orange-55 hover:text-primary rounded-lg transition-colors select-none">EN</button>
                             </li>
-                            <li>
-                                <button data-lang="es"
+                            <li role="presentation">
+                                <button data-lang="es" role="option" aria-selected="false"
                                     class="w-full text-left px-3 py-2 text-xs font-bold text-gray-700 hover:bg-orange-55 hover:text-primary rounded-lg transition-colors select-none">ES</button>
                             </li>
-                            <li>
-                                <button data-lang="ca"
+                            <li role="presentation">
+                                <button data-lang="ca" role="option" aria-selected="false"
                                     class="w-full text-left px-3 py-2 text-xs font-bold text-gray-700 hover:bg-orange-55 hover:text-primary rounded-lg transition-colors select-none">CA</button>
                             </li>
                         </ul>
@@ -148,14 +151,14 @@
                         your personal records and
                         compare efforts.</p>
                     <div class="flex gap-4">
-                        <a href="https://www.strava.com" target="_blank" rel="noopener noreferrer"
+                        <a href="https://www.strava.com" target="_blank" rel="noopener noreferrer" aria-label="Strava"
                             class="w-10 h-10 rounded-full bg-gray-800 hover:bg-[#fc4c02] flex items-center justify-center transition-colors">
                             <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
                                 <path
                                     d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169" />
                             </svg>
                         </a>
-                        <a href="#"
+                        <a href="#" aria-label="Email Contact"
                             class="w-10 h-10 rounded-full bg-gray-800 hover:bg-[#ea580c] flex items-center justify-center transition-colors">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -169,14 +172,14 @@
 
             <!-- Bottom Bar -->
             <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-gray-500 text-sm" data-i18n="footer_copyright">
+                <p class="text-gray-400 text-sm" data-i18n="footer_copyright">
                     &copy; 2026 Mallorca Cycling. Developed by Pau Antich &amp; Jaume Ribas. Academic Project UIB -
                     Tecnologia Multimedia.
                 </p>
                 <div class="flex items-center gap-6 text-sm">
-                    <a href="#" class="text-gray-500 hover:text-white transition-colors"
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors"
                         data-i18n="footer_privacy">Privacy Policy</a>
-                    <a href="#" class="text-gray-500 hover:text-white transition-colors" data-i18n="footer_terms">Terms
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors" data-i18n="footer_terms">Terms
                         of Service</a>
                 </div>
             </div>
