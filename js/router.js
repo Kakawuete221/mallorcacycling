@@ -15,6 +15,46 @@ const getPuertos = async () => {
     } catch (e) { return []; }
 };
 
+const mapHikingRoutes = (hikingData) => {
+    if (!hikingData || !hikingData.itemListElement) return [];
+    return hikingData.itemListElement.map(item => {
+        const props = item.additionalProperty || [];
+        const getProp = (name) => props.find(p => p.name === name)?.value || '';
+        
+        const polyline = item.itinerary.geo.line;
+        let lat = 0, lng = 0;
+        if (polyline) {
+            const coords = polyline.trim().split(/\s+/)[0].split(',');
+            if (coords.length >= 2) {
+                lat = parseFloat(coords[0]);
+                lng = parseFloat(coords[1]);
+            }
+        }
+        
+        return {
+            id: item['@id'].split('/').pop(),
+            nom: item.name,
+            descripcio: item.description,
+            distancia_km: parseFloat(getProp('Distance').replace(' km', '')),
+            elevacion_m: parseFloat(getProp('Elevation gain').replace(' m', '')),
+            categoria: getProp('Technical difficulty'),
+            polyline: polyline,
+            lat: lat,
+            lng: lng,
+            imatge: 'media/mallorcaCyclingLogo.webp', // fallback genèric
+            type: 'hiking'
+        }
+    });
+};
+
+const getHikingRoutes = async () => {
+    try {
+        const r = await fetch('data/rutasmallorca_provisional.json');
+        const data = await r.json();
+        return mapHikingRoutes(data);
+    } catch (e) { return []; }
+};
+
 const routes = {
     "/": {
         title: () => `${t('nav_home')} | Mallorca Cycling`,
@@ -163,7 +203,7 @@ const routes = {
             <section class="relative h-[calc(100vh-80px)] w-full overflow-hidden bg-gray-100">
                 <div id="map" class="absolute top-0 left-0 w-full h-full z-0"></div>
 
-                <div class="absolute top-4 left-4 right-4 sm:right-auto z-40 flex flex-col gap-3">
+                <div class="absolute top-4 left-4 right-4 sm:right-auto z-40 flex flex-col gap-3 items-start">
                     ${createFiltresHTML()}
 
                     <div class="flex flex-col bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden w-10 mt-1">
@@ -221,8 +261,8 @@ const routes = {
             const all = stats?.all_ride_totals || {};
 
             let trophies = [];
-            if (appState.totsElsPorts.length > 0) {
-                appState.totsElsPorts.forEach(port => {
+            if (appState.cyclingRoutes.length > 0) {
+                appState.cyclingRoutes.forEach(port => {
                     const cache = localStorage.getItem('segment_' + port.id);
                     if (cache) {
                         try {
@@ -590,10 +630,15 @@ export const router = async () => {
     actualitzarInterficieUsuari();
     document.title = typeof route.title === 'function' ? route.title() : route.title;
 
-    // Assegurem que appState.totsElsPorts estigui inicialitzat
-    if (appState.totsElsPorts.length === 0) {
+    // Assegurem que appState estigui inicialitzat
+    if (appState.cyclingRoutes.length === 0) {
         const portsJSON = await getPuertos();
-        appState.totsElsPorts = portsJSON.map(p => assignarComarcaAdministrativa(p));
+        appState.cyclingRoutes = portsJSON.map(p => { p.type = 'cycling'; return assignarComarcaAdministrativa(p); });
+        
+        const hikingJSON = await getHikingRoutes();
+        appState.hikingRoutes = hikingJSON.map(p => assignarComarcaAdministrativa(p));
+        
+        appState.totsElsPorts = appState.mode === 'cycling' ? appState.cyclingRoutes : appState.hikingRoutes;
     }
 
     const footer = document.querySelector('footer');

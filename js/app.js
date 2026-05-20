@@ -10,14 +10,83 @@ import {
 import { showModal, closeModal } from './modal.js';
 import {
     uiToggleDropdownFiltres, uiCercaToggle, uiNetejarCercaUnica,
-    uiToggleCompletatsBtn, uiToggleGeneric, uiActualitzarSlider, uiNetejarFiltres, createMiniCardHTML, createCardHTML
+    uiToggleCompletatsBtn, uiToggleGeneric, uiActualitzarSlider, uiNetejarFiltres,
+    createMiniCardHTML, createCardHTML, createSidebarFiltresHTML, createTopBarSegmentsHTML
 } from './ui.js';
 import { router } from './router.js';
 import { setLanguage, getActiveLanguage, translatePage, initTranslations } from './translations.js';
 
 // Estat global de l'aplicació
 export const appState = {
-    totsElsPorts: []
+    mode: 'cycling', // 'cycling' o 'hiking'
+    cyclingRoutes: [],
+    hikingRoutes: [],
+    totsElsPorts: [] // llista activa actual
+};
+
+// Canviar de mode
+export const setMode = (newMode) => {
+    if (appState.mode === newMode) return;
+    appState.mode = newMode;
+    // Toggle body class to allow CSS theme overrides for hiking
+    try { document.body.classList.toggle('hiking-mode', newMode === 'hiking'); } catch (e) { /* ignore if DOM not ready */ }
+    
+    appState.totsElsPorts = appState.mode === 'cycling' ? appState.cyclingRoutes : appState.hikingRoutes;
+    
+    // Actualitzar estils dels botons
+    const btnCyclings = document.querySelectorAll('.mode-cycling-btn');
+    const btnHikings = document.querySelectorAll('.mode-hiking-btn');
+    
+    btnCyclings.forEach(btnCycling => {
+        if (newMode === 'cycling') {
+            btnCycling.classList.replace('text-gray-500', 'text-[#fc4c02]');
+            btnCycling.classList.replace('hover:text-gray-700', 'shadow-sm');
+            btnCycling.classList.add('bg-white');
+        } else {
+            btnCycling.classList.replace('text-[#fc4c02]', 'text-gray-500');
+            btnCycling.classList.remove('bg-white', 'shadow-sm');
+            btnCycling.classList.add('hover:text-gray-700');
+        }
+    });
+
+    btnHikings.forEach(btnHiking => {
+        if (newMode === 'cycling') {
+            btnHiking.classList.replace('text-[#2563eb]', 'text-gray-500');
+            btnHiking.classList.remove('bg-white', 'shadow-sm');
+            btnHiking.classList.add('hover:text-gray-700');
+        } else {
+            btnHiking.classList.replace('text-gray-500', 'text-[#2563eb]');
+            btnHiking.classList.replace('hover:text-gray-700', 'shadow-sm');
+            btnHiking.classList.add('bg-white');
+        }
+    });
+    
+    // Ocultar/Mostrar filtres específics de ciclisme/senderisme
+    document.querySelectorAll('[data-filter-group="cycling"]').forEach(el => {
+        el.style.display = newMode === 'cycling' ? '' : 'none';
+    });
+    document.querySelectorAll('[data-filter-group="hiking"]').forEach(el => {
+        el.style.display = newMode === 'hiking' ? '' : 'none';
+    });
+
+    // Si estem a /segments, re-renderitzar sidebar + topbar perquè
+    // contenen HTML estàtic generat amb l'estat anterior del mode
+    const currentPath = window.location.hash.slice(1) || '/';
+    if (currentPath === '/segments') {
+        const sidebarEl = document.querySelector('.sidebar-filtres-wrapper');
+        if (sidebarEl) sidebarEl.outerHTML = createSidebarFiltresHTML();
+        const topbarEl = document.querySelector('.topbar-segments-wrapper');
+        if (topbarEl) topbarEl.outerHTML = createTopBarSegmentsHTML();
+    }
+
+    // Reiniciar filtres i executar
+    resetFiltres();
+    executarFiltre();
+
+    // Si estem al mapa, el recentram
+    if (currentPath === "/map") {
+        resetearVistaMapa();
+    }
 };
 
 export const executarFiltre = () => {
@@ -115,6 +184,9 @@ document.addEventListener('click', async (e) => {
     const action = target.dataset.action;
 
     switch (action) {
+        case 'set-mode':
+            setMode(target.dataset.mode);
+            break;
         case 'login-strava':
             loginWithStrava();
             break;
@@ -240,7 +312,7 @@ document.addEventListener('input', (e) => {
             eliminarMarcadorCerca();
             debouncedExecutarFiltre(250);
         }
-    } else if (e.target.classList.contains('custom-slider')) {
+    } else if (['sl-distancia', 'sl-desnivell', 'sl-pendent'].includes(e.target.id)) {
         const target = e.target;
         uiActualitzarSlider(
             target.value,
@@ -258,7 +330,7 @@ document.addEventListener('click', (e) => {
     const btn = document.getElementById('language-dropdown-btn');
     const menu = document.getElementById('language-dropdown-menu');
     const chevron = document.getElementById('language-dropdown-chevron');
-    
+
     if (btn && menu) {
         if (btn.contains(e.target)) {
             const isHidden = menu.classList.toggle('hidden');
@@ -368,6 +440,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     const label = document.getElementById('current-lang-label');
     if (label) label.textContent = activeLang.toUpperCase();
     translatePage();
+
+    // Botons de Mode Ciclisme / Senderisme
+    const modeCyclingBtn = document.getElementById('mode-cycling-btn');
+    if (modeCyclingBtn) {
+        modeCyclingBtn.addEventListener('click', () => setMode('cycling'));
+    }
+    const modeHikingBtn = document.getElementById('mode-hiking-btn');
+    if (modeHikingBtn) {
+        modeHikingBtn.addEventListener('click', () => setMode('hiking'));
+    }
 
     window.addEventListener("hashchange", router);
     router();

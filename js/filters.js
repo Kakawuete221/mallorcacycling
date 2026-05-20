@@ -13,6 +13,8 @@ const estatFiltres = {
 
 export const aplicarFiltres = (ports) => {
     const filtrats = ports.filter(port => {
+        const isHiking = port.type === 'hiking';
+
         if (estatFiltres.cerca) {
             const text = estatFiltres.cerca.toLowerCase();
             if (!(port.nom || "").toLowerCase().includes(text)) return false;
@@ -24,19 +26,34 @@ export const aplicarFiltres = (ports) => {
         }
 
         if (estatFiltres.categoria.length > 0) {
-            if (!estatFiltres.categoria.includes(port.categoria.toString())) return false;
+            const cat = (port.categoria || "").toString();
+            if (!estatFiltres.categoria.includes(cat)) return false;
         }
 
-        if (parseFloat(port.distancia) > estatFiltres.distanciaMax) return false;
-        if (parseFloat(port.desnivell) > estatFiltres.desnivellMax) return false;
-        if (parseFloat(port.pendent_mitja) > estatFiltres.pendentMax) return false;
+        // Distància: cycling usa "distancia", hiking usa "distancia_km"
+        const dist = isHiking
+            ? parseFloat(port.distancia_km)
+            : parseFloat(port.distancia);
+        if (!isNaN(dist) && dist > estatFiltres.distanciaMax) return false;
+
+        // Elevació: cycling usa "desnivell", hiking usa "elevacion_m"
+        const desn = isHiking
+            ? parseFloat(port.elevacion_m)
+            : parseFloat(port.desnivell);
+        if (!isNaN(desn) && desn > estatFiltres.desnivellMax) return false;
+
+        // Pendent només per ciclisme
+        if (!isHiking) {
+            const pend = parseFloat(port.pendent_mitja);
+            if (!isNaN(pend) && pend > estatFiltres.pendentMax) return false;
+        }
 
         if (estatFiltres.nomesCompletats) {
             const cached = JSON.parse(localStorage.getItem(`segment_${port.id}`));
             if (!cached?.data?.athlete_segment_stats?.pr_elapsed_time) return false;
         }
 
-        return true; 
+        return true;
     });
 
     if (estatFiltres.ordenacio) {

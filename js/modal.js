@@ -13,6 +13,55 @@ export const showModal = (puerto) => {
     triggeringElement = document.activeElement;
     modal.removeAttribute('aria-hidden');
 
+    const isHiking = puerto.type === 'hiking';
+    const accentColor = isHiking ? 'text-[#2563eb]' : 'text-primary';
+    const accentColorHex = isHiking ? '#2563eb' : '#fc4c02';
+
+    let gridHTML = '';
+    if (isHiking) {
+        gridHTML = `
+            <div class="flex flex-col items-center justify-center text-center px-2">
+                <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">${t('distance')}</span>
+                <span class="text-xl font-title font-bold text-gray-800">${puerto.distancia_km || puerto.distancia} km</span>
+            </div>
+            <div class="flex flex-col items-center justify-center text-center px-2 pt-4 md:pt-0">
+                <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">${t('elevation')}</span>
+                <span class="text-xl font-title font-bold text-gray-800">${puerto.elevacion_m || puerto.desnivell} m</span>
+            </div>
+            <div class="flex flex-col items-center justify-center text-center px-2 pt-4 md:pt-0 lg:pt-0">
+                <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Dificultat</span>
+                <span class="text-xl font-title font-bold ${accentColor}">${puerto.categoria}</span>
+            </div>
+        `;
+    } else {
+        gridHTML = `
+            <div class="flex flex-col items-center justify-center text-center px-2">
+                <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">${t('distance')}</span>
+                <span class="text-xl font-title font-bold text-gray-800">${puerto.distancia} km</span>
+            </div>
+            <div class="flex flex-col items-center justify-center text-center px-2 pt-4 md:pt-0">
+                <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">${t('avg_grad')}</span>
+                <span class="text-xl font-title font-bold text-gray-800">${puerto.pendent_mitja}%</span>
+            </div>
+            <div class="flex flex-col items-center justify-center text-center px-2 pt-4 md:pt-0">
+                <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">${t('max_grad')}</span>
+                <span class="text-xl font-title font-bold text-gray-800">${puerto.pendent_max}%</span>
+            </div>
+            <div class="flex flex-col items-center justify-center text-center px-2 pt-4 lg:pt-0">
+                <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">${t('elevation')}</span>
+                <span class="text-xl font-title font-bold text-gray-800">${puerto.desnivell} m</span>
+            </div>
+            <div class="flex flex-col items-center justify-center text-center px-2 pt-4 lg:pt-0">
+                <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">${t('max_elev')}</span>
+                <span class="text-xl font-title font-bold text-gray-800">${puerto.altitud_max} m</span>
+            </div>
+            <div class="flex flex-col items-center justify-center text-center px-2 pt-4 lg:pt-0">
+                <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">${t('filter_category')}</span>
+                <span class="text-xl font-title font-bold text-primary">${puerto.categoria}</span>
+            </div>
+        `;
+    }
+
     modalBody.innerHTML = `
         <div class="flex flex-col w-full p-0 flex-1">
             <!-- Hero Header -->
@@ -22,7 +71,7 @@ export const showModal = (puerto) => {
                 <div class="relative z-10 w-full">
                     <h2 id="modal-title" class="text-3xl md:text-5xl font-title font-bold drop-shadow-lg m-0 leading-tight">${puerto.nom}</h2>
                     <div class="flex items-center gap-2 mt-3 opacity-90">
-                        <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <svg class="w-4 h-4 ${accentColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         <p id="modal-municipi" class="text-sm md:text-base m-0 font-medium tracking-wide">${t('finding_location')}</p>
                     </div>
                 </div>
@@ -30,31 +79,8 @@ export const showModal = (puerto) => {
 
             <div class="flex flex-col gap-8 p-5 md:p-8 w-full">
                 <!-- Unified Horizontal Key Stats Card -->
-                <div class="order-1 md:order-none bg-gray-50/50 rounded-3xl p-6 border border-gray-100/80 shadow-sm grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 divide-y md:divide-y-0 lg:divide-x divide-gray-200/50">
-                    <div class="flex flex-col items-center justify-center text-center px-2">
-                        <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">${t('distance')}</span>
-                        <span class="text-xl font-title font-bold text-gray-800">${puerto.distancia} km</span>
-                    </div>
-                    <div class="flex flex-col items-center justify-center text-center px-2 pt-4 md:pt-0">
-                        <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">${t('avg_grad')}</span>
-                        <span class="text-xl font-title font-bold text-gray-800">${puerto.pendent_mitja}%</span>
-                    </div>
-                    <div class="flex flex-col items-center justify-center text-center px-2 pt-4 md:pt-0">
-                        <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">${t('max_grad')}</span>
-                        <span class="text-xl font-title font-bold text-gray-800">${puerto.pendent_max}%</span>
-                    </div>
-                    <div class="flex flex-col items-center justify-center text-center px-2 pt-4 lg:pt-0">
-                        <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">${t('elevation')}</span>
-                        <span class="text-xl font-title font-bold text-gray-800">${puerto.desnivell} m</span>
-                    </div>
-                    <div class="flex flex-col items-center justify-center text-center px-2 pt-4 lg:pt-0">
-                        <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">${t('max_elev')}</span>
-                        <span class="text-xl font-title font-bold text-gray-800">${puerto.altitud_max} m</span>
-                    </div>
-                    <div class="flex flex-col items-center justify-center text-center px-2 pt-4 lg:pt-0">
-                        <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">${t('filter_category')}</span>
-                        <span class="text-xl font-title font-bold text-primary">${puerto.categoria}</span>
-                    </div>
+                <div class="order-1 md:order-none bg-gray-50/50 rounded-3xl p-6 border border-gray-100/80 shadow-sm grid grid-cols-2 md:grid-cols-3 lg:grid-cols-${isHiking ? '3' : '6'} gap-6 divide-y md:divide-y-0 lg:divide-x divide-gray-200/50">
+                    ${gridHTML}
                 </div>
 
                 <!-- Map & Elevation -->
@@ -81,6 +107,7 @@ export const showModal = (puerto) => {
                 </div>
 
                 <!-- Strava Performance Section -->
+                ${isHiking ? '' : `
                 <div class="order-4 md:order-none bg-[#11131f] text-white rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between shadow-2xl relative overflow-hidden gap-8 border border-gray-800/40">
                     <!-- Radial brand decoration gradient matching Home page -->
                     <div class="absolute inset-0 opacity-20 pointer-events-none" style="background: radial-gradient(circle at 100% 50%, #fc4c02 0%, transparent 60%);"></div>
@@ -140,6 +167,7 @@ export const showModal = (puerto) => {
                         </div>
                     </div>
                 </div>
+                `}
 
                 <!-- Nearby Places Section with clean line se                 <div class="order-5 md:order-none w-full border-t border-gray-100/80 pt-8">
                     <!-- Section Header -->
@@ -177,7 +205,7 @@ export const showModal = (puerto) => {
                             <!-- Left side: GPS label and coordinates capsule -->
                             <div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
                                 <div class="flex items-center gap-2">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                                    <span class="w-1.5 h-1.5 rounded-full ${isHiking ? 'bg-[#2563eb]' : 'bg-primary'} animate-pulse"></span>
                                     <span class="text-xs font-bold text-gray-550 uppercase tracking-wider">${t('start_coordinates')}</span>
                                 </div>
                                 
@@ -188,7 +216,7 @@ export const showModal = (puerto) => {
                                     </div>
                                     
                                     <!-- Minimal copy action -->
-                                    <button onclick="navigator.clipboard.writeText('${puerto.lat}, ${puerto.lng}').then(() => { const b=this; const prev=b.innerHTML; b.innerHTML='✓'; b.classList.add('!text-emerald-500','!bg-emerald-50','!border-emerald-200'); setTimeout(()=>{b.innerHTML=prev; b.classList.remove('!text-emerald-500','!bg-emerald-50','!border-emerald-200')},2000); })" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-550 hover:text-gray-700 w-10 h-10 rounded-xl flex items-center justify-center cursor-pointer transition-all shadow-sm shrink-0 active:scale-95" title="${t('copy_coords')}">'copy_coords')}">
+                                    <button onclick="navigator.clipboard.writeText('${puerto.lat}, ${puerto.lng}').then(() => { const b=this; const prev=b.innerHTML; b.innerHTML='✓'; b.classList.add('!text-emerald-500','!bg-emerald-50','!border-emerald-200'); setTimeout(()=>{b.innerHTML=prev; b.classList.remove('!text-emerald-500','!bg-emerald-50','!border-emerald-200')},2000); })" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-550 hover:text-gray-700 w-10 h-10 rounded-xl flex items-center justify-center cursor-pointer transition-all shadow-sm shrink-0 active:scale-95" title="${t('copy_coords')}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
                                     </button>
                                 </div>
@@ -196,7 +224,7 @@ export const showModal = (puerto) => {
                             
                             <!-- Right side: Premium button, full width on mobile, auto on sm -->
                             <div class="w-full sm:w-auto">
-                                <a href="https://www.google.com/maps/dir/?api=1&destination=${puerto.lat},${puerto.lng}&travelmode=bicycling" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-primary hover:bg-orange-600 text-white font-bold h-11 sm:h-10 px-5 rounded-xl text-xs tracking-wider uppercase transition-all shadow-sm hover:shadow-[0_4px_12px_rgba(252,76,2,0.25)] no-underline select-none">
+                                <a href="https://www.google.com/maps/dir/?api=1&destination=${puerto.lat},${puerto.lng}&travelmode=${isHiking ? 'walking' : 'bicycling'}" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 ${isHiking ? 'bg-[#2563eb] hover:bg-blue-700 hover:shadow-[0_4px_12px_rgba(37,99,235,0.25)]' : 'bg-primary hover:bg-orange-600 hover:shadow-[0_4px_12px_rgba(252,76,2,0.25)]'} text-white font-bold h-11 sm:h-10 px-5 rounded-xl text-xs tracking-wider uppercase transition-all shadow-sm no-underline select-none">
                                     ${t('get_directions')}
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                                 </a>

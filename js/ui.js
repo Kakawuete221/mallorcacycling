@@ -3,6 +3,26 @@ import { isStravaSessionValid, getAthleteStats } from './stravaApi.js';
 import { formatTime } from './utils.js';
 import { setValorSlider } from './filters.js';
 import { t } from './translations.js';
+import { appState } from './app.js';
+
+export const createModeToggleHTML = () => {
+    const isHiking = appState.mode === 'hiking';
+    const cycBtnClass = isHiking ? 'text-gray-500 hover:text-gray-700' : 'bg-white shadow-sm text-[#fc4c02]';
+    const hikBtnClass = isHiking ? 'bg-white shadow-sm text-[#2563eb]' : 'text-gray-500 hover:text-gray-700';
+
+    return `
+        <div class="bg-gray-100 p-1 rounded-xl flex items-center shadow-inner gap-1 w-fit">
+            <button id="mode-cycling-btn" data-action="set-mode" data-mode="cycling" title="${t('mode_cycling') || 'Mode Ciclisme'}" class="mode-cycling-btn p-1.5 px-3 rounded-lg transition-colors font-bold text-xs uppercase flex items-center gap-1.5 ${cycBtnClass}" aria-label="Mode Ciclisme">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM5 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5zm5.8-10l2.4-2.4.8.8c1.3 1.3 3 2.1 5.1 2.1V9c-1.5 0-2.7-.6-3.6-1.5l-1.9-1.9c-.5-.4-1-.6-1.6-.6s-1.1.2-1.4.6L7.8 8.4c-.4.4-.6.9-.6 1.4 0 .6.2 1.1.6 1.4L11 14v5h2v-6.2l-2.2-2.3zM19 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5z"/></svg>
+                <span data-i18n="mode_cycling" class="hidden sm:inline">${t('mode_cycling') || 'Cycling'}</span>
+            </button>
+            <button id="mode-hiking-btn" data-action="set-mode" data-mode="hiking" title="${t('mode_hiking') || 'Mode Senderisme'}" class="mode-hiking-btn p-1.5 px-3 rounded-lg transition-colors font-bold text-xs uppercase flex items-center gap-1.5 ${hikBtnClass}" aria-label="Mode Senderisme">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/><path d="M7 6c-1.1 0-2 .9-2 2v4c0 1.1.9 2 2 2h1v-8H7z"/></svg>
+                <span data-i18n="mode_hiking" class="hidden sm:inline">${t('mode_hiking') || 'Hiking'}</span>
+            </button>
+        </div>
+    `;
+};
 
 export function actualitzarInterficieUsuari() {
     const userStr = localStorage.getItem('strava_athlete');
@@ -151,6 +171,10 @@ export const createCardHTML = (puerto, index = 0) => {
     const desn = puerto.desnivell || puerto.elevacion_m;
     const portDataStr = JSON.stringify(puerto).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
 
+    const isHiking = puerto.type === 'hiking';
+    const accentColor = isHiking ? 'text-[#2563eb]' : 'text-[#ea580c]';
+    const catText = isHiking ? puerto.categoria : `Cat. ${puerto.categoria}`;
+
     return `
     <div class="group relative rounded-3xl overflow-hidden shadow-lg aspect-[4/3] w-full cursor-pointer hover:shadow-2xl transition-all duration-300" data-action="view-details" data-port="${portDataStr}" role="button" tabindex="0" aria-label="${t('view_details_of')} ${nom}">
         <img src="${puerto.imatge && puerto.imatge !== 'media/ColldeSoller.jpeg' ? puerto.imatge : 'media/' + nom + '.jpg'}" alt="${nom}" onerror="this.onerror=null; this.src='media/ColldeSoller.jpeg';" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
@@ -158,9 +182,9 @@ export const createCardHTML = (puerto, index = 0) => {
         <div class="absolute bottom-0 left-0 p-5 text-white w-full">
             <h3 class="text-xl md:text-2xl font-title font-bold mb-3 leading-tight pr-4">${nom}</h3>
             <div class="flex flex-wrap items-center gap-4 text-xs md:text-sm font-medium text-gray-300 tracking-wide">
-                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg> ${dist} km</span>
-                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11l7-7 7 7M5 19l7-7 7 7"></path></svg> ${desn} m</span>
-                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#ea580c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Cat. ${puerto.categoria}</span>
+                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 ${accentColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg> ${dist} km</span>
+                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 ${accentColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11l7-7 7 7M5 19l7-7 7 7"></path></svg> ${desn} m</span>
+                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 ${accentColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> ${catText}</span>
             </div>
         </div>
     </div>`;
@@ -181,27 +205,35 @@ export const createMiniCardHTML = (port, dadesStrava = null) => {
             </div>
         </div>`;
 
-    let infoStrava = `<div class="bg-gray-50 rounded-lg p-2.5 mb-3 mt-3 border border-gray-100 text-[11px] text-gray-500 italic text-center">${t('loading_strava')}</div>`;
+    const isHiking = port.type === 'hiking';
+    let infoStrava = isHiking ? '' : `<div class="bg-gray-50 rounded-lg p-2.5 mb-3 mt-3 border border-gray-100 text-[11px] text-gray-500 italic text-center">${t('loading_strava')}</div>`;
 
-    if (dadesStrava) {
-        infoStrava = getStravaHTML(dadesStrava.xoms?.kom, dadesStrava.xoms?.qom, dadesStrava.athlete_segment_stats?.pr_elapsed_time);
-    } else {
-        const cached = JSON.parse(localStorage.getItem(`segment_${port.id}`));
-        if (cached && cached.data) {
-            infoStrava = getStravaHTML(cached.data.xoms?.kom, cached.data.xoms?.qom, cached.data.athlete_segment_stats?.pr_elapsed_time);
+    if (!isHiking) {
+        if (dadesStrava) {
+            infoStrava = getStravaHTML(dadesStrava.xoms?.kom, dadesStrava.xoms?.qom, dadesStrava.athlete_segment_stats?.pr_elapsed_time);
+        } else {
+            const cached = JSON.parse(localStorage.getItem(`segment_${port.id}`));
+            if (cached && cached.data) {
+                infoStrava = getStravaHTML(cached.data.xoms?.kom, cached.data.xoms?.qom, cached.data.athlete_segment_stats?.pr_elapsed_time);
+            }
         }
     }
 
     const portDataStr = JSON.stringify(port).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+    const dist = port.distancia || port.distancia_km;
+    const desn = port.desnivell || port.elevacion_m;
+    const middleStat = isHiking ? port.categoria : `${port.pendent_mitja || 0}%`;
+    const btnColor = isHiking ? 'bg-[#2563eb] hover:bg-blue-700' : 'bg-primary hover:bg-orange-600';
+
     return `
         <div class="font-body p-2 min-w-[260px]">
             <h3 class="m-0 text-base font-title font-bold text-gray-900 tracking-tight leading-tight pr-4">${port.nom}</h3>
             <div class="flex items-center gap-1.5 text-[12px] text-gray-500 mt-1.5 font-medium">
                 <svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM5 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5zm5.8-10l2.4-2.4.8.8c1.3 1.3 3 2.1 5.1 2.1V9c-1.5 0-2.7-.6-3.6-1.5l-1.9-1.9c-.5-.4-1-.6-1.6-.6s-1.1.2-1.4.6L7.8 8.4c-.4.4-.6.9-.6 1.4 0 .6.2 1.1.6 1.4L11 14v5h1.5v-5.5l-1.7-3zM19 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5z"></path></svg>
-                <span>${port.distancia}km · ${port.pendent_mitja}% · ${port.desnivell}m</span>
+                <span>${dist}km · ${middleStat} · ${desn}m</span>
             </div>
             ${infoStrava}
-            <button data-action="view-details" data-port="${portDataStr}" class="w-full bg-primary hover:bg-orange-600 text-white border-none py-2.5 px-4 rounded-lg text-sm font-bold cursor-pointer transition-colors shadow-sm flex justify-center items-center gap-2">
+            <button data-action="view-details" data-port="${portDataStr}" class="w-full ${btnColor} text-white border-none py-2.5 px-4 rounded-lg text-sm font-bold cursor-pointer transition-colors shadow-sm flex justify-center items-center gap-2 mt-3">
                 ${t('view_details')}
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             </button>
@@ -265,10 +297,17 @@ export const uiNetejarCercaUnica = () => {
 };
 
 export const uiToggleCompletatsBtn = (btn) => {
-    const isActive = btn.classList.contains('text-primary');
+    const isActive = btn.classList.contains('text-primary') || btn.classList.contains('text-[#2563eb]');
+    const isHiking = appState.mode === 'hiking';
+
+    const activeText = isHiking ? 'text-[#2563eb]' : 'text-primary';
+    const activeBorder = isHiking ? 'border-[#2563eb]' : 'border-primary';
+    const activeBg = isHiking ? 'bg-sky-50' : 'bg-orange-50';
+    const activeShadow = isHiking ? 'shadow-[0_0_15px_rgba(37,99,235,0.15)]' : 'shadow-[0_0_15px_rgba(252,76,2,0.25)]';
+    const activeSwitchBg = isHiking ? '#2563eb' : 'var(--accent)';
 
     if (isActive) {
-        btn.classList.remove('text-primary', 'border-primary', 'bg-orange-50', 'shadow-[0_0_15px_rgba(252,76,2,0.25)]');
+        btn.classList.remove(activeText, activeBorder, activeBg, activeShadow);
         btn.classList.add('text-gray-600', 'border-gray-200', 'bg-white');
         btn.setAttribute('aria-pressed', 'false'); // Accessibility
         const switchEl = btn.querySelector('#toggle-completats-switch');
@@ -276,15 +315,22 @@ export const uiToggleCompletatsBtn = (btn) => {
             switchEl.classList.remove('bg-primary');
             switchEl.classList.add('bg-gray-200');
             switchEl.firstElementChild.classList.remove('translate-x-4');
+            // inline style fallback for hiking switch
+            if (isHiking) switchEl.style.backgroundColor = '';
         }
     } else {
         btn.classList.remove('text-gray-600', 'border-gray-200', 'text-gray-700', 'border-gray-300', 'bg-white');
-        btn.classList.add('text-primary', 'border-primary', 'bg-orange-50', 'shadow-[0_0_15px_rgba(252,76,2,0.25)]');
+        btn.classList.add(activeText, activeBorder, activeBg, activeShadow);
         btn.setAttribute('aria-pressed', 'true'); // Accessibility
         const switchEl = btn.querySelector('#toggle-completats-switch');
         if (switchEl) {
             switchEl.classList.remove('bg-gray-200');
-            switchEl.classList.add('bg-primary');
+            // prefer class for cycling, inline color for hiking
+            if (isHiking) {
+                switchEl.style.backgroundColor = activeSwitchBg;
+            } else {
+                switchEl.classList.add('bg-primary');
+            }
             switchEl.firstElementChild.classList.add('translate-x-4');
         }
     }
@@ -293,19 +339,22 @@ export const uiToggleCompletatsBtn = (btn) => {
 };
 
 export const uiToggleGeneric = (btn) => {
+    const isHiking = appState.mode === 'hiking';
     const classesInactiu = ['bg-gray-50', 'text-gray-600', 'border-gray-200'];
-    const classesActiu = ['bg-orange-50', 'text-primary', 'border-primary', 'shadow-[0_0_15px_rgba(252,76,2,0.25)]'];
+    const classesActiu = isHiking
+        ? ['bg-sky-50', 'text-[#2563eb]', 'border-[#2563eb]', 'is-selected']
+        : ['bg-orange-50', 'text-primary', 'border-primary', 'is-selected'];
 
-    const esSeleccionat = btn.classList.contains('bg-orange-50');
+    const esSeleccionat = btn.classList.contains('is-selected');
 
     if (esSeleccionat) {
         btn.classList.remove(...classesActiu);
         btn.classList.add(...classesInactiu);
-        btn.setAttribute('aria-pressed', 'false'); // Accessibility
+        btn.setAttribute('aria-pressed', 'false');
     } else {
         btn.classList.remove(...classesInactiu);
         btn.classList.add(...classesActiu);
-        btn.setAttribute('aria-pressed', 'true'); // Accessibility
+        btn.setAttribute('aria-pressed', 'true');
     }
 };
 
@@ -327,8 +376,13 @@ export const uiNetejarFiltres = () => {
     }
 
     document.querySelectorAll('.pindola').forEach(btn => {
-        btn.classList.remove('bg-orange-50', 'text-primary', 'border-primary', 'shadow-[0_0_15px_rgba(252,76,2,0.25)]');
+        btn.classList.remove(
+            'bg-orange-50', 'text-primary', 'border-primary',
+            'bg-sky-50', 'text-[#2563eb]', 'border-[#2563eb]',
+            'is-selected'
+        );
         btn.classList.add('bg-gray-50', 'text-gray-600', 'border-gray-200');
+        btn.setAttribute('aria-pressed', 'false');
     });
 
     const sliders = [
@@ -348,15 +402,18 @@ export const uiNetejarFiltres = () => {
 export const createFiltresHTML = () => `
     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto relative sm:static">
         <!-- Search bar (displayed first on mobile using order-1, and full width) -->
-        <div class="relative order-1 sm:order-2 bg-white rounded-lg shadow-sm border border-gray-200 flex items-center h-10 px-3 w-full sm:w-64 md:w-72">
-            <svg class="w-4 h-4 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <input type="text" id="input-cerca" autocomplete="off" aria-label="${t('filter_search_placeholder')}" class="w-full h-full outline-none border-none ring-0 focus:ring-0 text-sm text-gray-700 placeholder-gray-400 bg-transparent" placeholder="${t('filter_search_placeholder')}">
-            
-            <button id="btn-clear-search" data-action="netejar-cerca" aria-label="${t('filter_clear')}" class="hidden ml-2 text-gray-400 hover:text-gray-600">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
+        <div class="flex items-center gap-3 order-1 sm:order-2 w-full sm:w-auto">
+            <div class="relative bg-white rounded-lg shadow-sm border border-gray-200 flex items-center h-10 px-3 w-full sm:w-64 md:w-72">
+                <svg class="w-4 h-4 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <input type="text" id="input-cerca" autocomplete="off" aria-label="${t('filter_search_placeholder')}" class="w-full h-full outline-none border-none ring-0 focus:ring-0 text-sm text-gray-700 placeholder-gray-400 bg-transparent" placeholder="${t('filter_search_placeholder')}">
+                
+                <button id="btn-clear-search" data-action="netejar-cerca" aria-label="${t('filter_clear')}" class="hidden ml-2 text-gray-400 hover:text-gray-600">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
 
-            <ul id="llista-suggeriments" role="listbox" aria-label="Suggestions" class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-100 shadow-xl rounded-lg overflow-hidden hidden z-50 max-h-60 overflow-y-auto"></ul>
+                <ul id="llista-suggeriments" role="listbox" aria-label="Suggestions" class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-100 shadow-xl rounded-lg overflow-hidden hidden z-50 max-h-60 overflow-y-auto"></ul>
+            </div>
+            ${createModeToggleHTML()}
         </div>
 
         <!-- Buttons area (Filters & Completed side-by-side on mobile, compact on desktop) -->
@@ -373,11 +430,11 @@ export const createFiltresHTML = () => `
                         <button data-action="netejar-filtres" class="text-xs font-semibold text-primary hover:text-orange-700">${t('filter_clear')}</button>
                     </div>
 
-                    <div class="p-5 space-y-7">
-                        <div>
+                    <div class="p-5 space-y-5">
+                        <div data-filter-group="cycling" style="display: ${appState.mode === 'cycling' ? '' : 'none'}">
                             <h4 class="text-xs font-bold text-gray-500 mb-3 uppercase tracking-wider">${t('filter_region')}</h4>
                             <div class="grid grid-cols-2 gap-2">
-                                <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Tramuntana">Tramuntana</button>
+                                <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-150" data-action="toggle-generic" data-camp="comarca" data-valor="Tramuntana">Tramuntana</button>
                                 <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Raiguer">Raiguer</button>
                                 <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Pla">Pla</button>
                                 <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200" data-action="toggle-generic" data-camp="comarca" data-valor="Migjorn">Migjorn</button>
@@ -386,7 +443,7 @@ export const createFiltresHTML = () => `
                             </div>
                         </div>
 
-                        <div>
+                        <div data-filter-group="cycling">
                             <h4 class="text-xs font-bold text-gray-500 mb-3 uppercase tracking-wider">${t('filter_category')}</h4>
                             <div class="grid grid-cols-4 gap-2">
                                 <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="1">1</button>
@@ -396,28 +453,37 @@ export const createFiltresHTML = () => `
                             </div>
                         </div>
 
+                        <div data-filter-group="hiking" style="display: ${appState.mode === 'hiking' ? '' : 'none'}">
+                            <h4 class="text-xs font-bold text-gray-500 mb-3 uppercase tracking-wider">Dificultat</h4>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-150 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="Easy">Easy</button>
+                                <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-150 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="Moderate">Moderate</button>
+                                <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-150 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="Exigent">Hard</button>
+                            </div>
+                        </div>
+
                         <div>
                             <div class="flex justify-between items-end mb-2">
                                 <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">${t('filter_max_dist')}</h4>
-                                <span class="text-[13px] font-bold text-primary" id="val-dist">10 km</span>
+                                <span class="text-[13px] font-bold" style="color: var(--accent-thumb)" id="val-dist">10 km</span>
                             </div>
-                            <input type="range" id="sl-distancia" data-camp="distanciaMax" data-val-id="val-dist" data-sufix=" km" min="1" max="10" value="10" step="0.5" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                            <input type="range" id="sl-distancia" data-camp="distanciaMax" data-val-id="val-dist" data-sufix=" km" min="1" max="10" value="10" step="0.5" style="accent-color: var(--accent-thumb)" class="w-full h-2 bg-gray-200 rounded-full cursor-pointer appearance-none">
                         </div>
 
                         <div>
                             <div class="flex justify-between items-end mb-2">
                                 <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">${t('filter_max_elev')}</h4>
-                                <span class="text-[13px] font-bold text-primary" id="val-desn">1000 m</span>
+                                <span class="text-[13px] font-bold" style="color: var(--accent-thumb)" id="val-desn">1000 m</span>
                             </div>
-                            <input type="range" id="sl-desnivell" data-camp="desnivellMax" data-val-id="val-desn" data-sufix=" m" min="0" max="1000" value="1000" step="50" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                            <input type="range" id="sl-desnivell" data-camp="desnivellMax" data-val-id="val-desn" data-sufix=" m" min="0" max="1000" value="1000" step="50" style="accent-color: var(--accent-thumb)" class="w-full h-2 bg-gray-200 rounded-full cursor-pointer appearance-none">
                         </div>
 
-                        <div>
+                        <div data-filter-group="cycling">
                             <div class="flex justify-between items-end mb-2">
                                 <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">${t('filter_max_grad')}</h4>
-                                <span class="text-[13px] font-bold text-primary" id="val-pend">< 10 %</span>
+                                <span class="text-[13px] font-bold" style="color: var(--accent-thumb)" id="val-pend">< 10 %</span>
                             </div>
-                            <input type="range" id="sl-pendent" data-camp="pendentMax" data-val-id="val-pend" data-prefix="< " data-sufix=" %" min="2" max="10" value="10" step="0.5" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                            <input type="range" id="sl-pendent" data-camp="pendentMax" data-val-id="val-pend" data-prefix="< " data-sufix=" %" min="2" max="10" value="10" step="0.5" style="accent-color: var(--accent-thumb)" class="w-full h-2 bg-gray-200 rounded-full cursor-pointer appearance-none">
                         </div>
                     </div>
                 </div>
@@ -432,7 +498,7 @@ export const createFiltresHTML = () => `
 `;
 
 export const createSidebarFiltresHTML = () => `
-    <div class="bg-white lg:bg-transparent rounded-xl lg:rounded-none shadow-sm lg:shadow-none border border-gray-100 lg:border-none p-4 lg:p-0 flex flex-col gap-4 lg:gap-6 w-full lg:w-72 flex-shrink-0 lg:sticky lg:top-[100px]">
+    <div class="sidebar-filtres-wrapper bg-white lg:bg-transparent rounded-xl lg:rounded-none shadow-sm lg:shadow-none border border-gray-100 lg:border-none p-4 lg:p-0 flex flex-col gap-4 lg:gap-6 w-full lg:w-72 flex-shrink-0 lg:sticky lg:top-[100px]">
         
         <!-- Mobile Toggle Button (Only visible on mobile/tablet) -->
         <button data-action="toggle-sidebar-filtres" aria-expanded="false" aria-controls="sidebar-filtres-content" class="lg:hidden w-full flex items-center justify-between bg-gray-50 border border-gray-100 hover:bg-gray-100 hover:border-gray-200 rounded-xl px-4 py-3 transition-all cursor-pointer">
@@ -454,7 +520,7 @@ export const createSidebarFiltresHTML = () => `
             </div>
 
             <div class="space-y-4">
-                <details class="group border-b border-gray-100 pb-4">
+                <details class="group border-b border-gray-100 pb-4" data-filter-group="cycling" style="display: ${appState.mode === 'cycling' ? '' : 'none'}">
                     <summary class="text-xs font-bold text-gray-500 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                         <span>${t('filter_region')}</span>
                         <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -469,7 +535,7 @@ export const createSidebarFiltresHTML = () => `
                     </div>
                 </details>
 
-                <details class="group border-b border-gray-100 pb-4">
+                <details class="group border-b border-gray-100 pb-4" data-filter-group="cycling">
                     <summary class="text-xs font-bold text-gray-500 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                         <span>${t('filter_category')}</span>
                         <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -482,6 +548,18 @@ export const createSidebarFiltresHTML = () => `
                     </div>
                 </details>
 
+                <details class="group border-b border-gray-100 pb-4" data-filter-group="hiking" style="display: ${appState.mode === 'hiking' ? '' : 'none'}" open>
+                    <summary class="text-xs font-bold text-gray-500 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                        <span>Dificultat</span>
+                        <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <div class="grid grid-cols-3 gap-2 mt-3">
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-150 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="Easy" aria-pressed="false">Easy</button>
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-150 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="Moderate" aria-pressed="false">Moderate</button>
+                        <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-150 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="Exigent" aria-pressed="false">Hard</button>
+                    </div>
+                </details>
+
                 <details class="group border-b border-gray-100 pb-4">
                     <summary class="text-xs font-bold text-gray-500 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                         <span>${t('filter_max_dist')}</span>
@@ -489,9 +567,9 @@ export const createSidebarFiltresHTML = () => `
                     </summary>
                     <div class="mt-3">
                         <div class="flex justify-end items-end mb-2">
-                            <span class="text-[13px] font-bold text-primary" id="val-dist">10 km</span>
+                            <span class="text-[13px] font-bold" style="color: var(--accent-thumb)" id="val-dist">10 km</span>
                         </div>
-                        <input type="range" id="sl-distancia" data-camp="distanciaMax" data-val-id="val-dist" data-sufix=" km" min="1" max="10" value="10" step="0.5" aria-label="${t('filter_max_dist')}" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                        <input type="range" id="sl-distancia" data-camp="distanciaMax" data-val-id="val-dist" data-sufix=" km" min="1" max="10" value="10" step="0.5" aria-label="${t('filter_max_dist')}" style="accent-color: var(--accent-thumb)" class="w-full h-2 bg-gray-200 rounded-full cursor-pointer appearance-none">
                     </div>
                 </details>
 
@@ -502,22 +580,22 @@ export const createSidebarFiltresHTML = () => `
                     </summary>
                     <div class="mt-3">
                         <div class="flex justify-end items-end mb-2">
-                            <span class="text-[13px] font-bold text-primary" id="val-desn">1000 m</span>
+                            <span class="text-[13px] font-bold" style="color: var(--accent-thumb)" id="val-desn">1000 m</span>
                         </div>
-                        <input type="range" id="sl-desnivell" data-camp="desnivellMax" data-val-id="val-desn" data-sufix=" m" min="0" max="1000" value="1000" step="50" aria-label="${t('filter_max_elev')}" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                        <input type="range" id="sl-desnivell" data-camp="desnivellMax" data-val-id="val-desn" data-sufix=" m" min="0" max="1000" value="1000" step="50" aria-label="${t('filter_max_elev')}" style="accent-color: var(--accent-thumb)" class="w-full h-2 bg-gray-200 rounded-full cursor-pointer appearance-none">
                     </div>
                 </details>
 
-                <details class="group pb-2">
+                <details class="group pb-2" data-filter-group="cycling">
                     <summary class="text-xs font-bold text-gray-500 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                         <span>${t('filter_max_grad')}</span>
                         <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
                     <div class="mt-3">
                         <div class="flex justify-end items-end mb-2">
-                            <span class="text-[13px] font-bold text-primary" id="val-pend">< 10 %</span>
+                            <span class="text-[13px] font-bold" style="color: var(--accent-thumb)" id="val-pend">< 10 %</span>
                         </div>
-                        <input type="range" id="sl-pendent" data-camp="pendentMax" data-val-id="val-pend" data-prefix="< " data-sufix=" %" min="2" max="10" value="10" step="0.5" aria-label="${t('filter_max_grad')}" class="custom-slider w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                        <input type="range" id="sl-pendent" data-camp="pendentMax" data-val-id="val-pend" data-prefix="< " data-sufix=" %" min="2" max="10" value="10" step="0.5" aria-label="${t('filter_max_grad')}" style="accent-color: var(--accent-thumb)" class="w-full h-2 bg-gray-200 rounded-full cursor-pointer appearance-none">
                     </div>
                 </details>
             </div>
@@ -526,20 +604,23 @@ export const createSidebarFiltresHTML = () => `
 `;
 
 export const createTopBarSegmentsHTML = () => `
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 flex flex-col md:flex-row gap-4 justify-between items-center w-full mb-6">
-        <div class="relative flex-1 w-full md:w-auto max-w-md bg-white rounded-lg flex items-center h-10 px-3 border border-gray-200 hover:border-gray-300 transition-colors">
-            <svg class="w-4 h-4 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <input type="text" id="input-cerca" autocomplete="off" aria-label="${t('filter_segments_placeholder')}" class="w-full h-full outline-none border-none ring-0 focus:ring-0 text-sm text-gray-700 placeholder-gray-400 bg-transparent" placeholder="${t('filter_segments_placeholder')}">
-            
-            <button id="btn-clear-search" data-action="netejar-cerca" aria-label="${t('filter_clear')}" class="hidden ml-2 text-gray-400 hover:text-gray-600">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
+    <div class="topbar-segments-wrapper bg-white rounded-xl shadow-sm border border-gray-100 p-3 flex flex-col md:flex-row gap-4 justify-between items-center w-full mb-6">
+        <div class="flex items-center gap-3 w-full md:w-auto">
+            <div class="relative flex-1 w-full md:w-auto max-w-md bg-white rounded-lg flex items-center h-10 px-3 border border-gray-200 hover:border-gray-300 transition-colors">
+                <svg class="w-4 h-4 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <input type="text" id="input-cerca" autocomplete="off" aria-label="${t('filter_segments_placeholder')}" class="w-full h-full outline-none border-none ring-0 focus:ring-0 text-sm text-gray-700 placeholder-gray-400 bg-transparent" placeholder="${t('filter_segments_placeholder')}">
+                
+                <button id="btn-clear-search" data-action="netejar-cerca" aria-label="${t('filter_clear')}" class="hidden ml-2 text-gray-400 hover:text-gray-600">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
 
-            <ul id="llista-suggeriments" role="listbox" aria-label="Suggestions" class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-100 shadow-xl rounded-lg overflow-hidden hidden z-50 max-h-60 overflow-y-auto"></ul>
+                <ul id="llista-suggeriments" role="listbox" aria-label="Suggestions" class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-100 shadow-xl rounded-lg overflow-hidden hidden z-50 max-h-60 overflow-y-auto"></ul>
+            </div>
+            ${createModeToggleHTML()}
         </div>
         
         <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
-            <button id="btn-completats" data-action="toggle-completats" aria-pressed="false" class="flex-1 md:flex-none justify-center bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">
+            <button data-filter-group="cycling" id="btn-completats" data-action="toggle-completats" aria-pressed="false" class="flex-1 md:flex-none justify-center bg-white rounded-lg shadow-sm border border-gray-200 h-10 px-4 flex items-center gap-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors" style="display: ${appState.mode === 'cycling' ? '' : 'none'}">
                 <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 ${t('filter_completed')}
             </button>

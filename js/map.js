@@ -124,15 +124,30 @@ export function pintarPorts(ports, onSegmentClickCallback) {
         if (!port.polyline) return;
 
         if (!polylinesCache.has(port.id)) {
-            // És la primera vegada que processem aquest port, creem els objectes de mapa
-            const path = google.maps.geometry.encoding.decodePath(port.polyline);
+            const isHiking = port.type === 'hiking';
+            
+            let path;
+            if (isHiking) {
+                // Parse "lng,lat" or "lat,lng" string from Schema.org (usually lat,lng in this JSON as per user info)
+                const points = port.polyline.trim().split(/\s+/);
+                path = points.map(p => {
+                    const coords = p.split(',');
+                    // Assuming lat,lng format
+                    return { lat: parseFloat(coords[0]), lng: parseFloat(coords[1]) };
+                });
+            } else {
+                path = google.maps.geometry.encoding.decodePath(port.polyline);
+            }
+            
+            const colorRuta = isHiking ? '#2563eb' : '#fc4c02';
+            const colorHover = isHiking ? '#1d4ed8' : '#d94302';
 
             const borderPolyline = new google.maps.Polyline({
                 path: path, geodesic: true, strokeColor: '#FFFFFF', strokeOpacity: 0.9, strokeWeight: 6, zIndex: 1, map: map
             });
 
             const mainPolyline = new google.maps.Polyline({
-                path: path, geodesic: true, strokeColor: '#fc4c02', strokeOpacity: 0.7, strokeWeight: 3, zIndex: 2, map: map
+                path: path, geodesic: true, strokeColor: colorRuta, strokeOpacity: 0.7, strokeWeight: 3, zIndex: 2, map: map
             });
 
             const startMarker = new google.maps.Marker({
@@ -140,18 +155,18 @@ export function pintarPorts(ports, onSegmentClickCallback) {
                 map: map,
                 title: port.nom,
                 icon: {
-                    path: google.maps.SymbolPath.CIRCLE, scale: 4, fillColor: '#fc4c02', fillOpacity: 1, strokeColor: '#ffffff', strokeWeight: 2
+                    path: google.maps.SymbolPath.CIRCLE, scale: 4, fillColor: colorRuta, fillOpacity: 1, strokeColor: '#ffffff', strokeWeight: 2
                 },
                 zIndex: 3
             });
 
             const ferHover = () => {
-                mainPolyline.setOptions({ strokeOpacity: 1.0, strokeColor: '#d94302', zIndex: 10 });
+                mainPolyline.setOptions({ strokeOpacity: 1.0, strokeColor: colorHover, zIndex: 10 });
                 map.setOptions({ draggableCursor: 'pointer' });
             };
 
             const treureHover = () => {
-                mainPolyline.setOptions({ strokeOpacity: 0.7, strokeColor: '#fc4c02', zIndex: 2 });
+                mainPolyline.setOptions({ strokeOpacity: 0.7, strokeColor: colorRuta, zIndex: 2 });
                 map.setOptions({ draggableCursor: '' });
             };
 

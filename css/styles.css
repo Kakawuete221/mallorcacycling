@@ -117,3 +117,55 @@ body:has(.map-section) footer {
 .skip-link:focus-visible {
     top: 0;
 }
+
+/* Custom range slider styling with accent color variable */
+:root {
+    --accent: #fc4c02; /* default orange */
+    --accent-strong: rgba(252,76,2,0.18);
+    --accent-thumb: #fc4c02;
+}
+
+/* Hiking mode overrides (set on body.hiking-mode) */
+body.hiking-mode {
+    --accent: #2563eb; /* blue */
+    --accent-strong: rgba(37,99,235,0.14);
+    --accent-thumb: #2563eb;
+}
+
+.custom-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    background: linear-gradient(90deg, #e6e6e6 var(--pos, 50%), #e6e6e6 0%);
+    border-radius: 999px;
+    outline: none;
+}
+.custom-slider::-webkit-slider-runnable-track {
+    height: 8px;
+    background: #e6e6e6;
+    border-radius: 999px;
+}
+.custom-slider::-moz-range-track {
+    height: 8px;
+    background: #e6e6e6;
+    border-radius: 999px;
+}
+.custom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--accent-thumb);
+    border-radius: 999px;
+    border: 4px solid #fff;
+    box-shadow: 0 4px 12px var(--accent-strong);
+    margin-top: -5px;
+}
+.custom-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: var(--accent-thumb);
+    border-radius: 999px;
+    border: 4px solid #fff;
+    box-shadow: 0 4px 12px var(--accent-strong);
+}
