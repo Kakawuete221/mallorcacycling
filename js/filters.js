@@ -4,7 +4,7 @@ const estatFiltres = {
     cerca: "",
     comarca: [],
     categoria: [],
-    distanciaMax: 10,
+    distanciaMax: 15,
     desnivellMax: 1000,
     pendentMax: 10,
     nomesCompletats: false,
@@ -58,10 +58,10 @@ export const aplicarFiltres = (ports) => {
 
     if (estatFiltres.ordenacio) {
         filtrats.sort((a, b) => {
-            const distA = parseFloat(a.distancia) || 0;
-            const distB = parseFloat(b.distancia) || 0;
-            const gradA = parseFloat(a.pendent_mitja) || 0;
-            const gradB = parseFloat(b.pendent_mitja) || 0;
+            const distA = parseFloat(a.distancia || a.distancia_km) || 0;
+            const distB = parseFloat(b.distancia || b.distancia_km) || 0;
+            const gradA = parseFloat(a.pendent_mitja || a.elevacion_m || a.desnivell) || 0;
+            const gradB = parseFloat(b.pendent_mitja || b.elevacion_m || b.desnivell) || 0;
 
             switch (estatFiltres.ordenacio) {
                 case "dist_asc": return distA - distB;
@@ -91,7 +91,7 @@ export const resetFiltres = () => {
     estatFiltres.cerca = "";
     estatFiltres.comarca = [];
     estatFiltres.categoria = [];
-    estatFiltres.distanciaMax = 10;
+    estatFiltres.distanciaMax = 15;
     estatFiltres.desnivellMax = 1000;
     estatFiltres.pendentMax = 10;
     estatFiltres.nomesCompletats = false;

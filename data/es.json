@@ -31,6 +31,8 @@
     "filter_dist_desc": "Distancia (Descendente)",
     "filter_grad_asc": "Pendiente (Ascendente)",
     "filter_grad_desc": "Pendiente (Descendente)",
+    "filter_elev_asc": "Desnivel (Ascendente)",
+    "filter_elev_desc": "Desnivel (Descendente)",
     "view_details": "Ver Detalles",
     "loading_strava": "Cargando datos de Strava...",
     "your_pr": "Tu PR",

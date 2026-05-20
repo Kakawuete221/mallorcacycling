@@ -62,6 +62,17 @@ export const assignarComarcaAdministrativa = (port) => {
     return port;
 };
 
+export const decodificarRuta = (port) => {
+    if (port.type === 'hiking') {
+        const points = port.polyline.trim().split(/\s+/);
+        return points.map(p => {
+            const coords = p.split(',');
+            return { lat: parseFloat(coords[0]), lng: parseFloat(coords[1]) };
+        });
+    }
+    return google.maps.geometry.encoding.decodePath(port.polyline);
+};
+
 export function initGoogleMap() {
     polylinesCache.clear(); // IMPORTANT: Si es recarrega la pàgina del mapa, hem de buidar la memòria cau perquè els objectes pertanyen al mapa anterior (ja destruït)
 
@@ -125,19 +136,7 @@ export function pintarPorts(ports, onSegmentClickCallback) {
 
         if (!polylinesCache.has(port.id)) {
             const isHiking = port.type === 'hiking';
-            
-            let path;
-            if (isHiking) {
-                // Parse "lng,lat" or "lat,lng" string from Schema.org (usually lat,lng in this JSON as per user info)
-                const points = port.polyline.trim().split(/\s+/);
-                path = points.map(p => {
-                    const coords = p.split(',');
-                    // Assuming lat,lng format
-                    return { lat: parseFloat(coords[0]), lng: parseFloat(coords[1]) };
-                });
-            } else {
-                path = google.maps.geometry.encoding.decodePath(port.polyline);
-            }
+            const path = decodificarRuta(port);
             
             const colorRuta = isHiking ? '#2563eb' : '#fc4c02';
             const colorHover = isHiking ? '#1d4ed8' : '#d94302';
@@ -224,7 +223,7 @@ export const dibuixarMiniMapa = (puerto) => {
 
     const miniMap = modalMap;
 
-    fullSegmentPath = google.maps.geometry.encoding.decodePath(puerto.polyline);
+    fullSegmentPath = decodificarRuta(puerto);
 
     new google.maps.Polyline({
         path: fullSegmentPath, strokeColor: '#BDC3C7', strokeOpacity: 0.7, strokeWeight: 5, map: miniMap, zIndex: 1
@@ -421,9 +420,9 @@ export const cercarServeisProp = (lat, lng) => {
     });
 };
 
-export const dibuixarPerfilElevacio = (polyline) => {
+export const dibuixarPerfilElevacio = (port) => {
     const elevationService = new google.maps.ElevationService();
-    const path = google.maps.geometry.encoding.decodePath(polyline);
+    const path = decodificarRuta(port);
 
     elevationService.getElevationAlongPath({ path, samples: 100 }, (results, status) => {
         if (status === "OK") {

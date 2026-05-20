@@ -224,12 +224,15 @@ export const createMiniCardHTML = (port, dadesStrava = null) => {
     const desn = port.desnivell || port.elevacion_m;
     const middleStat = isHiking ? port.categoria : `${port.pendent_mitja || 0}%`;
     const btnColor = isHiking ? 'bg-[#2563eb] hover:bg-blue-700' : 'bg-primary hover:bg-orange-600';
+    const typeIconPath = isHiking 
+        ? '<path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/><path d="M7 6c-1.1 0-2 .9-2 2v4c0 1.1.9 2 2 2h1v-8H7z"/>'
+        : '<path d="M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM5 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5zm5.8-10l2.4-2.4.8.8c1.3 1.3 3 2.1 5.1 2.1V9c-1.5 0-2.7-.6-3.6-1.5l-1.9-1.9c-.5-.4-1-.6-1.6-.6s-1.1.2-1.4.6L7.8 8.4c-.4.4-.6.9-.6 1.4 0 .6.2 1.1.6 1.4L11 14v5h1.5v-5.5l-1.7-3zM19 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5z"></path>';
 
     return `
         <div class="font-body p-2 min-w-[260px]">
             <h3 class="m-0 text-base font-title font-bold text-gray-900 tracking-tight leading-tight pr-4">${port.nom}</h3>
             <div class="flex items-center gap-1.5 text-[12px] text-gray-500 mt-1.5 font-medium">
-                <svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM5 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5zm5.8-10l2.4-2.4.8.8c1.3 1.3 3 2.1 5.1 2.1V9c-1.5 0-2.7-.6-3.6-1.5l-1.9-1.9c-.5-.4-1-.6-1.6-.6s-1.1.2-1.4.6L7.8 8.4c-.4.4-.6.9-.6 1.4 0 .6.2 1.1.6 1.4L11 14v5h1.5v-5.5l-1.7-3zM19 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5z"></path></svg>
+                <svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">${typeIconPath}</svg>
                 <span>${dist}km · ${middleStat} · ${desn}m</span>
             </div>
             ${infoStrava}
@@ -386,7 +389,7 @@ export const uiNetejarFiltres = () => {
     });
 
     const sliders = [
-        { id: 'sl-distancia', valId: 'val-dist', default: "10", unit: " km" },
+        { id: 'sl-distancia', valId: 'val-dist', default: "15", unit: " km" },
         { id: 'sl-desnivell', valId: 'val-desn', default: "1000", unit: " m" },
         { id: 'sl-pendent', valId: 'val-pend', default: "10", unit: " %", prefix: "< " }
     ];
@@ -443,7 +446,7 @@ export const createFiltresHTML = () => `
                             </div>
                         </div>
 
-                        <div data-filter-group="cycling">
+                        <div data-filter-group="cycling" style="display: ${appState.mode === 'cycling' ? '' : 'none'}">
                             <h4 class="text-xs font-bold text-gray-500 mb-3 uppercase tracking-wider">${t('filter_category')}</h4>
                             <div class="grid grid-cols-4 gap-2">
                                 <button class="pindola py-2 rounded-lg text-[13px] font-medium bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200 text-center" data-action="toggle-generic" data-camp="categoria" data-valor="1">1</button>
@@ -465,9 +468,9 @@ export const createFiltresHTML = () => `
                         <div>
                             <div class="flex justify-between items-end mb-2">
                                 <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">${t('filter_max_dist')}</h4>
-                                <span class="text-[13px] font-bold" style="color: var(--accent-thumb)" id="val-dist">10 km</span>
+                                <span class="text-[13px] font-bold" style="color: var(--accent-thumb)" id="val-dist">15 km</span>
                             </div>
-                            <input type="range" id="sl-distancia" data-camp="distanciaMax" data-val-id="val-dist" data-sufix=" km" min="1" max="10" value="10" step="0.5" style="accent-color: var(--accent-thumb)" class="w-full h-2 bg-gray-200 rounded-full cursor-pointer appearance-none">
+                            <input type="range" id="sl-distancia" data-camp="distanciaMax" data-val-id="val-dist" data-sufix=" km" min="1" max="15" value="15" step="0.5" style="accent-color: var(--accent-thumb)" class="w-full h-2 bg-gray-200 rounded-full cursor-pointer appearance-none">
                         </div>
 
                         <div>
@@ -478,7 +481,7 @@ export const createFiltresHTML = () => `
                             <input type="range" id="sl-desnivell" data-camp="desnivellMax" data-val-id="val-desn" data-sufix=" m" min="0" max="1000" value="1000" step="50" style="accent-color: var(--accent-thumb)" class="w-full h-2 bg-gray-200 rounded-full cursor-pointer appearance-none">
                         </div>
 
-                        <div data-filter-group="cycling">
+                        <div data-filter-group="cycling" style="display: ${appState.mode === 'cycling' ? '' : 'none'}">
                             <div class="flex justify-between items-end mb-2">
                                 <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide">${t('filter_max_grad')}</h4>
                                 <span class="text-[13px] font-bold" style="color: var(--accent-thumb)" id="val-pend">< 10 %</span>
@@ -535,7 +538,7 @@ export const createSidebarFiltresHTML = () => `
                     </div>
                 </details>
 
-                <details class="group border-b border-gray-100 pb-4" data-filter-group="cycling">
+                <details class="group border-b border-gray-100 pb-4" data-filter-group="cycling" style="display: ${appState.mode === 'cycling' ? '' : 'none'}">
                     <summary class="text-xs font-bold text-gray-500 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                         <span>${t('filter_category')}</span>
                         <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -548,7 +551,7 @@ export const createSidebarFiltresHTML = () => `
                     </div>
                 </details>
 
-                <details class="group border-b border-gray-100 pb-4" data-filter-group="hiking" style="display: ${appState.mode === 'hiking' ? '' : 'none'}" open>
+                <details class="group border-b border-gray-100 pb-4" data-filter-group="hiking" style="display: ${appState.mode === 'hiking' ? '' : 'none'}">
                     <summary class="text-xs font-bold text-gray-500 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                         <span>Dificultat</span>
                         <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -567,9 +570,9 @@ export const createSidebarFiltresHTML = () => `
                     </summary>
                     <div class="mt-3">
                         <div class="flex justify-end items-end mb-2">
-                            <span class="text-[13px] font-bold" style="color: var(--accent-thumb)" id="val-dist">10 km</span>
+                            <span class="text-[13px] font-bold" style="color: var(--accent-thumb)" id="val-dist">15 km</span>
                         </div>
-                        <input type="range" id="sl-distancia" data-camp="distanciaMax" data-val-id="val-dist" data-sufix=" km" min="1" max="10" value="10" step="0.5" aria-label="${t('filter_max_dist')}" style="accent-color: var(--accent-thumb)" class="w-full h-2 bg-gray-200 rounded-full cursor-pointer appearance-none">
+                        <input type="range" id="sl-distancia" data-camp="distanciaMax" data-val-id="val-dist" data-sufix=" km" min="1" max="15" value="15" step="0.5" aria-label="${t('filter_max_dist')}" style="accent-color: var(--accent-thumb)" class="w-full h-2 bg-gray-200 rounded-full cursor-pointer appearance-none">
                     </div>
                 </details>
 
@@ -586,7 +589,7 @@ export const createSidebarFiltresHTML = () => `
                     </div>
                 </details>
 
-                <details class="group pb-2" data-filter-group="cycling">
+                <details class="group pb-2" data-filter-group="cycling" style="display: ${appState.mode === 'cycling' ? '' : 'none'}">
                     <summary class="text-xs font-bold text-gray-500 uppercase tracking-wider flex justify-between items-center cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                         <span>${t('filter_max_grad')}</span>
                         <svg class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -631,8 +634,8 @@ export const createTopBarSegmentsHTML = () => `
                     <option value="">${t('filter_default_order')}</option>
                     <option value="dist_asc">${t('filter_dist_asc')}</option>
                     <option value="dist_desc">${t('filter_dist_desc')}</option>
-                    <option value="grad_asc">${t('filter_grad_asc')}</option>
-                    <option value="grad_desc">${t('filter_grad_desc')}</option>
+                    <option value="grad_asc">${appState.mode === 'hiking' ? t('filter_elev_asc') || 'Desnivell (Ascendent)' : t('filter_grad_asc')}</option>
+                    <option value="grad_desc">${appState.mode === 'hiking' ? t('filter_elev_desc') || 'Desnivell (Descendent)' : t('filter_grad_desc')}</option>
                 </select>
             </div>
             

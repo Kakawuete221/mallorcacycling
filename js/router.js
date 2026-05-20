@@ -126,9 +126,14 @@ const routes = {
 
             return `
             <section id="intro" class="fade-in">
-                <div class="relative w-full h-[calc(100vh-40px)] overflow-hidden">
-                    <img src="media/ColldeSoller.jpeg" alt="Vista del Coll de Sóller" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 flex flex-col justify-center items-center text-white bg-black/40 text-center p-5">
+                <div class="relative w-full h-[calc(100vh-40px)] overflow-hidden bg-[#11131f]">
+                    <!-- Slideshow Images -->
+                    <img src="media/ColldeSoller.jpeg" alt="Coll de Sóller" class="hero-slideshow-img">
+                    <img src="media/PuigMajorVertienteLluc.jpeg" alt="Puig Major" class="hero-slideshow-img">
+                    <img src="media/ColldesGrauEsporles.jpeg" alt="Coll des Grau" class="hero-slideshow-img">
+                    <img src="media/ColldesaCreuCalvia.jpeg" alt="Coll de sa Creu" class="hero-slideshow-img">
+                    
+                    <div class="absolute inset-0 flex flex-col justify-center items-center text-white bg-black/40 text-center p-5 z-10 pointer-events-none">
                         <h1 class="font-title text-4xl md:text-5xl lg:text-7xl font-bold mb-4">Mallorca Cycling</h1>
                         <p class="text-lg md:text-2xl opacity-90 tracking-wide">${t('hero_subtitle')}</p>
                     </div>

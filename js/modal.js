@@ -169,7 +169,8 @@ export const showModal = (puerto) => {
                 </div>
                 `}
 
-                <!-- Nearby Places Section with clean line se                 <div class="order-5 md:order-none w-full border-t border-gray-100/80 pt-8">
+                <!-- Nearby Places Section with clean line separator -->
+                <div class="order-5 md:order-none w-full border-t border-gray-100/80 pt-8">
                     <!-- Section Header -->
                     <div class="flex items-start gap-4 mb-6">
                         <div class="w-10 h-10 rounded-2xl bg-[#fc4c02]/10 flex items-center justify-center shrink-0">
@@ -185,14 +186,16 @@ export const showModal = (puerto) => {
                             <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                             ${t('loading_nearby')}
                         </div>
-                    </div>       </div>
+                    </div>
+                </div>
                 </div>
 
-                <!-- Directions & Access Section (Ultra-Clean Premium Moder                 <div class="order-2 md:order-none w-full border-t-0 md:border-t border-gray-100/80 pt-0 md:pt-8 mt-0 md:mt-8">
-                        <!-- Section Header matching Nearby Places -->
+                <!-- Directions & Access Section (Ultra-Clean Premium Modern) -->
+                <div class="order-2 md:order-none w-full bg-gray-50/50 rounded-3xl p-6 border border-gray-100/80 shadow-sm mb-2 md:mb-0">
+                        <!-- Section Header -->
                         <div class="flex items-start gap-4 mb-6">
-                            <div class="w-10 h-10 rounded-2xl bg-[#fc4c02]/10 flex items-center justify-center shrink-0 border border-[#fc4c02]/20">
-                                <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+                            <div class="w-10 h-10 rounded-2xl ${isHiking ? 'bg-blue-100 border-blue-200' : 'bg-[#fc4c02]/10 border-[#fc4c02]/20'} flex items-center justify-center shrink-0 border">
+                                <svg class="w-5 h-5 ${accentColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
                             </div>
                             <div class="flex-1 text-left">
                                 <h4 class="font-title font-bold text-gray-900 text-xl m-0 leading-tight">${t('access_directions')}</h4>
@@ -211,7 +214,7 @@ export const showModal = (puerto) => {
                                 
                                 <div class="flex items-center gap-2.5 w-full sm:w-auto">
                                     <!-- Coordinate capsule - expands on mobile, content centered -->
-                                    <div class="flex-1 sm:flex-none text-center bg-gray-50 border border-gray-100 rounded-xl px-4 py-2.5 text-xs font-mono font-bold text-gray-650 shadow-sm select-all">
+                                    <div class="flex-1 sm:flex-none text-center bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-xs font-mono font-bold text-gray-650 shadow-sm select-all">
                                         ${puerto.lat}° N &nbsp;&middot;&nbsp; ${puerto.lng}° E
                                     </div>
                                     
@@ -245,7 +248,7 @@ export const showModal = (puerto) => {
 
     dibuixarMiniMapa(puerto);
     actualitzarMunicipiReal(puerto.lat, puerto.lng);
-    dibuixarPerfilElevacio(puerto.polyline);
+    dibuixarPerfilElevacio(puerto);
 
     _omplirDadesStravaModal(puerto);
     _fetchAndRenderNearbyPlaces(puerto.lat, puerto.lng);

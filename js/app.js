@@ -247,9 +247,15 @@ document.addEventListener('click', async (e) => {
         case 'seleccionar-suggeriment':
             const portSugg = JSON.parse(target.dataset.port);
             document.getElementById('input-cerca').value = portSugg.nom;
+            setCerca(portSugg.nom);
             document.getElementById('llista-suggeriments').classList.add('hidden');
             document.getElementById('btn-clear-search').classList.remove('hidden');
-            centrarMapaEnPort(portSugg.lat, portSugg.lng, portSugg.nom);
+            
+            const currentHash = window.location.hash.slice(1);
+            if (currentHash === "/map" || currentHash === "") {
+                centrarMapaEnPort(portSugg.lat, portSugg.lng, portSugg.nom);
+            }
+            executarFiltre();
             break;
         case 'calcular-ruta':
             calcularRutaPort(parseFloat(target.dataset.lat), parseFloat(target.dataset.lng));
@@ -305,13 +311,13 @@ const debouncedExecutarFiltre = (delay = 250) => {
 document.addEventListener('input', (e) => {
     if (e.target.id === 'input-cerca') {
         const textCerca = e.target.value;
+        setCerca(textCerca);
         const teCaractersValids = uiCercaToggle(textCerca, appState.totsElsPorts);
 
         if (!teCaractersValids) {
-            setCerca("");
             eliminarMarcadorCerca();
-            debouncedExecutarFiltre(250);
         }
+        debouncedExecutarFiltre(250);
     } else if (['sl-distancia', 'sl-desnivell', 'sl-pendent'].includes(e.target.id)) {
         const target = e.target;
         uiActualitzarSlider(
