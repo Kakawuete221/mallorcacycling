@@ -188,7 +188,6 @@ export const showModal = (puerto) => {
                         </div>
                     </div>
                 </div>
-                </div>
 
                 <!-- Directions & Access Section (Ultra-Clean Premium Modern) -->
                 <div class="order-2 md:order-none w-full bg-gray-50/50 rounded-3xl p-6 border border-gray-100/80 shadow-sm mb-2 md:mb-0">
