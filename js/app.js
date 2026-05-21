@@ -215,7 +215,7 @@ document.addEventListener('click', async (e) => {
             break;
         case 'view-details':
             const portData = JSON.parse(target.dataset.port);
-            showModal(portData);
+            await showModal(portData);
             break;
         case 'close-modal':
             closeModal();

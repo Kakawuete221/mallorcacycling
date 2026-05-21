@@ -1,6 +1,19 @@
 // map.js - Module for handling Google Maps services
 import { createMiniCardHTML } from './ui.js';
 import { t } from './translations.js';
+import { loadScript } from './utils.js';
+
+let mapsPromise = null;
+
+export const ensureGoogleMapsLoaded = () => {
+    if (typeof google !== 'undefined' && typeof google.maps !== 'undefined') {
+        return Promise.resolve();
+    }
+    if (!mapsPromise) {
+        mapsPromise = loadScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyAfKHI_ppkXrqq9woohNzLDi1Zchlf5BEM&libraries=places,geometry,elevation');
+    }
+    return mapsPromise;
+};
 
 // CONSTANTS DE VISTA DEL MAPA
 let CENTRE_MALLORCA = { lat: 39.62, lng: 2.98 };
@@ -73,7 +86,8 @@ export const decodificarRuta = (port) => {
     return google.maps.geometry.encoding.decodePath(port.polyline);
 };
 
-export function initGoogleMap() {
+export async function initGoogleMap() {
+    await ensureGoogleMapsLoaded();
     polylinesCache.clear(); // IMPORTANT: Si es recarrega la pàgina del mapa, hem de buidar la memòria cau perquè els objectes pertanyen al mapa anterior (ja destruït)
 
     const isMobile = window.innerWidth < 640;
@@ -289,7 +303,8 @@ export const actualitzarMunicipiReal = (lat, lng) => {
     });
 };
 
-export const calcularRutaPort = (destLat, destLng) => {
+export const calcularRutaPort = async (destLat, destLng) => {
+    await ensureGoogleMapsLoaded();
     // If the main map is not active on the screen (e.g., they are on Segments, Home, or Profile),
     // directly open Google Maps directions in a new window!
     const isMapPage = window.location.hash === '#/map' || window.location.pathname === '/map';
@@ -424,8 +439,16 @@ export const dibuixarPerfilElevacio = (port) => {
     const elevationService = new google.maps.ElevationService();
     const path = decodificarRuta(port);
 
-    elevationService.getElevationAlongPath({ path, samples: 100 }, (results, status) => {
+    elevationService.getElevationAlongPath({ path, samples: 100 }, async (results, status) => {
         if (status === "OK") {
+            if (typeof Chart === 'undefined') {
+                try {
+                    await loadScript('https://cdn.jsdelivr.net/npm/chart.js');
+                } catch (e) {
+                    console.error("No s'ha pogut carregar Chart.js", e);
+                    return;
+                }
+            }
             const ctx = document.getElementById('elevation-chart').getContext('2d');
             if (window.currentChart) window.currentChart.destroy();
 

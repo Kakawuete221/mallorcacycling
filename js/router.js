@@ -4,7 +4,7 @@ import { actualitzarInterficieUsuari, createCardHTML, createFiltresHTML, createS
 import { resetFiltres } from './filters.js';
 import { appState, executarFiltre } from './app.js';
 import { getAthleteStats, getStarredSegments, getRecentActivities } from './stravaApi.js';
-import { formatTime } from './utils.js';
+import { formatTime, loadScript } from './utils.js';
 import { t } from './translations.js';
 
 const getPuertos = async () => {
@@ -73,7 +73,7 @@ const routes = {
                 <div class="lg:col-span-8 flex flex-col gap-6 h-full">
                     <!-- Segment of the Month (Gran) -->
                     <div data-action="view-details" data-port="${p1Str}" role="button" tabindex="0" aria-label="${t('view_details_of')} ${p1.nom || p1.nombre}" class="group relative rounded-3xl overflow-hidden shadow-2xl flex-1 min-h-[400px] md:min-h-[450px] cursor-pointer block">
-                        <img src="${p1.imatge && p1.imatge !== 'media/ColldeSoller.jpeg' ? p1.imatge : 'media/' + (p1.nom || p1.nombre) + '.jpg'}" alt="${p1.nom || p1.nombre}" onerror="this.src='media/ColldeSoller.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <img src="${p1.imatge && p1.imatge !== 'media/ColldeSoller.webp' ? p1.imatge : 'media/' + (p1.nom || p1.nombre) + '.jpg'}" alt="${p1.nom || p1.nombre}" onerror="this.src='media/ColldeSoller.webp'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-6 md:p-10 text-white w-full">
                             <span class="bg-[#cf4002] text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest mb-4 inline-block shadow-lg">${t('segment_of_month')}</span>
@@ -88,7 +88,7 @@ const routes = {
                     
                     <!-- Segment Secundari Inferior -->
                     <div data-action="view-details" data-port="${p2Str}" role="button" tabindex="0" aria-label="${t('view_details_of')} ${p2.nom || p2.nombre}" class="group relative rounded-3xl overflow-hidden shadow-lg h-[180px] md:h-[220px] flex-shrink-0 cursor-pointer block">
-                        <img src="${p2.imatge && p2.imatge !== 'media/ColldeSoller.jpeg' ? p2.imatge : 'media/' + (p2.nom || p2.nombre) + '.jpg'}" alt="${p2.nom || p2.nombre}" onerror="this.src='media/ColldeSoller.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <img src="${p2.imatge && p2.imatge !== 'media/ColldeSoller.webp' ? p2.imatge : 'media/' + (p2.nom || p2.nombre) + '.jpg'}" alt="${p2.nom || p2.nombre}" onerror="this.src='media/ColldeSoller.webp'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/30 to-transparent opacity-90"></div>
                         <div class="absolute bottom-0 left-0 p-6 text-white w-full">
                             <h3 class="text-2xl md:text-3xl font-title font-bold mb-3">${p2.nom || p2.nombre}</h3>
@@ -107,7 +107,7 @@ const routes = {
                 const pStr = JSON.stringify(p).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
                 return `
                         <div data-action="view-details" data-port="${pStr}" role="button" tabindex="0" aria-label="${t('view_details_of')} ${p.nom || p.nombre}" class="group relative rounded-3xl overflow-hidden shadow-lg flex-1 min-h-[160px] cursor-pointer block">
-                            <img src="${p.imatge && p.imatge !== 'media/ColldeSoller.jpeg' ? p.imatge : 'media/' + (p.nom || p.nombre) + '.jpg'}" alt="${p.nom || p.nombre}" onerror="this.src='media/ColldeSoller.jpeg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <img src="${p.imatge && p.imatge !== 'media/ColldeSoller.webp' ? p.imatge : 'media/' + (p.nom || p.nombre) + '.jpg'}" alt="${p.nom || p.nombre}" onerror="this.src='media/ColldeSoller.webp'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                             <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent opacity-95"></div>
                             <div class="absolute bottom-0 left-0 p-5 text-white w-full">
                                 <h3 class="text-xl md:text-2xl font-title font-bold mb-3 leading-tight">${p.nom || p.nombre}</h3>
@@ -128,10 +128,10 @@ const routes = {
             <section id="intro" class="fade-in">
                 <div class="relative w-full h-[calc(100vh-40px)] overflow-hidden bg-[#11131f]">
                     <!-- Slideshow Images -->
-                    <img src="media/ColldeSoller.jpeg" alt="Coll de Sóller" class="hero-slideshow-img">
-                    <img src="media/PuigMajorVertienteLluc.jpeg" alt="Puig Major" class="hero-slideshow-img">
-                    <img src="media/ColldesGrauEsporles.jpeg" alt="Coll des Grau" class="hero-slideshow-img">
-                    <img src="media/ColldesaCreuCalvia.jpeg" alt="Coll de sa Creu" class="hero-slideshow-img">
+                    <img src="media/ColldeSoller.webp" alt="Coll de Sóller" class="hero-slideshow-img">
+                    <img src="media/PuigMajorVertienteLluc.webp" alt="Puig Major" class="hero-slideshow-img">
+                    <img src="media/ColldesGrauEsporles.webp" alt="Coll des Grau" class="hero-slideshow-img">
+                    <img src="media/ColldesaCreuCalvia.webp" alt="Coll de sa Creu" class="hero-slideshow-img">
                     
                     <div class="absolute inset-0 flex flex-col justify-center items-center text-white bg-black/40 text-center p-5 z-10 pointer-events-none">
                         <h1 class="font-title text-4xl md:text-5xl lg:text-7xl font-bold mb-4">Mallorca Cycling</h1>
@@ -186,14 +186,14 @@ const routes = {
                 <div class="flex flex-wrap justify-center gap-12 md:gap-24">
                     <div class="flex flex-col items-center group">
                         <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shadow-xl border-4 border-white ring-4 ring-[#ea580c]/20 group-hover:ring-[#ea580c] transition-all duration-500 mb-5">
-                            <img src="media/ColldeSoller.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Pau">
+                            <img src="media/ColldeSoller.webp" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Pau">
                         </div>
                         <h3 class="font-bold text-gray-800 text-2xl font-title">Pau Antich</h4>
                         <p class="text-sm text-[#cf4002] uppercase tracking-widest font-bold mt-1">${t('creators_role')}</p>
                     </div>
                     <div class="flex flex-col items-center group">
                         <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shadow-xl border-4 border-white ring-4 ring-[#ea580c]/20 group-hover:ring-[#ea580c] transition-all duration-500 mb-5">
-                            <img src="media/ColldeSoller.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Creator 2">
+                            <img src="media/ColldeSoller.webp" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Creator 2">
                         </div>
                         <h3 class="font-bold text-gray-800 text-2xl font-title">Jaume Ribas</h4>
                         <p class="text-sm text-[#cf4002] uppercase tracking-widest font-bold mt-1">${t('creators_role')}</p>
@@ -298,7 +298,7 @@ const routes = {
                     ${visibleTrophies.map(tr => `
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-1.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group block">
                         <div class="relative rounded-xl overflow-hidden h-36 mb-2">
-                            <img src="${tr.port.imatge && tr.port.imatge !== 'media/ColldeSoller.jpeg' ? tr.port.imatge : 'media/' + (tr.port.nom || tr.port.nombre) + '.jpg'}" alt="${tr.port.nom || tr.port.nombre}" onerror="this.src='media/ColldeSoller.jpeg'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <img src="${tr.port.imatge && tr.port.imatge !== 'media/ColldeSoller.webp' ? tr.port.imatge : 'media/' + (tr.port.nom || tr.port.nombre) + '.jpg'}" alt="${tr.port.nom || tr.port.nombre}" onerror="this.src='media/ColldeSoller.webp'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute inset-0 bg-gradient-to-t from-[#11131f]/90 via-transparent to-transparent"></div>
                             <div class="absolute bottom-3 left-4 right-4">
                                 <h3 class="font-bold font-title text-white text-lg leading-tight truncate drop-shadow-md">${tr.port.nom || tr.port.nombre}</h3>
@@ -326,7 +326,7 @@ const routes = {
                     ${hiddenTrophies.map(tr => `
                     <div class="hidden-trophy hidden bg-white rounded-2xl shadow-sm border border-gray-100 p-1.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group block">
                         <div class="relative rounded-xl overflow-hidden h-36 mb-2">
-                            <img src="${tr.port.imatge && tr.port.imatge !== 'media/ColldeSoller.jpeg' ? tr.port.imatge : 'media/' + (tr.port.nom || tr.port.nombre) + '.jpg'}" alt="${tr.port.nom || tr.port.nombre}" onerror="this.src='media/ColldeSoller.jpeg'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <img src="${tr.port.imatge && tr.port.imatge !== 'media/ColldeSoller.webp' ? tr.port.imatge : 'media/' + (tr.port.nom || tr.port.nombre) + '.jpg'}" alt="${tr.port.nom || tr.port.nombre}" onerror="this.src='media/ColldeSoller.webp'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute inset-0 bg-gradient-to-t from-[#11131f]/90 via-transparent to-transparent"></div>
                             <div class="absolute bottom-3 left-4 right-4">
                                 <h3 class="font-bold font-title text-white text-lg leading-tight truncate drop-shadow-md">${tr.port.nom || tr.port.nombre}</h3>
@@ -522,10 +522,14 @@ const routes = {
             const canvas = document.getElementById('activitiesChart');
             if (!canvas) return;
 
-            // Si Chart.js no està carregat al window, esperem o avisem
+            // Carreguem Chart.js dinàmicament només quan cal
             if (typeof Chart === 'undefined') {
-                console.error("Chart.js not loaded.");
-                return;
+                try {
+                    await loadScript('https://cdn.jsdelivr.net/npm/chart.js');
+                } catch (e) {
+                    console.error("No s'ha pogut carregar Chart.js", e);
+                    return;
+                }
             }
 
             const activities = await getRecentActivities(30);
@@ -651,7 +655,7 @@ export const router = async () => {
         if (footer) footer.style.display = 'none';
         document.body.style.overflow = 'hidden';
         resetFiltres();
-        initGoogleMap();
+        await initGoogleMap();
     } else {
         if (footer) footer.style.display = 'block';
         document.body.style.overflow = '';
