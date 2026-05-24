@@ -192,3 +192,63 @@ body.hiking-mode {
     33% { opacity: 0; transform: scale(1.08); }
     100% { opacity: 0; }
 }
+
+/* =========================================
+   MODERN ABOUT US & TEAM SECTION UPGRADES
+   ========================================= */
+
+/* Background Dot Grid Pattern */
+.bg-dot-pattern {
+    background-image: radial-gradient(rgba(229, 231, 235, 0.7) 1.5px, transparent 1.5px);
+    background-size: 20px 20px;
+}
+
+/* Glassmorphism details card */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* Gradient highlight card border hover */
+.glow-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glow-card:hover {
+    box-shadow: 0 20px 25px -5px rgba(252, 76, 2, 0.08), 0 10px 10px -5px rgba(252, 76, 2, 0.04);
+}
+
+/* Branded Team profile card with smooth image zooms */
+.team-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom interactive hover state */
+.team-card:hover {
+    transform: translateY(-6px);
+}
+
+/* Creator Social Buttons dynamic pops */
+.creator-social-btn {
+    transform: translateY(12px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Delayed transitions for cascades */
+.team-card:hover .creator-social-btn {
+    transform: translateY(0);
+    opacity: 1;
+}
+.team-card:hover .social-delay-1 { transition-delay: 0.05s; }
+.team-card:hover .social-delay-2 { transition-delay: 0.1s; }
+.team-card:hover .social-delay-3 { transition-delay: 0.15s; }
+
+/* Custom decorative badge glows */
+.glow-orange {
+    box-shadow: 0 0 15px rgba(252, 76, 2, 0.3);
+}
+.glow-blue {
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.3);
+}

@@ -122,7 +122,7 @@ export function actualitzarInterficieUsuari() {
         }
     } else {
         if (navArea) {
-            navArea.innerHTML = `<button data-action="login-strava" class="bg-primary hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg transition-transform hover:scale-105 duration-200 text-sm">${t('connect_strava').toUpperCase()}</button>`;
+            navArea.innerHTML = `<button data-action="login-strava" class="bg-[#cf4002] hover:bg-[#ea580c] text-white font-bold py-2 px-4 rounded-lg transition-transform hover:scale-105 duration-200 text-sm">${t('connect_strava').toUpperCase()}</button>`;
         }
         if (connectCard) {
             connectCard.innerHTML = `
@@ -224,7 +224,7 @@ export const createMiniCardHTML = (port, dadesStrava = null) => {
     const desn = port.desnivell || port.elevacion_m;
     const middleStat = isHiking ? port.categoria : `${port.pendent_mitja || 0}%`;
     const btnColor = isHiking ? 'bg-[#2563eb] hover:bg-blue-700' : 'bg-primary hover:bg-orange-600';
-    const typeIconPath = isHiking 
+    const typeIconPath = isHiking
         ? '<path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/><path d="M7 6c-1.1 0-2 .9-2 2v4c0 1.1.9 2 2 2h1v-8H7z"/>'
         : '<path d="M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM5 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5zm5.8-10l2.4-2.4.8.8c1.3 1.3 3 2.1 5.1 2.1V9c-1.5 0-2.7-.6-3.6-1.5l-1.9-1.9c-.5-.4-1-.6-1.6-.6s-1.1.2-1.4.6L7.8 8.4c-.4.4-.6.9-.6 1.4 0 .6.2 1.1.6 1.4L11 14v5h1.5v-5.5l-1.7-3zM19 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5z"></path>';
 

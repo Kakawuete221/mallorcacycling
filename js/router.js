@@ -20,7 +20,7 @@ const mapHikingRoutes = (hikingData) => {
     return hikingData.itemListElement.map(item => {
         const props = item.additionalProperty || [];
         const getProp = (name) => props.find(p => p.name === name)?.value || '';
-        
+
         const polyline = item.itinerary.geo.line;
         let lat = 0, lng = 0;
         if (polyline) {
@@ -30,7 +30,7 @@ const mapHikingRoutes = (hikingData) => {
                 lng = parseFloat(coords[1]);
             }
         }
-        
+
         return {
             id: item['@id'].split('/').pop(),
             nom: item.name,
@@ -164,13 +164,12 @@ const routes = {
                 </div>
                 <div id="strava-card-container"></div>
             </section>
-            
             <section class="max-w-[1200px] w-[90%] mx-auto py-20 px-5 border-t border-gray-100 fade-in">
                 <div class="flex flex-col md:flex-row items-center gap-12">
-                    <div class="flex-1">
-                        <h2 class="text-3xl md:text-4xl font-bold font-title text-secondary tracking-tight mb-6">${t('about_title')}</h2>
-                        <p class="text-gray-600 text-lg mb-4 leading-relaxed">${t('about_p1')}</p>
-                        <p class="text-gray-600 text-lg leading-relaxed">${t('about_p2')}</p>
+                    <div class="flex-1 flex flex-col justify-center text-left">
+                        <h2 class="text-3xl md:text-4xl font-bold font-title text-secondary tracking-tight mb-6" data-i18n="about_title">${t('about_title')}</h2>
+                        <p class="text-gray-600 text-lg mb-4 leading-relaxed" data-i18n="about_p1">${t('about_p1')}</p>
+                        <p class="text-gray-600 text-lg leading-relaxed" data-i18n="about_p2">${t('about_p2')}</p>
                     </div>
                     <div class="flex-1 w-full aspect-video rounded-3xl overflow-hidden shadow-xl">
                         <img src="media/mallorcaCyclingLogo.webp" alt="Logotip de Mallorca Cycling" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
@@ -178,25 +177,78 @@ const routes = {
                 </div>
             </section>
 
-            <section class="max-w-[1200px] w-[90%] mx-auto pb-24 px-5 fade-in">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl md:text-4xl font-bold font-title text-secondary tracking-tight">${t('creators_title')}</h2>
-                    <p class="text-gray-500 mt-3 text-lg">${t('creators_subtitle')}</p>
+            <!-- Modernized Team/Creators Section with fallbacks and social tags -->
+            <section class="max-w-[1250px] w-[95%] mx-auto pb-32 px-5 fade-in">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-black font-title text-secondary tracking-tight mb-4" data-i18n="creators_title">${t('creators_title')}</h2>
+                    <p class="text-gray-500 text-lg max-w-xl mx-auto leading-relaxed" data-i18n="creators_subtitle">${t('creators_subtitle')}</p>
                 </div>
-                <div class="flex flex-wrap justify-center gap-12 md:gap-24">
-                    <div class="flex flex-col items-center group">
-                        <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shadow-xl border-4 border-white ring-4 ring-[#ea580c]/20 group-hover:ring-[#ea580c] transition-all duration-500 mb-5">
-                            <img src="media/ColldeSoller.webp" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Pau">
+                
+                <div class="flex flex-wrap justify-center gap-10 md:gap-16">
+                    <!-- Creator 1: Pau Antich -->
+                    <div class="team-card w-full max-w-[320px] aspect-[3/4] bg-white rounded-3xl overflow-hidden shadow-md border border-gray-150 hover:shadow-2xl hover:border-[#fc4c02]/30 transition-all duration-300 relative group flex flex-col">
+                        <!-- Image Container with fallback systems -->
+                        <div class="relative w-full h-full">
+                            <img src="media/pau.jpg" alt="Pau Antich" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            
+                            <!-- Initials Gradient Fallback (Pau Theme: Cycling Orange) -->
+                            <div class="hidden absolute inset-0 bg-gradient-to-br from-[#ff7e40] to-[#fc4c02] flex flex-col items-center justify-center text-white p-6">
+                                <div class="w-20 h-20 rounded-full border-4 border-white/20 bg-white/10 flex items-center justify-center text-3xl font-black font-title tracking-wider mb-4 shadow-inner">PA</div>
+                                <svg class="w-12 h-12 opacity-35 animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM5 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5zm5.8-10l2.4-2.4.8.8c1.3 1.3 3 2.1 5.1 2.1V9c-1.5 0-2.7-.6-3.6-1.5l-1.9-1.9c-.5-.4-1-.6-1.6-.6s-1.1.2-1.4.6L7.8 8.4c-.4.4-.6.9-.6 1.4 0 .6.2 1.1.6 1.4L11 14v5h2v-6.2l-2.2-2.3zM19 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5z"/></svg>
+                            </div>
                         </div>
-                        <h3 class="font-bold text-gray-800 text-2xl font-title">Pau Antich</h4>
-                        <p class="text-sm text-[#cf4002] uppercase tracking-widest font-bold mt-1">${t('creators_role')}</p>
+
+                        <!-- Card text overlays sitting cleanly inside photo view -->
+                        <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent p-6 text-white text-left flex flex-col justify-end">
+                            <span class="bg-[#fc4c02]/25 border border-[#fc4c02]/45 text-[#ff8e5e] text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider mb-2.5 inline-block w-fit glow-orange" data-i18n="creators_role">${t('creators_role')}</span>
+                            <h3 class="font-black text-white text-2xl font-title leading-tight mb-1">Pau Antich</h3>
+                            
+                            <!-- Floating Social Bar on hover -->
+                            <div class="flex items-center gap-3 mt-4">
+                                <a href="https://strava.com" target="_blank" aria-label="${t('creators_strava')}" class="creator-social-btn social-delay-1 w-9 h-9 rounded-full bg-white/10 hover:bg-[#fc4c02] text-white border border-white/10 hover:border-transparent flex items-center justify-center transition-all shadow-md">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"/></svg>
+                                </a>
+                                <a href="https://github.com" target="_blank" aria-label="${t('creators_github')}" class="creator-social-btn social-delay-2 w-9 h-9 rounded-full bg-white/10 hover:bg-black text-white border border-white/10 hover:border-transparent flex items-center justify-center transition-all shadow-md">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.646.64.699 1.026 1.592 1.026 2.683 0 3.842-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.577.688.479C19.138 20.162 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+                                </a>
+                                <a href="https://linkedin.com" target="_blank" aria-label="${t('creators_linkedin')}" class="creator-social-btn social-delay-3 w-9 h-9 rounded-full bg-white/10 hover:bg-[#0077b5] text-white border border-white/10 hover:border-transparent flex items-center justify-center transition-all shadow-md">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex flex-col items-center group">
-                        <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shadow-xl border-4 border-white ring-4 ring-[#ea580c]/20 group-hover:ring-[#ea580c] transition-all duration-500 mb-5">
-                            <img src="media/ColldeSoller.webp" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Creator 2">
+                    
+                    <!-- Creator 2: Jaume Ribas -->
+                    <div class="team-card w-full max-w-[320px] aspect-[3/4] bg-white rounded-3xl overflow-hidden shadow-md border border-gray-150 hover:shadow-2xl hover:border-blue-500/30 transition-all duration-300 relative group flex flex-col">
+                        <!-- Image Container with fallback systems -->
+                        <div class="relative w-full h-full">
+                            <img src="media/jaume.jpg" alt="Jaume Ribas" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            
+                            <!-- Initials Gradient Fallback (Jaume Theme: Hiking Blue) -->
+                            <div class="hidden absolute inset-0 bg-gradient-to-br from-[#60a5fa] to-[#2563eb] flex flex-col items-center justify-center text-white p-6">
+                                <div class="w-20 h-20 rounded-full border-4 border-white/20 bg-white/10 flex items-center justify-center text-3xl font-black font-title tracking-wider mb-4 shadow-inner">JR</div>
+                                <svg class="w-12 h-12 opacity-35 animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/><path d="M7 6c-1.1 0-2 .9-2 2 v4c0 1.1.9 2 2 2h1v-8H7z"/></svg>
+                            </div>
                         </div>
-                        <h3 class="font-bold text-gray-800 text-2xl font-title">Jaume Ribas</h4>
-                        <p class="text-sm text-[#cf4002] uppercase tracking-widest font-bold mt-1">${t('creators_role')}</p>
+
+                        <!-- Card text overlays sitting cleanly inside photo view -->
+                        <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent p-6 text-white text-left flex flex-col justify-end">
+                            <span class="bg-blue-600/25 border border-blue-500/45 text-blue-300 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider mb-2.5 inline-block w-fit glow-blue" data-i18n="creators_role">${t('creators_role')}</span>
+                            <h3 class="font-black text-white text-2xl font-title leading-tight mb-1">Jaume Ribas</h3>
+                            
+                            <!-- Floating Social Bar on hover -->
+                            <div class="flex items-center gap-3 mt-4">
+                                <a href="https://strava.com" target="_blank" aria-label="${t('creators_strava')}" class="creator-social-btn social-delay-1 w-9 h-9 rounded-full bg-white/10 hover:bg-[#fc4c02] text-white border border-white/10 hover:border-transparent flex items-center justify-center transition-all shadow-md">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"/></svg>
+                                </a>
+                                <a href="https://github.com" target="_blank" aria-label="${t('creators_github')}" class="creator-social-btn social-delay-2 w-9 h-9 rounded-full bg-white/10 hover:bg-black text-white border border-white/10 hover:border-transparent flex items-center justify-center transition-all shadow-md">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.646.64.699 1.026 1.592 1.026 2.683 0 3.842-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.577.688.479C19.138 20.162 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+                                </a>
+                                <a href="https://linkedin.com" target="_blank" aria-label="${t('creators_linkedin')}" class="creator-social-btn social-delay-3 w-9 h-9 rounded-full bg-white/10 hover:bg-[#0077b5] text-white border border-white/10 hover:border-transparent flex items-center justify-center transition-all shadow-md">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>`;
@@ -643,10 +695,10 @@ export const router = async () => {
     if (appState.cyclingRoutes.length === 0) {
         const portsJSON = await getPuertos();
         appState.cyclingRoutes = portsJSON.map(p => { p.type = 'cycling'; return assignarComarcaAdministrativa(p); });
-        
+
         const hikingJSON = await getHikingRoutes();
         appState.hikingRoutes = hikingJSON.map(p => assignarComarcaAdministrativa(p));
-        
+
         appState.totsElsPorts = appState.mode === 'cycling' ? appState.cyclingRoutes : appState.hikingRoutes;
     }
 
