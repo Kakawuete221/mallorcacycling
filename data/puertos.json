@@ -137,7 +137,7 @@
       "altitud_max": 223.4,
       "altitud_min": 22.6,
       "categoria": 3,
-      "imatge": "media/ColldeSoller.webp"
+      "imatge": "media/ColldenBledaSoller.webp"
     },
     {
       "@type": "TouristAttraction",
@@ -181,7 +181,7 @@
       "altitud_max": 553.5,
       "altitud_min": 214.3,
       "categoria": 2,
-      "imatge": "media/ColldeSoller.webp"
+      "imatge": "media/ColldHonor.webp"
     },
     {
       "@type": "TouristAttraction",
@@ -203,7 +203,7 @@
       "altitud_max": 359.7,
       "altitud_min": 193.2,
       "categoria": 3,
-      "imatge": "media/ColldeSoller.webp"
+      "imatge": "media/ColldesaGramolaEstellencs.webp"
     },
     {
       "@type": "TouristAttraction",
@@ -247,7 +247,7 @@
       "altitud_max": 425.1,
       "altitud_min": 133.1,
       "categoria": 3,
-      "imatge": "media/ColldeSoller.webp"
+      "imatge": "media/ColldesaPedrissa.webp"
     },
     {
       "@type": "TouristAttraction",
@@ -269,7 +269,7 @@
       "altitud_max": 360.6,
       "altitud_min": 92.7,
       "categoria": 3,
-      "imatge": "media/ColldeSoller.webp"
+      "imatge": "media/ColldesaGramola.webp"
     },
     {
       "@type": "TouristAttraction",
@@ -291,7 +291,7 @@
       "altitud_max": 412,
       "altitud_min": 120.9,
       "categoria": 3,
-      "imatge": "media/ColldeSoller.webp"
+      "imatge": "media/GalileaCapdella.webp"
     },
     {
       "@type": "TouristAttraction",
@@ -313,7 +313,7 @@
       "altitud_max": 406.3,
       "altitud_min": 217.2,
       "categoria": 3,
-      "imatge": "media/ColldeSoller.webp"
+      "imatge": "media/GalileaPuigpunyent.webp"
     },
     {
       "@type": "TouristAttraction",
@@ -335,7 +335,7 @@
       "altitud_max": 564.6,
       "altitud_min": 393,
       "categoria": 3,
-      "imatge": "media/ColldeSoller.webp"
+      "imatge": "media/ColldenClaretCruce.webp"
     },
     {
       "@type": "TouristAttraction",
@@ -357,7 +357,7 @@
       "altitud_max": 475.8,
       "altitud_min": 167.6,
       "categoria": 3,
-      "imatge": "media/ColldeSoller.webp"
+      "imatge": "media/ColldenClaretEsporles.webp"
     },
     {
       "@type": "TouristAttraction",
@@ -379,7 +379,7 @@
       "altitud_max": 359.8,
       "altitud_min": -6.4,
       "categoria": 2,
-      "imatge": "media/ColldeSoller.webp"
+      "imatge": "media/PortdeValldemossa.webp"
     },
     {
       "@type": "TouristAttraction",
@@ -401,7 +401,7 @@
       "altitud_max": 295.2,
       "altitud_min": 110,
       "categoria": 3,
-      "imatge": "media/ColldeSoller.webp"
+      "imatge": "media/ColldesaBastida.webp"
     },
     {
       "@type": "TouristAttraction",
@@ -533,12 +533,12 @@
       "altitud_max": 244.9,
       "altitud_min": 130.1,
       "categoria": 4,
-      "imatge": "media/ColldeSoller.webp"
+      "imatge": "media/ColldenBledaDeia.webp"
     },
     {
       "@type": "TouristAttraction",
       "id": "652948",
-      "nom": "Coll de Soller",
+      "nom": "Coll de Soller (desde Sóller)",
       "municipi": "Mallorca",
       "geo": {
         "@type": "GeoCoordinates",
@@ -555,7 +555,7 @@
       "altitud_max": 490.8,
       "altitud_min": 73.6,
       "categoria": 2,
-      "imatge": "media/ColldeSoller.webp"
+      "imatge": "media/ColldeSollerSoller.webp"
     },
     {
       "@type": "TouristAttraction",
@@ -620,7 +620,7 @@
       "altitud_max": 226.8,
       "altitud_min": 129.6,
       "categoria": 4,
-      "imatge": "media/ColldeSoller.webp"
+      "imatge": "media/ColldenEsteve.webp"
     },
     {
       "@type": "TouristAttraction",
@@ -707,7 +707,7 @@
       "altitud_max": 154,
       "altitud_min": 13.9,
       "categoria": 4,
-      "imatge": "media/ColldeSoller.webp"
+      "imatge": "media/ColldesArraco.webp"
     },
     {
       "@type": "TouristAttraction",
