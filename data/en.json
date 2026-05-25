@@ -131,5 +131,7 @@
     "select_language": "Select language",
     "reset_map_view": "Reset map view",
     "summit": "Summit",
-    "center_on_user": "My location"
+    "center_on_user": "My location",
+    "offline_status": "You are offline. Showing cached data.",
+    "online_status": "Connection restored."
 }

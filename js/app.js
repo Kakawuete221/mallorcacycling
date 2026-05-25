@@ -14,7 +14,7 @@ import {
     createMiniCardHTML, createCardHTML, createSidebarFiltresHTML, createTopBarSegmentsHTML
 } from './ui.js';
 import { router } from './router.js';
-import { setLanguage, getActiveLanguage, translatePage, initTranslations } from './translations.js';
+import { setLanguage, getActiveLanguage, translatePage, initTranslations, t } from './translations.js';
 
 // Estat global de l'aplicació
 export const appState = {
@@ -433,8 +433,61 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+// Gestió de l'estat de connexió (Offline/Online Popup)
+const showOfflinePopup = () => {
+    let popup = document.getElementById('offline-popup');
+    if (!popup) {
+        popup = document.createElement('div');
+        popup.id = 'offline-popup';
+        popup.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] sm:w-auto max-w-[340px] sm:max-w-none bg-[#fc4c02] text-white px-5 sm:px-6 py-3.5 rounded-2xl sm:rounded-full shadow-[0_10px_30px_rgba(252,76,2,0.4)] z-[9999] flex items-center justify-center sm:justify-start gap-3 font-bold text-[13px] sm:text-sm transition-all duration-500 translate-y-20 opacity-0 border border-orange-400/80 leading-tight';
+        popup.innerHTML = `
+            <svg class="w-5 h-5 text-white/90 animate-pulse shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 00-12.728 0M12 2v2m0 16v2m8-8h2M2 12h2m13.657-6.343l1.414-1.414M4.929 19.071l1.414-1.414m0-11.314L4.929 4.929m14.142 14.142l-1.414-1.414"></path></svg>
+            <span data-i18n="offline_status" class="tracking-wide text-center sm:text-left">${t('offline_status') || 'Offline'}</span>
+        `;
+        document.body.appendChild(popup);
+    }
+    
+    // Animar entrada
+    setTimeout(() => {
+        popup.classList.remove('translate-y-20', 'opacity-0');
+        popup.classList.add('translate-y-0', 'opacity-100');
+    }, 10);
+};
+
+const showOnlinePopup = () => {
+    const popup = document.getElementById('offline-popup');
+    if (popup) {
+        popup.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] sm:w-auto max-w-[340px] sm:max-w-none bg-emerald-500 text-white px-5 sm:px-6 py-3.5 rounded-2xl sm:rounded-full shadow-[0_10px_30px_rgba(16,185,129,0.4)] z-[9999] flex items-center justify-center sm:justify-start gap-3 font-bold text-[13px] sm:text-sm transition-all duration-500 translate-y-0 opacity-100 border border-emerald-400/80 leading-tight';
+        popup.innerHTML = `
+            <svg class="w-5 h-5 text-white/90 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+            <span data-i18n="online_status" class="tracking-wide text-center sm:text-left">${t('online_status') || 'Online'}</span>
+        `;
+        
+        // Animar sortida
+        setTimeout(() => {
+            popup.classList.remove('translate-y-0', 'opacity-100');
+            popup.classList.add('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                popup.remove();
+            }, 500);
+        }, 3000);
+    }
+};
+
+window.addEventListener('offline', showOfflinePopup);
+window.addEventListener('online', showOnlinePopup);
+
 // Inicialització principal
 document.addEventListener("DOMContentLoaded", async () => {
+    if ('serviceWorker' in navigator) {
+        try {
+            const registration = await navigator.serviceWorker.register('./sw.js');
+            console.log('ServiceWorker registrat amb èxit:', registration.scope);
+        } catch (error) {
+            console.error('Error al registrar ServiceWorker:', error);
+        }
+    }
+
     await checkStravaCallback();
     if (!isStravaSessionValid()) logoutStrava();
 
@@ -459,4 +512,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     window.addEventListener("hashchange", router);
     router();
+
+    // Comprovar si inicialment ja estem offline
+    if (!navigator.onLine) {
+        showOfflinePopup();
+    }
 });

@@ -131,5 +131,7 @@
     "select_language": "Selecciona l'idioma",
     "reset_map_view": "Restablir vista del mapa",
     "summit": "Cim",
-    "center_on_user": "La meva ubicació"
+    "center_on_user": "La meva ubicació",
+    "offline_status": "Estàs sense connexió. Mostrant dades emmagatzemades.",
+    "online_status": "Connexió restablerta."
 }

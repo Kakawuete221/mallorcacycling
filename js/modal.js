@@ -311,9 +311,9 @@ const _fetchAndRenderNearbyPlaces = (lat, lng) => {
 
                 let openStatus = '';
                 if (place.opening_hours) {
-                    const isOpen = place.opening_hours.open_now !== undefined
-                        ? place.opening_hours.open_now
-                        : (typeof place.opening_hours.isOpen === 'function' ? place.opening_hours.isOpen() : false);
+                    const isOpen = typeof place.opening_hours.isOpen === 'function'
+                        ? place.opening_hours.isOpen()
+                        : !!place.opening_hours.open_now;
                     openStatus = isOpen
                         ? `<span class="absolute top-4 right-4 text-[9px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full text-emerald-400 bg-emerald-950/80 border border-emerald-500/20 backdrop-blur-sm shadow-sm z-10">${t('place_open')}</span>`
                         : `<span class="absolute top-4 right-4 text-[9px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full text-red-400 bg-red-950/80 border border-red-500/20 backdrop-blur-sm shadow-sm z-10">${t('place_closed')}</span>`;
