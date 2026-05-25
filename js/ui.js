@@ -177,7 +177,7 @@ export const createCardHTML = (puerto, index = 0) => {
 
     return `
     <div class="group relative rounded-3xl overflow-hidden shadow-lg aspect-[4/3] w-full cursor-pointer hover:shadow-2xl transition-all duration-300" data-action="view-details" data-port="${portDataStr}" role="button" tabindex="0" aria-label="${t('view_details_of')} ${nom}">
-        <img src="${puerto.imatge && puerto.imatge !== 'media/ColldeSoller.webp' ? puerto.imatge : 'media/' + nom + '.jpg'}" alt="${nom}" onerror="this.onerror=null; this.src='media/ColldeSoller.webp';" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+        <img src="${isHiking ? 'media/pedraSec.webp' : (puerto.imatge && puerto.imatge !== 'media/ColldeSoller.webp' ? puerto.imatge : 'media/' + nom + '.jpg')}" alt="${nom}" onerror="this.onerror=null; this.src='media/ColldeSoller.webp';" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
         <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent opacity-95"></div>
         <div class="absolute bottom-0 left-0 p-5 text-white w-full">
             <h3 class="text-xl md:text-2xl font-title font-bold mb-3 leading-tight pr-4">${nom}</h3>
