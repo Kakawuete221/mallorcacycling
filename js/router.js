@@ -41,7 +41,7 @@ const mapHikingRoutes = (hikingData) => {
             polyline: polyline,
             lat: lat,
             lng: lng,
-            imatge: 'media/mallorcaCyclingLogo.webp', // fallback genèric
+            imatge: 'media/mallorcaCyclingLogo.webp',
             type: 'hiking'
         }
     });
