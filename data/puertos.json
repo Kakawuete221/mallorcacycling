@@ -225,7 +225,7 @@
       "altitud_max": 540.5,
       "altitud_min": 290.6,
       "categoria": 3,
-      "imatge": "media/ColldeSoller.webp"
+      "imatge": "media/PuigRanda.webp"
     },
     {
       "@type": "TouristAttraction",
@@ -577,7 +577,7 @@
       "altitud_max": 374.4,
       "altitud_min": 166.9,
       "categoria": 3,
-      "imatge": "media/ColldeSoller.webp"
+      "imatge": "media/PujadaGracia.webp"
     },
     {
       "@type": "TouristAttraction",
@@ -642,7 +642,7 @@
       "altitud_max": 397.8,
       "altitud_min": 108.4,
       "categoria": 3,
-      "imatge": "media/ColldeSoller.webp"
+      "imatge": "media/SantSalvador.webp"
     },
     {
       "@type": "TouristAttraction",
@@ -685,7 +685,7 @@
       "altitud_max": 363.8,
       "altitud_min": 131.2,
       "categoria": 3,
-      "imatge": "media/ColldeSoller.webp"
+      "imatge": "media/CastellSantueri.webp"
     },
     {
       "@type": "TouristAttraction",
@@ -751,7 +751,7 @@
       "altitud_max": 292.7,
       "altitud_min": 121.1,
       "categoria": 3,
-      "imatge": "media/ColldeSoller.webp"
+      "imatge": "media/ErmitaBonany.webp"
     }
   ]
 }
