@@ -8,16 +8,33 @@
 
     <link rel="icon" type="image/svg+xml" href="media/icon.svg">
 
-    <!-- Preconnect per optimitzar càrrega de fonts i mapes -->
+    <!-- Preconnect i DNS Prefetch per optimitzar connexions -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://maps.googleapis.com">
     <link rel="preconnect" href="https://maps.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://maps.googleapis.com">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lexend:wght@400;600;700&display=swap"
-        rel="stylesheet">
+    <!-- Evitar Flash of Unstyled Content (FOUC) fins que es carregui el CSS -->
+    <style>
+        html { background-color: #fcfcfc; }
+        body { opacity: 0; transition: opacity 0.25s ease-in-out; }
+    </style>
 
-    <link rel="stylesheet" href="css/tailwind.min.css">
+    <!-- Càrrega asíncrona no bloquejant de Google Fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lexend:wght@400;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
+    </noscript>
+
+    <!-- Càrrega asíncrona no bloquejant de Tailwind (inclou styles.css) -->
+    <link rel="preload" href="css/tailwind.min.css" as="style" onload="this.onload=null;this.rel='stylesheet';document.body.style.opacity='1';">
+    <noscript>
+        <link rel="stylesheet" href="css/tailwind.min.css">
+        <style>body { opacity: 1 !important; }</style>
+    </noscript>
 </head>
 
 <body class="font-body text-gray-800 bg-[#fcfcfc] overflow-y-auto">
