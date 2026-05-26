@@ -189,7 +189,7 @@ const routes = {
                     <div class="team-card w-full max-w-[320px] aspect-[3/4] bg-white rounded-3xl overflow-hidden shadow-md border border-gray-150 hover:shadow-2xl hover:border-[#fc4c02]/30 transition-all duration-300 relative group flex flex-col">
                         <!-- Image Container with fallback systems -->
                         <div class="relative w-full h-full">
-                            <img src="media/pau.jpg" alt="Pau Antich" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <img src="media/pau.webp" alt="Pau Antich" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                             
                             <!-- Initials Gradient Fallback (Pau Theme: Cycling Orange) -->
                             <div class="hidden absolute inset-0 bg-gradient-to-br from-[#ff7e40] to-[#fc4c02] flex flex-col items-center justify-center text-white p-6">
@@ -222,7 +222,7 @@ const routes = {
                     <div class="team-card w-full max-w-[320px] aspect-[3/4] bg-white rounded-3xl overflow-hidden shadow-md border border-gray-150 hover:shadow-2xl hover:border-blue-500/30 transition-all duration-300 relative group flex flex-col">
                         <!-- Image Container with fallback systems -->
                         <div class="relative w-full h-full">
-                            <img src="media/jaume.jpg" alt="Jaume Ribas" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <img src="media/jaume.webp" alt="Jaume Ribas" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                             
                             <!-- Initials Gradient Fallback (Jaume Theme: Hiking Blue) -->
                             <div class="hidden absolute inset-0 bg-gradient-to-br from-[#60a5fa] to-[#2563eb] flex flex-col items-center justify-center text-white p-6">

@@ -3,7 +3,7 @@
 const CLIENT_ID = '236654';
 const CLIENT_SECRET = '312e7c7c712a8af0e55af705e2d2e6a163d5b563';
 
-const REDIRECT_URI = 'http://127.0.0.1:5500/index.html'
+const REDIRECT_URI = 'https://www.mallorcacycling.online/index.html'
 
 export function loginWithStrava() {
     console.log("Iniciant procés d'autenticació amb Strava...");
