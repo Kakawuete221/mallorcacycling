@@ -676,6 +676,18 @@ export const router = async () => {
     let path = window.location.hash.slice(1);
     if (!path) path = "/";
     const route = routes[path] || routes["/"];
+
+    // Assegurem que appState estigui inicialitzat abans de renderitzar la ruta
+    if (appState.cyclingRoutes.length === 0) {
+        const portsJSON = await getPuertos();
+        appState.cyclingRoutes = portsJSON.map(p => { p.type = 'cycling'; return assignarComarcaAdministrativa(p); });
+
+        const hikingJSON = await getHikingRoutes();
+        appState.hikingRoutes = hikingJSON.map(p => assignarComarcaAdministrativa(p));
+
+        appState.totsElsPorts = appState.mode === 'cycling' ? appState.cyclingRoutes : appState.hikingRoutes;
+    }
+
     document.getElementById("app-viewport").innerHTML = await route.render() + `
         <div id="puerto-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-title" class="fixed inset-0 z-[2000] bg-black/0 backdrop-blur-none flex items-center justify-center pointer-events-none transition-all duration-300 ease-in-out">
             <div id="modal-container" class="bg-white w-full h-full md:w-[95%] md:h-auto md:rounded-3xl max-w-[1200px] max-h-[100dvh] md:max-h-[90vh] overflow-y-auto relative shadow-2xl flex flex-col transform scale-95 opacity-0 transition-all duration-300 ease-out">
@@ -690,17 +702,6 @@ export const router = async () => {
 
     actualitzarInterficieUsuari();
     document.title = typeof route.title === 'function' ? route.title() : route.title;
-
-    // Assegurem que appState estigui inicialitzat
-    if (appState.cyclingRoutes.length === 0) {
-        const portsJSON = await getPuertos();
-        appState.cyclingRoutes = portsJSON.map(p => { p.type = 'cycling'; return assignarComarcaAdministrativa(p); });
-
-        const hikingJSON = await getHikingRoutes();
-        appState.hikingRoutes = hikingJSON.map(p => assignarComarcaAdministrativa(p));
-
-        appState.totsElsPorts = appState.mode === 'cycling' ? appState.cyclingRoutes : appState.hikingRoutes;
-    }
 
     const footer = document.querySelector('footer');
     if (path === "/map") {
