@@ -29,4 +29,15 @@ export const loadScript = (src) => {
         script.onerror = (err) => reject(err);
         document.head.appendChild(script);
     });
+};
+
+export const updateJSONLD = (schemaData) => {
+    let script = document.getElementById('dynamic-json-ld');
+    if (!script) {
+        script = document.createElement('script');
+        script.id = 'dynamic-json-ld';
+        script.type = 'application/ld+json';
+        document.head.appendChild(script);
+    }
+    script.textContent = JSON.stringify(schemaData);
 };

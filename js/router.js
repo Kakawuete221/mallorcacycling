@@ -4,7 +4,7 @@ import { actualitzarInterficieUsuari, createCardHTML, createFiltresHTML, createS
 import { resetFiltres } from './filters.js';
 import { appState, executarFiltre } from './app.js';
 import { getAthleteStats, getStarredSegments, getRecentActivities } from './stravaApi.js';
-import { formatTime, loadScript } from './utils.js';
+import { formatTime, loadScript, updateJSONLD } from './utils.js';
 import { t } from './translations.js';
 
 const getPuertos = async () => {
@@ -59,6 +59,13 @@ const routes = {
     "/": {
         title: () => `${t('nav_home')} | Mallorca Cycling`,
         render: async () => {
+            updateJSONLD({
+                "@context": "https://schema.org",
+                "@type": "SportsApplication",
+                "name": "Mallorca Cycling Home",
+                "url": "https://mallorcacycling.com/",
+                "description": "Explora els millors segments ciclistes de Mallorca."
+            });
             const puertos = await getPuertos();
             const p1 = puertos[0];
             const p2 = puertos[1];
@@ -256,7 +263,14 @@ const routes = {
     },
     "/map": {
         title: "Map | Mallorca Cycling",
-        render: async () => `
+        render: async () => {
+            updateJSONLD({
+                "@context": "https://schema.org",
+                "@type": "Map",
+                "name": "Mapa de Segments Ciclistes - Mallorca",
+                "url": "https://mallorcacycling.com/map"
+            });
+            return `
             <section class="relative h-[calc(100vh-80px)] w-full overflow-hidden bg-gray-100">
                 <div id="map" class="absolute top-0 left-0 w-full h-full z-0"></div>
 
@@ -273,11 +287,18 @@ const routes = {
                     </div>
 
                 </div>
-            </section>`
+            </section>`;
+        }
     },
     "/segments": {
         title: "Segments | Mallorca Cycling",
         render: async () => {
+            updateJSONLD({
+                "@context": "https://schema.org",
+                "@type": "CollectionPage",
+                "name": "Explorador de Segments",
+                "url": "https://mallorcacycling.com/segments"
+            });
             return `
             <div class="w-full xl:max-w-[1400px] mx-auto py-12 px-5 fade-in">
                 <div class="flex flex-col lg:flex-row gap-8 items-start relative">
@@ -301,6 +322,11 @@ const routes = {
     "/profile": {
         title: "My Profile | Mallorca Cycling",
         render: async () => {
+            updateJSONLD({
+                "@context": "https://schema.org",
+                "@type": "ProfilePage",
+                "name": "El Meu Perfil - Mallorca Cycling"
+            });
             const userStr = localStorage.getItem('strava_athlete');
             if (!userStr) {
                 window.location.hash = "/";
