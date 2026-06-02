@@ -1,0 +1,21 @@
+{
+  "name": "Mallorca Cycling",
+  "short_name": "MCycling",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fcfcfc",
+  "theme_color": "#ea580c",
+  "description": "The ultimate platform to explore, conquer, and track the best cycling segments across the beautiful island of Mallorca.",
+  "icons": [
+    {
+      "src": "/media/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/media/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
