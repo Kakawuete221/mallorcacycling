@@ -4,7 +4,7 @@ import { actualitzarInterficieUsuari, createCardHTML, createFiltresHTML, createS
 import { resetFiltres } from './filters.js';
 import { appState, executarFiltre } from './app.js';
 import { getAthleteStats, getStarredSegments, getRecentActivities } from './stravaApi.js';
-import { formatTime, loadScript, updateJSONLD } from './utils.js';
+import { formatTime, loadScript, updateJSONLD, getPictureHTML } from './utils.js';
 import { t } from './translations.js';
 
 const getPuertos = async () => {
@@ -80,7 +80,13 @@ const routes = {
                 <div class="lg:col-span-8 flex flex-col gap-6 h-full">
                     <!-- Segment of the Month (Gran) -->
                     <div data-action="view-details" data-port="${p1Str}" role="button" tabindex="0" aria-label="${t('view_details_of')} ${p1.nom || p1.nombre}" class="group relative rounded-3xl overflow-hidden shadow-2xl flex-1 min-h-[400px] md:min-h-[450px] cursor-pointer block">
-                        <img src="${p1.imatge && p1.imatge !== 'media/ColldeSoller.webp' ? p1.imatge : 'media/' + (p1.nom || p1.nombre) + '.jpg'}" alt="${p1.nom || p1.nombre}" onerror="this.src='media/ColldeSoller.webp'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        ${getPictureHTML(
+                            p1.imatge || 'media/ColldeSoller.webp',
+                            p1.nom || p1.nombre,
+                            'w-full h-full block overflow-hidden z-0',
+                            'w-full h-full object-cover group-hover:scale-105 transition-transform duration-700',
+                            '(max-width: 1024px) 100vw, 66vw'
+                        )}
                         <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-6 md:p-10 text-white w-full">
                             <span class="bg-[#cf4002] text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest mb-4 inline-block shadow-lg">${t('segment_of_month')}</span>
@@ -95,7 +101,13 @@ const routes = {
                     
                     <!-- Segment Secundari Inferior -->
                     <div data-action="view-details" data-port="${p2Str}" role="button" tabindex="0" aria-label="${t('view_details_of')} ${p2.nom || p2.nombre}" class="group relative rounded-3xl overflow-hidden shadow-lg h-[180px] md:h-[220px] flex-shrink-0 cursor-pointer block">
-                        <img src="${p2.imatge && p2.imatge !== 'media/ColldeSoller.webp' ? p2.imatge : 'media/' + (p2.nom || p2.nombre) + '.jpg'}" alt="${p2.nom || p2.nombre}" onerror="this.src='media/ColldeSoller.webp'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        ${getPictureHTML(
+                            p2.imatge || 'media/ColldeSoller.webp',
+                            p2.nom || p2.nombre,
+                            'w-full h-full block overflow-hidden z-0',
+                            'w-full h-full object-cover group-hover:scale-105 transition-transform duration-700',
+                            '(max-width: 1024px) 100vw, 66vw'
+                        )}
                         <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/30 to-transparent opacity-90"></div>
                         <div class="absolute bottom-0 left-0 p-6 text-white w-full">
                             <h3 class="text-2xl md:text-3xl font-title font-bold mb-3">${p2.nom || p2.nombre}</h3>
@@ -107,14 +119,20 @@ const routes = {
                         </div>
                     </div>
                 </div>
-
+ 
                 <!-- Columna Dreta (3 segments) -->
                 <div class="lg:col-span-4 flex flex-col gap-6 h-full">
                     ${rest.map(p => {
                 const pStr = JSON.stringify(p).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
                 return `
                         <div data-action="view-details" data-port="${pStr}" role="button" tabindex="0" aria-label="${t('view_details_of')} ${p.nom || p.nombre}" class="group relative rounded-3xl overflow-hidden shadow-lg flex-1 min-h-[160px] cursor-pointer block">
-                            <img src="${p.imatge && p.imatge !== 'media/ColldeSoller.webp' ? p.imatge : 'media/' + (p.nom || p.nombre) + '.jpg'}" alt="${p.nom || p.nombre}" onerror="this.src='media/ColldeSoller.webp'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            ${getPictureHTML(
+                                p.imatge || 'media/ColldeSoller.webp',
+                                p.nom || p.nombre,
+                                'w-full h-full block overflow-hidden z-0',
+                                'w-full h-full object-cover group-hover:scale-105 transition-transform duration-700',
+                                '(max-width: 1024px) 100vw, 33vw'
+                            )}
                             <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent opacity-95"></div>
                             <div class="absolute bottom-0 left-0 p-5 text-white w-full">
                                 <h3 class="text-xl md:text-2xl font-title font-bold mb-3 leading-tight">${p.nom || p.nombre}</h3>
@@ -135,10 +153,10 @@ const routes = {
             <section id="intro" class="fade-in">
                 <div class="relative w-full h-[calc(100vh-40px)] overflow-hidden bg-[#11131f]">
                     <!-- Slideshow Images -->
-                    <img src="media/ColldeSoller.webp" alt="Coll de Sóller" class="hero-slideshow-img">
-                    <img src="media/PuigMajorVertienteLluc.webp" alt="Puig Major" class="hero-slideshow-img">
-                    <img src="media/ColldesGrauEsporles.webp" alt="Coll des Grau" class="hero-slideshow-img">
-                    <img src="media/ColldesaCreuCalvia.webp" alt="Coll de sa Creu" class="hero-slideshow-img">
+                    ${getPictureHTML('media/ColldeSoller.webp', 'Coll de Sóller', 'hero-slideshow-img', 'w-full h-full object-cover', '100vw')}
+                    ${getPictureHTML('media/PuigMajorVertienteLluc.webp', 'Puig Major', 'hero-slideshow-img', 'w-full h-full object-cover', '100vw')}
+                    ${getPictureHTML('media/ColldesGrauEsporles.webp', 'Coll des Grau', 'hero-slideshow-img', 'w-full h-full object-cover', '100vw')}
+                    ${getPictureHTML('media/ColldesaCreuCalvia.webp', 'Coll de sa Creu', 'hero-slideshow-img', 'w-full h-full object-cover', '100vw')}
                     
                     <div class="absolute inset-0 flex flex-col justify-center items-center text-white bg-black/40 text-center p-5 z-10 pointer-events-none">
                         <h1 class="font-title text-4xl md:text-5xl lg:text-7xl font-bold mb-4">Mallorca Cycling</h1>
@@ -196,7 +214,14 @@ const routes = {
                     <div class="team-card w-full max-w-[320px] aspect-[3/4] bg-white rounded-3xl overflow-hidden shadow-md border border-gray-150 hover:shadow-2xl hover:border-[#fc4c02]/30 transition-all duration-300 relative group flex flex-col">
                         <!-- Image Container with fallback systems -->
                         <div class="relative w-full h-full">
-                            <img src="media/pau.webp" alt="Pau Antich" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            ${getPictureHTML(
+                                'media/pau.webp',
+                                'Pau Antich',
+                                'w-full h-full block overflow-hidden z-0',
+                                'w-full h-full object-cover group-hover:scale-105 transition-transform duration-700',
+                                '(max-width: 640px) 100vw, 320px',
+                                `onerror="this.closest('picture').classList.add('hidden'); this.closest('picture').nextElementSibling.classList.remove('hidden');"`
+                            )}
                             
                             <!-- Initials Gradient Fallback (Pau Theme: Cycling Orange) -->
                             <div class="hidden absolute inset-0 bg-gradient-to-br from-[#ff7e40] to-[#fc4c02] flex flex-col items-center justify-center text-white p-6">
@@ -229,7 +254,14 @@ const routes = {
                     <div class="team-card w-full max-w-[320px] aspect-[3/4] bg-white rounded-3xl overflow-hidden shadow-md border border-gray-150 hover:shadow-2xl hover:border-blue-500/30 transition-all duration-300 relative group flex flex-col">
                         <!-- Image Container with fallback systems -->
                         <div class="relative w-full h-full">
-                            <img src="media/jaume.webp" alt="Jaume Ribas" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            ${getPictureHTML(
+                                'media/jaume.webp',
+                                'Jaume Ribas',
+                                'w-full h-full block overflow-hidden z-0',
+                                'w-full h-full object-cover group-hover:scale-105 transition-transform duration-700',
+                                '(max-width: 640px) 100vw, 320px',
+                                `onerror="this.closest('picture').classList.add('hidden'); this.closest('picture').nextElementSibling.classList.remove('hidden');"`
+                            )}
                             
                             <!-- Initials Gradient Fallback (Jaume Theme: Hiking Blue) -->
                             <div class="hidden absolute inset-0 bg-gradient-to-br from-[#60a5fa] to-[#2563eb] flex flex-col items-center justify-center text-white p-6">
@@ -376,7 +408,13 @@ const routes = {
                     ${visibleTrophies.map(tr => `
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-1.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group block">
                         <div class="relative rounded-xl overflow-hidden h-36 mb-2">
-                            <img src="${tr.port.imatge && tr.port.imatge !== 'media/ColldeSoller.webp' ? tr.port.imatge : 'media/' + (tr.port.nom || tr.port.nombre) + '.jpg'}" alt="${tr.port.nom || tr.port.nombre}" onerror="this.src='media/ColldeSoller.webp'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            ${getPictureHTML(
+                                tr.port.imatge || 'media/ColldeSoller.webp',
+                                tr.port.nom || tr.port.nombre,
+                                'w-full h-full block overflow-hidden z-0',
+                                'w-full h-full object-cover group-hover:scale-110 transition-transform duration-700',
+                                '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
+                            )}
                             <div class="absolute inset-0 bg-gradient-to-t from-[#11131f]/90 via-transparent to-transparent"></div>
                             <div class="absolute bottom-3 left-4 right-4">
                                 <h3 class="font-bold font-title text-white text-lg leading-tight truncate drop-shadow-md">${tr.port.nom || tr.port.nombre}</h3>
@@ -404,7 +442,13 @@ const routes = {
                     ${hiddenTrophies.map(tr => `
                     <div class="hidden-trophy hidden bg-white rounded-2xl shadow-sm border border-gray-100 p-1.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group block">
                         <div class="relative rounded-xl overflow-hidden h-36 mb-2">
-                            <img src="${tr.port.imatge && tr.port.imatge !== 'media/ColldeSoller.webp' ? tr.port.imatge : 'media/' + (tr.port.nom || tr.port.nombre) + '.jpg'}" alt="${tr.port.nom || tr.port.nombre}" onerror="this.src='media/ColldeSoller.webp'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            ${getPictureHTML(
+                                tr.port.imatge || 'media/ColldeSoller.webp',
+                                tr.port.nom || tr.port.nombre,
+                                'w-full h-full block overflow-hidden z-0',
+                                'w-full h-full object-cover group-hover:scale-110 transition-transform duration-700',
+                                '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
+                            )}
                             <div class="absolute inset-0 bg-gradient-to-t from-[#11131f]/90 via-transparent to-transparent"></div>
                             <div class="absolute bottom-3 left-4 right-4">
                                 <h3 class="font-bold font-title text-white text-lg leading-tight truncate drop-shadow-md">${tr.port.nom || tr.port.nombre}</h3>

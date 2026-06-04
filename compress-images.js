@@ -1,18 +1,25 @@
 const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
+const heicConvert = require('heic-convert');
 
 // Disable Sharp caching to prevent file locking
 sharp.cache(false);
 
 const mediaDir = path.join(__dirname, 'media');
 
+const SIZES = {
+  sm: 400,
+  md: 800,
+  lg: 1200
+};
+
 async function compressImages() {
   console.log('Starting image compression in directory:', mediaDir);
   try {
     const files = fs.readdirSync(mediaDir);
     
-    // Clean up any leftover temporary files from previous failed runs
+    // Clean up temporary files first
     files.forEach(f => {
       if (f.includes('.tmp')) {
         try {
@@ -25,71 +32,98 @@ async function compressImages() {
     // Refresh file list after cleanup
     const cleanFiles = fs.readdirSync(mediaDir);
 
-    const targetFiles = cleanFiles.filter(f => {
-      const ext = path.extname(f).toLowerCase();
-      // Skip any temporary files
-      if (f.includes('.tmp')) return false;
-      return ext === '.webp' || ext === '.jpg' || ext === '.jpeg' || ext === '.png';
+    // Group files by base name
+    const groups = {};
+    cleanFiles.forEach(file => {
+      const ext = path.extname(file).toLowerCase();
+      // Skip directories
+      if (fs.statSync(path.join(mediaDir, file)).isDirectory()) return;
+      // Skip non-image files or icons/logos
+      if (!['.webp', '.jpg', '.jpeg', '.png', '.heic'].includes(ext)) return;
+      if (file.startsWith('icon-') || file === 'icon.svg' || file === 'icon.png') return;
+      if (file.includes('mallorcaCyclingLogo') || file.includes('mallorcaCyclingIso')) return;
+      
+      // Skip generated files (e.g. name ends with -sm, -md, -lg before extension)
+      const base = path.parse(file).name;
+      if (base.endsWith('-sm') || base.endsWith('-md') || base.endsWith('-lg')) return;
+
+      if (!groups[base]) {
+        groups[base] = [];
+      }
+      groups[base].push(file);
     });
 
-    console.log(`Found ${targetFiles.length} image files to process.`);
+    const basenames = Object.keys(groups);
+    console.log(`Found ${basenames.length} distinct images to process.`);
 
-    let totalSaved = 0;
+    for (const base of basenames) {
+      console.log(`\nProcessing image: [${base}]`);
+      const groupFiles = groups[base];
 
-    for (const file of targetFiles) {
-      const inputPath = path.join(mediaDir, file);
-      
-      const stats = fs.statSync(inputPath);
-      const beforeSize = stats.size;
-      const beforeSizeMB = (beforeSize / (1024 * 1024)).toFixed(2);
-      
-      // Skip if already very small (e.g. logos/icons) to avoid loss of quality
-      if (beforeSize < 120 * 1024) {
-        console.log(`Skipping small file: ${file} (${(beforeSize / 1024).toFixed(1)} KB)`);
+      // Determine best source file
+      let bestFile = null;
+      const extensionsOrder = ['.heic', '.jpeg', '.jpg', '.png', '.webp'];
+      for (const ext of extensionsOrder) {
+        bestFile = groupFiles.find(f => path.extname(f).toLowerCase() === ext);
+        if (bestFile) break;
+      }
+
+      if (!bestFile) {
+        console.log(`  No suitable source file found for ${base}.`);
         continue;
       }
 
-      console.log(`Processing: ${file} (${beforeSizeMB} MB)`);
+      const sourcePath = path.join(mediaDir, bestFile);
+      const sourceExt = path.extname(bestFile).toLowerCase();
+      console.log(`  Selected source: ${bestFile} (${sourceExt})`);
 
-      const tempPath = inputPath + '.tmp.webp';
-      const outputName = path.parse(file).name + '.webp';
-      const outputPath = path.join(mediaDir, outputName);
-
-      // Read file into buffer to avoid keeping the file locked
-      const imageBuffer = fs.readFileSync(inputPath);
-
-      // Compress and resize from the buffer
-      await sharp(imageBuffer)
-        .resize({ width: 1200, withoutEnlargement: true }) // limit max width to 1200px for super-fast loading
-        .webp({ quality: 75 }) // high performance WebP optimization sweet-spot
-        .toFile(tempPath);
-
-      // Overwrite/Replace the original file safely
-      if (path.extname(file).toLowerCase() === '.webp') {
-        fs.unlinkSync(inputPath);
-        fs.renameSync(tempPath, inputPath);
+      let imageBuffer;
+      if (sourceExt === '.heic') {
+        console.log(`  Decoding HEIC to JPEG buffer...`);
+        const heicBuffer = fs.readFileSync(sourcePath);
+        imageBuffer = await heicConvert({
+          buffer: heicBuffer,
+          format: 'JPEG',
+          quality: 1
+        });
       } else {
-        // If it was a jpg/png, we convert it to webp and delete the old format
-        fs.renameSync(tempPath, outputPath);
-        fs.unlinkSync(inputPath);
-        console.log(`  Converted ${file} -> ${outputName}`);
+        imageBuffer = fs.readFileSync(sourcePath);
       }
 
-      const afterStats = fs.statSync(outputPath);
-      const afterSizeKB = (afterStats.size / 1024).toFixed(1);
-      const reduction = ((1 - afterStats.size / beforeSize) * 100).toFixed(1);
-      const savedBytes = beforeSize - afterStats.size;
-      totalSaved += savedBytes;
+      // Generate each size and format
+      for (const [sizeName, width] of Object.entries(SIZES)) {
+        console.log(`  Generating size: ${sizeName} (${width}px)...`);
 
-      console.log(`  Size after: ${afterSizeKB} KB - Reduced by ${reduction}%`);
+        // AVIF
+        const avifPath = path.join(mediaDir, `${base}-${sizeName}.avif`);
+        await sharp(imageBuffer)
+          .resize({ width, withoutEnlargement: true })
+          .avif({ quality: 65 })
+          .toFile(avifPath);
+        
+        // WebP
+        const webpPath = path.join(mediaDir, `${base}-${sizeName}.webp`);
+        await sharp(imageBuffer)
+          .resize({ width, withoutEnlargement: true })
+          .webp({ quality: 75 })
+          .toFile(webpPath);
+
+        // JPEG
+        const jpgPath = path.join(mediaDir, `${base}-${sizeName}.jpg`);
+        await sharp(imageBuffer)
+          .resize({ width, withoutEnlargement: true })
+          .jpeg({ quality: 80, progressive: true })
+          .toFile(jpgPath);
+
+        console.log(`    Generated: ${base}-${sizeName}.avif, .webp, .jpg`);
+      }
     }
 
     console.log('\n=========================================');
-    console.log(`Image compression completed successfully!`);
-    console.log(`Total storage saved: ${(totalSaved / (1024 * 1024)).toFixed(2)} MB`);
+    console.log(`All images compressed and formatted successfully!`);
     console.log('=========================================');
   } catch (error) {
-    console.error('Error compressing images:', error);
+    console.error('Error during image processing:', error);
   }
 }
 

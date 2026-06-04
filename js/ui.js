@@ -1,6 +1,6 @@
 // ui.js - Interfície d'Usuari i Targetes
 import { isStravaSessionValid, getAthleteStats } from './stravaApi.js';
-import { formatTime } from './utils.js';
+import { formatTime, getPictureHTML } from './utils.js';
 import { setValorSlider } from './filters.js';
 import { t } from './translations.js';
 import { appState } from './app.js';
@@ -177,7 +177,13 @@ export const createCardHTML = (puerto, index = 0) => {
 
     return `
     <div class="group relative rounded-3xl overflow-hidden shadow-lg aspect-[4/3] w-full cursor-pointer hover:shadow-2xl transition-all duration-300" data-action="view-details" data-port="${portDataStr}" role="button" tabindex="0" aria-label="${t('view_details_of')} ${nom}">
-        <img src="${isHiking ? 'media/pedraSec.webp' : (puerto.imatge && puerto.imatge !== 'media/ColldeSoller.webp' ? puerto.imatge : 'media/' + nom + '.jpg')}" alt="${nom}" onerror="this.onerror=null; this.src='media/ColldeSoller.webp';" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+        ${getPictureHTML(
+            isHiking ? 'media/pedraSec.webp' : (puerto.imatge || 'media/ColldeSoller.webp'),
+            nom,
+            'w-full h-full block overflow-hidden z-0',
+            'w-full h-full object-cover group-hover:scale-105 transition-transform duration-700',
+            '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
+        )}
         <div class="absolute inset-0 bg-gradient-to-t from-[#11131f] via-[#11131f]/40 to-transparent opacity-95"></div>
         <div class="absolute bottom-0 left-0 p-5 text-white w-full">
             <h3 class="text-xl md:text-2xl font-title font-bold mb-3 leading-tight pr-4">${nom}</h3>

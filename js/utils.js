@@ -40,4 +40,39 @@ export const updateJSONLD = (schemaData) => {
         document.head.appendChild(script);
     }
     script.textContent = JSON.stringify(schemaData);
+};
+
+export const getPictureHTML = (src, alt, className = '', imgClassName = '', sizes = '100vw', extraImgAttrs = '') => {
+    if (!src) return '';
+    
+    if (!src.startsWith('media/') || src.endsWith('.svg') || src.includes('icon-') || src.includes('logo') || src.includes('Iso')) {
+        return `<img src="${src}" alt="${alt}" class="${imgClassName || className}" ${extraImgAttrs}>`;
+    }
+    
+    const basePath = src.replace(/\.[^/.]+$/, "");
+    const escapeUrl = (url) => url.split('/').map(encodeURIComponent).join('/');
+    
+    const avifSm = escapeUrl(`${basePath}-sm.avif`);
+    const avifMd = escapeUrl(`${basePath}-md.avif`);
+    const avifLg = escapeUrl(`${basePath}-lg.avif`);
+    
+    const webpSm = escapeUrl(`${basePath}-sm.webp`);
+    const webpMd = escapeUrl(`${basePath}-md.webp`);
+    const webpLg = escapeUrl(`${basePath}-lg.webp`);
+    
+    const jpgSm = escapeUrl(`${basePath}-sm.jpg`);
+    const jpgMd = escapeUrl(`${basePath}-md.jpg`);
+    const jpgLg = escapeUrl(`${basePath}-lg.jpg`);
+    
+    const defaultOnError = `this.onerror=null; this.src='media/ColldeSoller-md.jpg';`;
+    const onError = extraImgAttrs.includes('onerror=') ? '' : `onerror="${defaultOnError}"`;
+    
+    return `
+        <picture class="${className}">
+            <source srcset="${avifSm} 400w, ${avifMd} 800w, ${avifLg} 1200w" sizes="${sizes}" type="image/avif">
+            <source srcset="${webpSm} 400w, ${webpMd} 800w, ${webpLg} 1200w" sizes="${sizes}" type="image/webp">
+            <source srcset="${jpgSm} 400w, ${jpgMd} 800w, ${jpgLg} 1200w" sizes="${sizes}" type="image/jpeg">
+            <img src="${jpgMd}" alt="${alt}" class="${imgClassName}" ${onError} ${extraImgAttrs}>
+        </picture>
+    `.trim().replace(/\s+/g, ' ');
 };
