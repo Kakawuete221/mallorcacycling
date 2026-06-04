@@ -1,7 +1,6 @@
 // stravaApi.js - Module for interacting with the Strava API
 
 const CLIENT_ID = '236654';
-const CLIENT_SECRET = '312e7c7c712a8af0e55af705e2d2e6a163d5b563';
 
 const REDIRECT_URI = 'https://www.mallorcacycling.online/index.html'
 
@@ -17,14 +16,11 @@ export async function checkStravaCallback() {
 
     if (code) {
         try {
-            const response = await fetch('https://www.strava.com/oauth/token', {
+            const response = await fetch('strava-token.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    client_id: CLIENT_ID,
-                    client_secret: CLIENT_SECRET,
-                    code: code,
-                    grant_type: 'authorization_code'
+                    code: code
                 })
             });
 

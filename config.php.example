@@ -1,0 +1,6 @@
+<?php
+// config.php - Fitxer de configuració de credencials per a l'API de Strava
+// Canvia aquestes claus amb les teves dades reals de Strava i guarda el fitxer com a "config.php"
+
+define('STRAVA_CLIENT_ID', 'YOUR_STRAVA_CLIENT_ID');
+define('STRAVA_CLIENT_SECRET', 'YOUR_STRAVA_CLIENT_SECRET');
