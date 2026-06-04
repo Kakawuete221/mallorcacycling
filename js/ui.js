@@ -7,8 +7,8 @@ import { appState } from './app.js';
 
 export const createModeToggleHTML = () => {
     const isHiking = appState.mode === 'hiking';
-    const cycBtnClass = isHiking ? 'text-gray-500 hover:text-gray-700' : 'bg-white shadow-sm text-[#fc4c02]';
-    const hikBtnClass = isHiking ? 'bg-white shadow-sm text-[#2563eb]' : 'text-gray-500 hover:text-gray-700';
+    const cycBtnClass = isHiking ? 'text-gray-600 hover:text-gray-700' : 'bg-white shadow-sm text-[#cf4002]';
+    const hikBtnClass = isHiking ? 'bg-white shadow-sm text-[#2563eb]' : 'text-gray-600 hover:text-gray-700';
 
     return `
         <div class="bg-gray-100 p-1 rounded-xl flex items-center shadow-inner gap-1 w-fit">
